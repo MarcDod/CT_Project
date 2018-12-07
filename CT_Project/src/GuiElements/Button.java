@@ -24,10 +24,7 @@ public class Button extends JButton{
     @Override
     protected void paintComponent(Graphics g) {
         g.clearRect(0, 0, this.getWidth(), this.getHeight());
-        
-        for(int i = 0; i < 3; i++){
-            g.fillRect((this.getWidth() / 2) - (this.getWidth() / 6) / 2, i * 14, this.getHeight() / 6, this.getHeight() / 6);
-        }
+        super.paintComponent(g);
     }
     
 }
