@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 /**
@@ -35,11 +36,14 @@ public class MenuBar extends JPanel{
 //</editor-fold>
         
         //<editor-fold defaultstate="collapsed" desc="Init Button">
-        this.optionButton = new Button(30, d.height - 10);
-        this.optionButton.setLocation(Gui.SCREEN_WIDTH - 10 -
+        int width = 20;
+        int height = d.height - 15;
+        this.optionButton = new Button(width, height, getImage(width, height));
+        this.optionButton.setLocation(Gui.SCREEN_WIDTH - 20 -
                 this.optionButton.getWidth(),
                 (d.height - this.optionButton.getHeight())/2);
         this.add(this.optionButton);
+        this.optionButton.setBorder(null);
         this.optionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,17 +53,44 @@ public class MenuBar extends JPanel{
 //</editor-fold>
     }
 
+    private BufferedImage getImage(int width, int height){
+        BufferedImage image = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
+        
+        Graphics2D g2d = image.createGraphics();
+        
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, width, height);
+        
+        
+        g2d.setColor(Color.BLACK);
+        
+        int pHeight = height / 5;
+        
+        for(int i = 0; i < 3; i++){
+            g2d.fillRect(width / 2 - pHeight / 2, (int) (i * pHeight * 1.5) + (int)(pHeight * 0.5), pHeight, pHeight);
+        }
+        
+        g2d.dispose();
+        
+        return image;
+    }
+    
     @Override
     protected void paintComponent(Graphics g) {
         g.clearRect(0, 0, this.getParent().getWidth(), getHeight());
         Graphics2D g2d = (Graphics2D) g;
         Color oldColor = g2d.getColor();
+        
         g2d.setColor(Color.WHITE);
-        g2d.drawRect(0, 0, this.getParent().getWidth(),getHeight());
+        g2d.fillRect(0, 0, this.getParent().getWidth(),getHeight());
+        
+        
+        g2d.setColor(new Color(201, 201, 201));
+        g2d.drawRect(0, 0, this.getParent().getWidth() - 7,getHeight() - 1);
         g2d.setColor(oldColor);
     }  
     
     private void optionButton_ActionEvent(ActionEvent e){
-        System.out.println("h");
+        System.exit(0);
     }
 }

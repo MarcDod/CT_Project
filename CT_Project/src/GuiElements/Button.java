@@ -16,20 +16,12 @@ public class Button extends JButton{
     private BufferedImage image;
     
     public Button(int width, int height){
-        Dimension d = new Dimension(width, height);
-        this.setSize(d);
-        this.setPreferredSize(d);
-        this.setMinimumSize(d);
-        this.setMaximumSize(d);
+        initButton(width, height);
         this.image = null;
     }
     
     public Button(int width, int height, BufferedImage image){
-        Dimension d = new Dimension(width, height);
-        this.setSize(d);
-        this.setPreferredSize(d);
-        this.setMinimumSize(d);
-        this.setMaximumSize(d);
+        initButton(width, height);
         this.image = image;
     }
     
@@ -43,5 +35,14 @@ public class Button extends JButton{
         g.drawImage(image, 0, 0, this);
         
     }
+ 
     
+    private void initButton(int width,int height){
+        Dimension d = new Dimension(width, height);
+        this.setSize(d);
+        this.setPreferredSize(d);
+        this.setMinimumSize(d);
+        this.setMaximumSize(d);
+        this.setRolloverEnabled(false);
+    }
 }
