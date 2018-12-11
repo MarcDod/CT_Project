@@ -18,11 +18,13 @@ import javax.swing.JPanel;
 
 public class MenuBar extends JPanel{
     
+    public static final int MENUBAR_HEIGHT = 60;
+    
     public Button optionButton;
     
     public MenuBar(){
         //<editor-fold defaultstate="collapsed" desc="settings">
-        Dimension d = new Dimension(Gui.SCREEN_WIDTH,60);
+        Dimension d = new Dimension(Gui.SCREEN_WIDTH, MENUBAR_HEIGHT);
         this.setPreferredSize(d);
         this.setSize(d);
         this.setMinimumSize(d);
@@ -53,7 +55,7 @@ public class MenuBar extends JPanel{
         Graphics2D g2d = (Graphics2D) g;
         Color oldColor = g2d.getColor();
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, this.getParent().getWidth() - 1,getHeight() - 1);
+        g2d.drawRect(0, 0, this.getParent().getWidth(),getHeight());
         g2d.setColor(oldColor);
     }  
     

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ct_project;
+package activities;
 
 /**
  *
- * @author Marc
+ * @author marc.doderer
  */
-public class ActivityManager {
-    
+public enum ActivityID {
+    HOME_SCREEN, GROCERY_LIST
 }
