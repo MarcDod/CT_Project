@@ -5,7 +5,7 @@
  */
 package GuiElements.activities;
 
-import database.DB_Connection;
+import DataManagement.database.DB_Connection;
 
 /**
  *
@@ -19,7 +19,6 @@ public class LogInManager {
     }
     
     public void checkUserData(String password, String user){
-        valid = true;
     }
     
     public boolean isValid(){

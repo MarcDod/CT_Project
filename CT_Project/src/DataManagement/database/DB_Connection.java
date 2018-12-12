@@ -37,5 +37,9 @@ public class DB_Connection {
     
     public void deleteConnection() throws SQLException{
         con.close();
-    }        
+    }   
+    
+//    public Connection sendSqlStatement(){
+//        this.con.
+//    }
 }
