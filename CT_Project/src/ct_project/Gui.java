@@ -101,6 +101,12 @@ public class Gui {
             }
         }
         
+        if(activity == ActivityID.LOGIN_SCREEN)
+            this.menu.setVisible(false);
+        else{
+            this.menu.setVisible(true);
+        }
+        
         if(this.manager.isEmpty())
             this.menu.disableReturnButton();
         else

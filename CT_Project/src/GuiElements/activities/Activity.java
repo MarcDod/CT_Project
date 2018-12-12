@@ -30,6 +30,20 @@ public abstract class Activity extends JPanel{
         this.setLayout(null);
         this.setFocusable(true);
     }
+    
+    public Activity(ActivityID activityID, int height){
+        this.activityID = activityID;
+        
+        Dimension d = new Dimension(Gui.SCREEN_WIDTH,height);
+        this.setPreferredSize(d);
+        this.setSize(d);
+        this.setMinimumSize(d);
+        this.setMaximumSize(d);
+        this.setBounds(0, 0, Gui.SCREEN_WIDTH, d.height);
+        this.setLocation(0, 0);
+        this.setLayout(null);
+        this.setFocusable(true);
+    }
         
     public ActivityID getActivityID(){
         return this.activityID;
