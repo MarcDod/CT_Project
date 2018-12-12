@@ -30,11 +30,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Account` (
   `accountID` INT NOT NULL,
   `User` VARCHAR(45) NULL,
   `password` VARCHAR(45) NULL,
-  `orderID` INT NOT NULL,
+  `groupID` INT NOT NULL,
   PRIMARY KEY (`accountID`),
-  INDEX `fk_Account_Group_idx` (`orderID` ASC),
+  INDEX `fk_Account_Group_idx` (`groupID` ASC),
+  UNIQUE INDEX `User_UNIQUE` (`User` ASC),
   CONSTRAINT `fk_Account_Group`
-    FOREIGN KEY (`orderID`)
+    FOREIGN KEY (`groupID`)
     REFERENCES `mydb`.`Group` (`groupID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

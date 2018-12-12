@@ -7,7 +7,9 @@ package DataManagement.database;
 
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -39,7 +41,8 @@ public class DB_Connection {
         con.close();
     }   
     
-//    public Connection sendSqlStatement(){
-//        this.con.
-//    }
+    public ResultSet sendSqlStatement(String sqlQuery) throws SQLException{
+        Statement stmt = this.con.createStatement();
+        return stmt.executeQuery(sqlQuery);
+    }
 }

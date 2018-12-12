@@ -5,6 +5,7 @@
  */
 package DataManagement.database;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -18,8 +19,13 @@ public class Connector {
         con = new DB_Connection();
     }
     
-    public void sentSQLStatement(String statement){
-        
-        
+    private ResultSet sendSQLStatement(String statement) throws SQLException{
+        return this.con.sendSqlStatement(statement);
+    }
+    
+    public String getPassword(String username) throws SQLException{
+        ResultSet result = this.sendSQLStatement("SELECT password FROM mydb.account WHERE USER = \"" + username +"\";");
+        result.next();
+        return result.getString(1);
     }
 }

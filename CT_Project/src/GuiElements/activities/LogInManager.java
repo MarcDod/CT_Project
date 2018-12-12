@@ -5,7 +5,10 @@
  */
 package GuiElements.activities;
 
-import DataManagement.database.DB_Connection;
+import DataManagement.database.Connector;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,6 +22,12 @@ public class LogInManager {
     }
     
     public void checkUserData(String password, String user){
+        try {
+            Connector baum = new Connector();
+            valid = baum.getPassword(user).equals(password);
+        }catch (SQLException ex){
+            System.err.println("MENSCH");
+        }
     }
     
     public boolean isValid(){
