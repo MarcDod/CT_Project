@@ -10,7 +10,9 @@ import ct_project.Gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JTextField;
 
 /**
  *
@@ -20,15 +22,42 @@ public class LoginScreen extends Activity{
     
     private Button loginButton;
     
-    public LoginScreen(ActionListener loginButton) {
+    private JTextField userName;
+    private JTextField password;
+    
+    private LogInManager logInManager;
+    
+    public LoginScreen(ActionListener loginButton, LogInManager logInManager) {
         super(ActivityID.LOGIN_SCREEN, Gui.SCREEN_HEIGHT - 29);
+        
+        this.logInManager = new LogInManager();
         
         this.loginButton = new Button(Gui.SCREEN_WIDTH, 50);
         this.loginButton.setLocation(0, this.getHeight() - this.loginButton.getHeight());
         this.loginButton.addActionListener(loginButton);
-
+        this.loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                loginAction();
+            }
+        });
+        
+        this.userName = initTextField(300);
+        this.password = initTextField(350);
         
         this.add(this.loginButton);
+        this.add(this.userName);
+        this.add(this.password);
+    }
+    
+    private JTextField initTextField(int y){
+        JTextField retTextField = new JTextField();
+        retTextField.setSize((int) (Gui.SCREEN_WIDTH * 0.9), 40);
+        retTextField.setLocation((Gui.SCREEN_WIDTH - 6) / 2 - retTextField.getWidth() / 2, y);
+        
+        retTextField.setHorizontalAlignment(JTextField.CENTER);
+        
+        return retTextField;
     }
     
      @Override
@@ -46,5 +75,8 @@ public class LoginScreen extends Activity{
         
         g2d.setColor(oldColor);
     }  
-    
+ 
+    private void loginAction(){
+        logInManager.checkUserData(this.password.getText(), this.userName.getText());
+    }
 }

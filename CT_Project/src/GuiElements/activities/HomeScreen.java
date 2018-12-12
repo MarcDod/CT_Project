@@ -22,21 +22,31 @@ import java.awt.image.BufferedImage;
  */
 public class HomeScreen extends Activity{
     
-    private Button groceryList;
+    private Button showGroceryList;
+    private Button showNewOrder;
     
-    public HomeScreen(ActionListener actionListener) {
+    public HomeScreen(ActionListener groceryListListener) {
         super(ActivityID.HOME_SCREEN);
         
         int buttonWidth = Gui.SCREEN_WIDTH - 6 - 20;
         int buttonHeight = Gui.SCREEN_HEIGHT / 7;
         
-        BufferedImage image = drawGroceryList(buttonWidth, buttonHeight, new Color(100,149,237), new Color(025,025,112), "EINKAUFSLISTE");
-           
-        this.groceryList = new Button(buttonWidth, buttonHeight, image);
-        this.groceryList.setLocation((Gui.SCREEN_WIDTH - 6 - this.groceryList.getWidth()) / 2, 30);
-        this.add(this.groceryList);
+        // Button neue Bestellung
+        BufferedImage image = drawGroceryList(buttonWidth, buttonHeight, new Color(124, 252, 0) , new Color(0, 100, 0), "NEUE BESTELLUNGEN");
         
-        this.groceryList.addActionListener(actionListener);
+        this.showNewOrder = new Button(buttonWidth, buttonHeight, image);
+        this.add(this.showNewOrder);
+        this.showNewOrder.setLocation((Gui.SCREEN_WIDTH - 6 - this.showNewOrder.getWidth()) / 2, 30);
+        
+        // Button einkaufsliste
+        image = drawGroceryList(buttonWidth, buttonHeight, new Color(100,149,237), new Color(025,025,112), "EINKAUFSLISTE");
+           
+        this.showGroceryList = new Button(buttonWidth, buttonHeight, image);
+        this.showGroceryList.setLocation((Gui.SCREEN_WIDTH - 6 - this.showGroceryList.getWidth()) / 2, this.showNewOrder.getX() + this.showNewOrder.getHeight() + 30);
+        this.showGroceryList.addActionListener(groceryListListener);
+        this.add(this.showGroceryList);
+        
+        
          
     }
     

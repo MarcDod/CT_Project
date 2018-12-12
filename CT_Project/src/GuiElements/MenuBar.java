@@ -1,7 +1,7 @@
 package GuiElements;
 
 import ct_project.Gui;
-import ct_project.Manager;
+import GuiElements.activities.Manager;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 
 public class MenuBar extends JPanel{
     
-    public static final int MENUBAR_HEIGHT = 60;
+    public static final int MENUBAR_HEIGHT = 50;
     
     private Button optionButton;
     private Button returnButton;
@@ -93,6 +93,9 @@ public class MenuBar extends JPanel{
         g2d.setColor(new Color(201, 201, 201));
         g2d.drawRect(0, 0, this.getParent().getWidth() - 7,getHeight() - 1);
         g2d.setColor(oldColor);
+        
+        
+                
     }  
     
     public void disableReturnButton(){
