@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package activities;
+package GuiElements.activities;
 
 /**
  *
  * @author marc.doderer
  */
 public enum ActivityID {
-    HOME_SCREEN, GROCERY_LIST
+    HOME_SCREEN, GROCERY_LIST, LOGIN_SCREEN
 }

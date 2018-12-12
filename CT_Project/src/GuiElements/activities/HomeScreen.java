@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package activities;
+package GuiElements.activities;
 
 import GuiElements.Button;
 import ct_project.Gui;
@@ -24,8 +24,8 @@ public class HomeScreen extends Activity{
     
     private Button groceryList;
     
-    public HomeScreen(ActivityID activityID, ActionListener actionListener) {
-        super(activityID);
+    public HomeScreen(ActionListener actionListener) {
+        super(ActivityID.HOME_SCREEN);
         
         int buttonWidth = Gui.SCREEN_WIDTH - 6 - 20;
         int buttonHeight = Gui.SCREEN_HEIGHT / 7;

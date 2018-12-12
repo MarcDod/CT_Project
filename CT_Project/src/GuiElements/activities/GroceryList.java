@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package activities;
+package GuiElements.activities;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -15,8 +15,8 @@ import java.awt.Graphics2D;
  */
 public class GroceryList extends Activity{
     
-    public GroceryList(ActivityID activityID) {
-        super(activityID);
+    public GroceryList() {
+        super(ActivityID.GROCERY_LIST);
     }
     
     @Override

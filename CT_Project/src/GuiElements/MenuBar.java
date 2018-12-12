@@ -1,6 +1,7 @@
 package GuiElements;
 
 import ct_project.Gui;
+import ct_project.Manager;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,9 +22,10 @@ public class MenuBar extends JPanel{
     
     public static final int MENUBAR_HEIGHT = 60;
     
-    public Button optionButton;
+    private Button optionButton;
+    private Button returnButton;
     
-    public MenuBar(){
+    public MenuBar(ActionListener returnListener, ActionListener optionListener){         
         //<editor-fold defaultstate="collapsed" desc="settings">
         Dimension d = new Dimension(Gui.SCREEN_WIDTH, MENUBAR_HEIGHT);
         this.setPreferredSize(d);
@@ -42,14 +44,17 @@ public class MenuBar extends JPanel{
         this.optionButton.setLocation(Gui.SCREEN_WIDTH - 20 -
                 this.optionButton.getWidth(),
                 (d.height - this.optionButton.getHeight())/2);
-        this.add(this.optionButton);
         this.optionButton.setBorder(null);
-        this.optionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                optionButton_ActionEvent(e);
-            }
-        });
+        this.optionButton.addActionListener(optionListener);
+        this.add(this.optionButton);
+        
+
+        this.returnButton = new Button(width, height);
+        this.returnButton.setLocation(20,
+                (d.height - this.returnButton.getHeight())/2);
+        this.returnButton.setBorder(null);
+        this.returnButton.addActionListener(returnListener);
+        this.add(this.returnButton);
 //</editor-fold>
     }
 
@@ -90,7 +95,10 @@ public class MenuBar extends JPanel{
         g2d.setColor(oldColor);
     }  
     
-    private void optionButton_ActionEvent(ActionEvent e){
-        System.exit(0);
+    public void disableReturnButton(){
+        this.returnButton.setVisible(false);
+    }
+    public void enableReturnButton(){
+        this.returnButton.setVisible(true);
     }
 }

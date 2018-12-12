@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package datenbank;
+package database;
 
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
@@ -22,7 +22,7 @@ public class DB_Connection {
     private Connection con;
     
     public DB_Connection() throws SQLException{
-        this.url = "jdbc:mysql://localhost:3306/CT_Project";
+        this.url = "jdbc:mysql://localhost:3306/mydb";
         this.user = "root";
         this.password = "";
         this.con = null;
