@@ -21,7 +21,7 @@ public class LoginScreen extends Activity{
     private Button loginButton;
     
     public LoginScreen(ActionListener loginButton) {
-        super(ActivityID.LOGIN_SCREEN);
+        super(ActivityID.LOGIN_SCREEN, Gui.SCREEN_HEIGHT - 29);
         
         this.loginButton = new Button(Gui.SCREEN_WIDTH, 50);
         this.loginButton.setLocation(0, this.getHeight() - this.loginButton.getHeight());
