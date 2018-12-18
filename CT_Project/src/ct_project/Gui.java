@@ -8,6 +8,7 @@ import GuiElements.activities.HomeScreen;
 import GuiElements.activities.LogInManager;
 import GuiElements.activities.LoginScreen;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
@@ -21,6 +22,8 @@ public class Gui {
 
     public static final int SCREEN_WIDTH = 450;
     public static final int SCREEN_HEIGHT = 800;
+    public static final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 16);
+    
 
     private JFrame frame;
     private JPanel panel;
@@ -51,7 +54,7 @@ public class Gui {
 
         this.manager = new Manager();
 
-        changeActivity(ActivityID.LOGIN_SCREEN);
+        changeActivity(ActivityID.HOME_SCREEN);
     }
 
     private ActionListener getActionListener(ActivityID activity, ActivityID oldActivity) {

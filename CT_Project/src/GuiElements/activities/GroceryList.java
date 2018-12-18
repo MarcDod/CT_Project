@@ -16,17 +16,12 @@ import java.awt.Graphics2D;
 public class GroceryList extends Activity{
     
     public GroceryList() {
-        super(ActivityID.GROCERY_LIST);
+        super(ActivityID.GROCERY_LIST, new Color(240, 240, 240));
     }
     
     @Override
     protected void paintComponent(Graphics g) {
-        g.clearRect(0, 0, this.getParent().getWidth(), getHeight());
-        Graphics2D g2d = (Graphics2D) g;
-        Color oldColor = g2d.getColor();
-        g2d.setColor(Color.BLUE);
-        g2d.fillRect(0, 0, this.getParent().getWidth(),getHeight());
-        g2d.setColor(oldColor);
+        super.paintComponent(g);
     } 
     
 }

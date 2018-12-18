@@ -12,82 +12,87 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.Map;
+import javax.swing.JButton;
 
 /**
  *
  * @author marc.doderer
  */
-public class HomeScreen extends Activity{
-    
-    private Button showGroceryList;
-    private Button showNewOrder;
-    
+public class HomeScreen extends Activity {
+
+    private Button[] buttons;
+
     public HomeScreen(ActionListener groceryListListener) {
-        super(ActivityID.HOME_SCREEN);
-        
+        super(ActivityID.HOME_SCREEN, new Color(240, 240, 240));
+
         int buttonWidth = Gui.SCREEN_WIDTH - 6 - 20;
         int buttonHeight = Gui.SCREEN_HEIGHT / 7;
-        
+
+        buttons = new Button[3];
+
         // Button neue Bestellung
-        BufferedImage image = drawGroceryList(buttonWidth, buttonHeight, new Color(124, 252, 0) , new Color(0, 100, 0), "NEUE BESTELLUNGEN");
-        
-        this.showNewOrder = new Button(buttonWidth, buttonHeight, image);
-        this.add(this.showNewOrder);
-        this.showNewOrder.setLocation((Gui.SCREEN_WIDTH - 6 - this.showNewOrder.getWidth()) / 2, 30);
-        
+        BufferedImage image = drawGroceryList(buttonWidth, buttonHeight, new Color(124, 252, 0), new Color(0, 100, 0), "NEUE BESTELLUNGEN");
+
+        buttons[0] = new Button(buttonWidth, buttonHeight, image);
+
         // Button einkaufsliste
-        image = drawGroceryList(buttonWidth, buttonHeight, new Color(100,149,237), new Color(025,025,112), "EINKAUFSLISTE");
-           
-        this.showGroceryList = new Button(buttonWidth, buttonHeight, image);
-        this.showGroceryList.setLocation((Gui.SCREEN_WIDTH - 6 - this.showGroceryList.getWidth()) / 2, this.showNewOrder.getX() + this.showNewOrder.getHeight() + 30);
-        this.showGroceryList.addActionListener(groceryListListener);
-        this.add(this.showGroceryList);
-        
-        
-         
+        image = drawGroceryList(buttonWidth, buttonHeight, new Color(100, 149, 237), new Color(025, 025, 112), "EINKAUFSLISTE");
+
+        buttons[1] = new Button(buttonWidth, buttonHeight, image);
+        buttons[1].addActionListener(groceryListListener);;
+
+        buttons[2] = new Button(buttonWidth, 50);
+        buttons[2].setBackground(Color.WHITE);
+        buttons[2].setFont(Gui.BUTTON_FONT);
+        buttons[2].setHorizontalAlignment(JButton.LEFT);
+        buttons[2].setForeground(Color.BLACK);
+        buttons[2].setFocusPainted(false);
+        buttons[2].setText("ERLEDIGTE BESTELLUNGEN");
+
+        for (int i = 0; i < buttons.length; i++) {
+            int bottomLast = (i != 0) ? buttons[i - 1].getY() + buttons[i - 1].getHeight() : 0;
+            buttons[i].setLocation((getWidth() - 6) / 2 - buttons[i].getWidth() / 2, bottomLast + 20);
+            this.add(buttons[i]);
+        }
     }
-    
-    private BufferedImage drawGroceryList(int width, int height, Color beginColor, Color endColor, String text){
-        BufferedImage image = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
-        
+
+    private BufferedImage drawGroceryList(int width, int height, Color beginColor, Color endColor, String text) {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
         Graphics2D g2d = image.createGraphics();
-        
-        int groceryLists = 2;
+
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, 
+            RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+            RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         
         // Background
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, width, height);
-        
+
         // Text
         g2d.setColor(Color.BLACK);
-        Font font = new Font("SansSerif", Font.BOLD, 15);
-        g2d.setFont(font);
-        g2d.drawString(text, 10, 30);
-        
-        
+        g2d.setFont(Gui.BUTTON_FONT);
+        g2d.drawString(text, 13, 30);
+
         GradientPaint gradient = new GradientPaint(0, 0, beginColor, width, 0, endColor);
         g2d.setPaint(gradient);
-        
+
         g2d.fillRect(0, height - 7, width, 7);
-              
+
         g2d.dispose();
-        
-        return  image;
+
+        return image;
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
-        g.clearRect(0, 0, this.getParent().getWidth(), getHeight());
-        Graphics2D g2d = (Graphics2D) g;
-        Color oldColor = g2d.getColor();
-        g2d.setColor(new Color(240, 240, 240));
-        g2d.fillRect(0, 0, this.getParent().getWidth() - 6,getHeight());
-        g2d.setColor(oldColor);
-       
-    }  
-   
-    
+        super.paintComponent(g);
+    }
+
 }

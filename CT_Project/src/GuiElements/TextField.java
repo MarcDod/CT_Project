@@ -40,4 +40,9 @@ public class TextField extends JPasswordField{
             g.drawString(hintText, (this.getWidth() - 6)/2 - fm.stringWidth(hintText) / 2,this.getHeight() / 2 + fm.getHeight() / 4);
         }
     }
+    
+    @Override
+    public String getText(){
+        return String.valueOf(this.getPassword());
+    }
 }

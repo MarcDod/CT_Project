@@ -7,7 +7,9 @@ package GuiElements.activities;
 
 import GuiElements.MenuBar;
 import ct_project.Gui;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
@@ -17,7 +19,7 @@ import javax.swing.JPanel;
 public abstract class Activity extends JPanel{
     private ActivityID activityID;
     
-    public Activity(ActivityID activityID){
+    public Activity(ActivityID activityID, Color background){
         this.activityID = activityID;
         
         Dimension d = new Dimension(Gui.SCREEN_WIDTH,Gui.SCREEN_HEIGHT - 29 - MenuBar.MENUBAR_HEIGHT); // 29 = TopBar
@@ -29,9 +31,10 @@ public abstract class Activity extends JPanel{
         this.setLocation(0, MenuBar.MENUBAR_HEIGHT);
         this.setLayout(null);
         this.setFocusable(true);
+        this.setBackground(background);
     }
     
-    public Activity(ActivityID activityID, int height){
+    public Activity(ActivityID activityID, int height, Color background){
         this.activityID = activityID;
         
         Dimension d = new Dimension(Gui.SCREEN_WIDTH,height);
@@ -43,9 +46,11 @@ public abstract class Activity extends JPanel{
         this.setLocation(0, 0);
         this.setLayout(null);
         this.setFocusable(true);
+        this.setBackground(background);
     }
         
     public ActivityID getActivityID(){
         return this.activityID;
     }
+    
 }
