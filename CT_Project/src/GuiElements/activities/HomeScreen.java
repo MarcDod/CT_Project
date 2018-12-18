@@ -7,12 +7,16 @@ package GuiElements.activities;
 
 import GuiElements.Button;
 import ct_project.Gui;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -70,6 +74,7 @@ public class HomeScreen extends Activity {
             RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
             RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         // Background
         g2d.setColor(Color.WHITE);
@@ -79,7 +84,25 @@ public class HomeScreen extends Activity {
         g2d.setColor(Color.BLACK);
         g2d.setFont(Gui.BUTTON_FONT);
         g2d.drawString(text, 13, 30);
-
+        
+        // Anzeigen
+        g2d.setColor(Gui.COLOR);
+        int ovalWidth = (int)((width / 2) * 0.9);
+        int ovalHeight = 37;
+        int ovalX = (width) / 2 + (width / 2 - ovalWidth) / 2;
+        int ovalY = height / 2;
+        g2d.fillRoundRect(ovalX, ovalY, ovalWidth, ovalHeight, ovalHeight, ovalHeight);
+        g2d.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        FontMetrics fm = g2d.getFontMetrics();
+        g2d.setColor(Color.WHITE);
+        int textY = ovalY + (ovalHeight / 2 + fm.getHeight() / 3);
+        int textX = ovalX + ((ovalWidth)/2 - fm.stringWidth("ANZEIGEN") / 2);
+        g2d.drawString("ANZEIGEN", textX,textY);
+        textY -= 15;
+        g2d.setStroke(new BasicStroke(2.0f));
+        g2d.drawPolyline(new int[]{ovalX + ovalWidth - ovalHeight + 5,ovalX + ovalWidth - ovalHeight + 10,ovalX + ovalWidth - ovalHeight + 5}, new int[]{textY,textY + fm.getHeight() / 2,textY + fm.getHeight()}, 3);
+        
+        
         GradientPaint gradient = new GradientPaint(0, 0, beginColor, width, 0, endColor);
         g2d.setPaint(gradient);
 

@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -49,7 +50,9 @@ public class MenuBar extends JPanel{
         this.add(this.optionButton);
         
 
-        this.returnButton = new Button(width, height);
+        height -= 10;
+        width -= 10;
+        this.returnButton = new Button(width, height, getRetrunImage(width, height));
         this.returnButton.setLocation(20,
                 (d.height - this.returnButton.getHeight())/2);
         this.returnButton.setBorder(null);
@@ -58,6 +61,27 @@ public class MenuBar extends JPanel{
 //</editor-fold>
     }
 
+    private BufferedImage getRetrunImage(int width, int height){
+        BufferedImage image = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
+        
+        Graphics2D g2d = image.createGraphics();
+        
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, width, height);
+        
+        
+        g2d.setColor(Color.BLACK);
+        
+        g2d.setStroke(new BasicStroke(2.0f));
+        g2d.drawPolyline(new int[]{width, 0, width}, new int[]{0, height/2, height}, 3);
+       
+        g2d.dispose();
+        
+        return image;
+    }
+    
     private BufferedImage getImage(int width, int height){
         BufferedImage image = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
         

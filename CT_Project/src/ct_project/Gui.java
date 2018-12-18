@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -23,6 +24,7 @@ public class Gui {
     public static final int SCREEN_WIDTH = 450;
     public static final int SCREEN_HEIGHT = 800;
     public static final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 16);
+    public static final Color COLOR = Color.BLUE;
     
 
     private JFrame frame;
