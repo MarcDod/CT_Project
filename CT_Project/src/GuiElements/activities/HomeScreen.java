@@ -39,6 +39,14 @@ public class HomeScreen extends Activity {
 
         buttons = new Button[3];
 
+        buttons[2] = new Button(buttonWidth, 50);
+        buttons[2].setBackground(Color.WHITE);
+        buttons[2].setFont(Gui.BUTTON_FONT);
+        buttons[2].setHorizontalAlignment(JButton.LEFT);
+        buttons[2].setForeground(Color.BLACK);
+        buttons[2].setFocusPainted(false);
+        buttons[2].setText("ERLEDIGTE BESTELLUNGEN");
+        
         // Button neue Bestellung
         BufferedImage image = drawGroceryList(buttonWidth, buttonHeight, new Color(124, 252, 0), new Color(0, 100, 0), "NEUE BESTELLUNGEN");
 
@@ -50,13 +58,6 @@ public class HomeScreen extends Activity {
         buttons[1] = new Button(buttonWidth, buttonHeight, image);
         buttons[1].addActionListener(groceryListListener);;
 
-        buttons[2] = new Button(buttonWidth, 50);
-        buttons[2].setBackground(Color.WHITE);
-        buttons[2].setFont(Gui.BUTTON_FONT);
-        buttons[2].setHorizontalAlignment(JButton.LEFT);
-        buttons[2].setForeground(Color.BLACK);
-        buttons[2].setFocusPainted(false);
-        buttons[2].setText("ERLEDIGTE BESTELLUNGEN");
 
         for (int i = 0; i < buttons.length; i++) {
             int bottomLast = (i != 0) ? buttons[i - 1].getY() + buttons[i - 1].getHeight() : 0;
@@ -83,7 +84,7 @@ public class HomeScreen extends Activity {
         // Text
         g2d.setColor(Color.BLACK);
         g2d.setFont(Gui.BUTTON_FONT);
-        g2d.drawString(text, 13, 30);
+        g2d.drawString(text, buttons[buttons.length - 1].getMargin().left + 3, 30);
         
         // Anzeigen
         g2d.setColor(Gui.COLOR);
@@ -98,9 +99,9 @@ public class HomeScreen extends Activity {
         int textY = ovalY + (ovalHeight / 2 + fm.getHeight() / 3);
         int textX = ovalX + ((ovalWidth)/2 - fm.stringWidth("ANZEIGEN") / 2);
         g2d.drawString("ANZEIGEN", textX,textY);
-        textY -= 15;
+        textY -= (fm.getHeight() / 4);
         g2d.setStroke(new BasicStroke(2.0f));
-        g2d.drawPolyline(new int[]{ovalX + ovalWidth - ovalHeight + 5,ovalX + ovalWidth - ovalHeight + 10,ovalX + ovalWidth - ovalHeight + 5}, new int[]{textY,textY + fm.getHeight() / 2,textY + fm.getHeight()}, 3);
+        g2d.drawPolyline(new int[]{ovalX + ovalWidth - ovalHeight + 5,ovalX + ovalWidth - ovalHeight + 10,ovalX + ovalWidth - ovalHeight + 5}, new int[]{textY - fm.getHeight() / 2,textY,textY + fm.getHeight() / 2}, 3);
         
         
         GradientPaint gradient = new GradientPaint(0, 0, beginColor, width, 0, endColor);

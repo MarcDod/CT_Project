@@ -24,7 +24,7 @@ public class Gui {
     public static final int SCREEN_WIDTH = 450;
     public static final int SCREEN_HEIGHT = 800;
     public static final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 16);
-    public static final Color COLOR = Color.BLUE;
+    public static final Color COLOR = Color.decode("0x0050be");
     
 
     private JFrame frame;
@@ -113,9 +113,9 @@ public class Gui {
         }
 
         if (this.manager.isEmpty()) {
-            this.menu.disableReturnButton();
+            this.menu.disableReturnButton("Paul");
         } else {
-            this.menu.enableReturnButton();
+            this.menu.enableReturnButton(activity.getString());
         }
 
         switch (activity) {

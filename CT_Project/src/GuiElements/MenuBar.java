@@ -11,6 +11,7 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -25,6 +26,8 @@ public class MenuBar extends JPanel{
     
     private Button optionButton;
     private Button returnButton;
+    
+    private JLabel label;
     
     public MenuBar(ActionListener returnListener, ActionListener optionListener){         
         //<editor-fold defaultstate="collapsed" desc="settings">
@@ -59,6 +62,14 @@ public class MenuBar extends JPanel{
         this.returnButton.addActionListener(returnListener);
         this.add(this.returnButton);
 //</editor-fold>
+
+        label = new JLabel();
+        label.setLocation(returnButton.getX() + 50, 0);
+        label.setSize(optionButton.getX(), this.getHeight() - 4);
+        label.setFont(Gui.BUTTON_FONT);
+        label.setForeground(Color.BLACK);
+        label.setVisible(true);
+        this.add(label);
     }
 
     private BufferedImage getRetrunImage(int width, int height){
@@ -122,10 +133,12 @@ public class MenuBar extends JPanel{
                 
     }  
     
-    public void disableReturnButton(){
+    public void disableReturnButton(String name){
         this.returnButton.setVisible(false);
+        this.label.setText(name);
     }
-    public void enableReturnButton(){
+    public void enableReturnButton(String activity){
         this.returnButton.setVisible(true);
+        this.label.setText(activity);
     }
 }
