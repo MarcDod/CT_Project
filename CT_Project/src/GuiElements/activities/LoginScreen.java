@@ -73,6 +73,6 @@ public class LoginScreen extends Activity{
     }  
  
     private void loginAction(){
-        logInManager.checkUserData(this.password.getText(), this.userName.getText());
+        logInManager.checkUserData(this.password.getString(), this.userName.getString());
     }
 }

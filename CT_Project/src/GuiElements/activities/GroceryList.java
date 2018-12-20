@@ -10,31 +10,42 @@ import GuiElements.Button;
 import ct_project.Gui;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.image.BufferedImage;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 /**
  *
  * @author marc.doderer
  */
 public class GroceryList extends Activity{
-    
-    Button lists[];
-    
-    Button newList;
-    
-    public GroceryList() {
+
+    private Button lists[];
+    JScrollPane jScrollPane;
+    JPanel jPanel;
+
+    private Button newList;
+
+    public GroceryList(){
         super(ActivityID.GROCERY_LIST, new Color(240, 240, 240));
-        
+        jPanel = new JPanel();
+        jScrollPane = new JScrollPane(jPanel);
+        jScrollPane.setWheelScrollingEnabled(true);
+        jScrollPane.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         int buttonWidth = Gui.SCREEN_WIDTH - 6 - 20;
         int buttonHeight = Gui.SCREEN_HEIGHT / 7;
-        
-        
+
         this.newList = new Button(Gui.SCREEN_WIDTH, 60);
         this.newList.setBackground(Gui.COLOR);
         this.newList.setForeground(Color.WHITE);
@@ -42,29 +53,60 @@ public class GroceryList extends Activity{
         this.newList.setText("NEUE LISTE");
         this.newList.setLocation(0, this.getHeight() - this.newList.getHeight());
         this.newList.setFocusPainted(false);
-        this.add(this.newList);
+
+        this.jScrollPane.setSize(this.getWidth(), this.newList.getY());
+        this.jScrollPane.setLocation(-1, 0);
         
-        List[] groceryList = new List[]{new List("Neue Liste", new int[99]), new List("Neue Liste2", new int[55])};
+        this.jPanel.setBackground(Color.yellow);
+        this.jPanel.setMaximumSize(new Dimension(this.getWidth(), Integer.MAX_VALUE));
+        this.jPanel.setLayout(null);
+          
+        this.jScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+        
+        this.add(this.newList);
+        this.add(this.jScrollPane);
+
+        List[] groceryList = new List[]{new List("Neue Liste", new int[99]),
+            new List("Neue Liste2", new int[55]), new List("Neue Liste",
+            new int[99]), new List("Neue Liste", new int[99]), new List(
+            "Neue Liste", new int[99]), new List("Neue Liste", new int[99]),
+            new List("Neue Liste", new int[99]), new List("Neue Liste",
+            new int[99]), new List("Neue Liste", new int[99]), new List(
+            "Neue Liste", new int[99]), new List("Neue Liste", new int[99])};
         this.lists = new Button[groceryList.length];
         for(int i = 0; i < lists.length; i++){
-            lists[i] = new Button(buttonWidth, buttonHeight, drawGroceryList(buttonWidth, buttonHeight, groceryList[i].getName(), groceryList[i].getOrderIDs().length));
-            int bottomLast = (i != 0) ? lists[i - 1].getY() + lists[i - 1].getHeight() : 0;
-            lists[i].setLocation((getWidth() - 6) / 2 - lists[i].getWidth() / 2, bottomLast + 20);
-            this.add(lists[i]);
+            lists[i] = new Button(buttonWidth, buttonHeight, drawGroceryList(
+                    buttonWidth, buttonHeight, groceryList[i].getName(),
+                    groceryList[i].getOrderIDs().length));
+            int bottomLast = (i != 0) ? lists[i - 1].getY() + lists[i - 1].
+                    getHeight() : 0;
+            lists[i].setLocation((getWidth() - 6) / 2 - lists[i].getWidth() / 2,
+                    bottomLast + 20);
+            this.jPanel.add(lists[i]);
         }
+
+        this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.lists.length * (buttonHeight + 20)));
+        this.jPanel.
+                setSize(buttonWidth, this.lists.length * (buttonHeight + 20));
+
+        this.jPanel.setVisible(true);
+        this.jScrollPane.setVisible(true);
     }
-    
-        private BufferedImage drawGroceryList(int width, int height, String text, int numberOrders) {
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+    private BufferedImage drawGroceryList(int width, int height, String text,
+            int numberOrders){
+        BufferedImage image = new BufferedImage(width, height,
+                BufferedImage.TYPE_INT_RGB);
 
         Graphics2D g2d = image.createGraphics();
 
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, 
-            RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-            RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
+                RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
         // Background
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, width, height);
@@ -73,40 +115,49 @@ public class GroceryList extends Activity{
         g2d.setColor(Color.BLACK);
         g2d.setFont(Gui.BUTTON_FONT);
         g2d.drawString(text, newList.getMargin().left + 3, 30);
-        Font font = new Font(Gui.BUTTON_FONT.getName(), Gui.BUTTON_FONT.getStyle(), 40);
+        Font font = new Font(Gui.BUTTON_FONT.getName(), Gui.BUTTON_FONT.
+                getStyle(), 40);
         g2d.setFont(font);
-        g2d.drawString(String.valueOf(numberOrders), newList.getMargin().left + 3, height - 30);
+        g2d.drawString(String.valueOf(numberOrders), newList.getMargin().left
+                + 3, height - 30);
         font = new Font(Gui.BUTTON_FONT.getName(), Font.PLAIN, 20);
         FontMetrics fm = g2d.getFontMetrics();
         g2d.setFont(font);
-        g2d.drawString("GEGENSTÄNDE", newList.getMargin().left + 3 + fm.stringWidth(String.valueOf(numberOrders)) + 5, height - 30);
-        
+        g2d.drawString("GEGENSTÄNDE", newList.getMargin().left + 3 + fm.
+                stringWidth(String.valueOf(numberOrders)) + 5, height - 30);
+
         // Anzeigen
         g2d.setColor(Gui.COLOR);
-        int ovalWidth = (int)((width / 2) * 0.9);
+        int ovalWidth = (int) ((width / 2) * 0.9);
         int ovalHeight = 37;
         int ovalX = (width) / 2 + (width / 2 - ovalWidth) / 2;
         int ovalY = height / 2;
-        g2d.fillRoundRect(ovalX, ovalY, ovalWidth, ovalHeight, ovalHeight, ovalHeight);
+        g2d.fillRoundRect(ovalX, ovalY, ovalWidth, ovalHeight, ovalHeight,
+                ovalHeight);
         g2d.setFont(new Font("Segoe UI", Font.BOLD, 14));
         fm = g2d.getFontMetrics();
         g2d.setColor(Color.WHITE);
         int textY = ovalY + (ovalHeight / 2 + fm.getHeight() / 3);
-        int textX = ovalX + ((ovalWidth)/2 - fm.stringWidth("ANZEIGEN") / 2);
-        g2d.drawString("ANZEIGEN", textX,textY);
+        int textX = ovalX + ((ovalWidth) / 2 - fm.stringWidth("ANZEIGEN") / 2);
+        g2d.drawString("ANZEIGEN", textX, textY);
         textY -= (fm.getHeight() / 4);
         g2d.setStroke(new BasicStroke(2.0f));
-        g2d.drawPolyline(new int[]{ovalX + ovalWidth - ovalHeight + 5,ovalX + ovalWidth - ovalHeight + 10,ovalX + ovalWidth - ovalHeight + 5}, new int[]{textY - fm.getHeight() / 2,textY,textY + fm.getHeight() / 2}, 3);
-        
+        g2d.drawPolyline(new int[]{ovalX + ovalWidth - ovalHeight + 5, ovalX
+            + ovalWidth - ovalHeight + 10, ovalX + ovalWidth - ovalHeight + 5},
+                new int[]{textY - fm.getHeight() / 2, textY, textY + fm.
+                    getHeight() / 2}, 3);
+
         g2d.dispose();
 
         return image;
     }
 
-    
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g){
+        for(int i = 0; i < lists.length; i++){
+            lists[i].repaint();
+        }
         super.paintComponent(g);
-    } 
-    
+    }
+
 }

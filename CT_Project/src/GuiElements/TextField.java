@@ -34,15 +34,14 @@ public class TextField extends JPasswordField{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawLine(0, this.getHeight() - 1, this.getWidth(), this.getHeight() - 1);
-        if(this.getText().equals("")){
+        if(this.getString().equals("")){
             FontMetrics fm = g.getFontMetrics();
             g.setColor(Color.decode("0x838B8B"));
             g.drawString(hintText, (this.getWidth() - 6)/2 - fm.stringWidth(hintText) / 2,this.getHeight() / 2 + fm.getHeight() / 4);
         }
     }
     
-    @Override
-    public String getText(){
+    public String getString(){
         return String.valueOf(this.getPassword());
     }
 }
