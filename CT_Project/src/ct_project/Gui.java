@@ -1,5 +1,6 @@
 package ct_project;
 
+import DataManagement.Datatemplates.List;
 import GuiElements.activities.Manager;
 import GuiElements.MenuBar;
 import GuiElements.activities.Activity;
@@ -27,7 +28,6 @@ public class Gui {
     public static final int SCREEN_HEIGHT = 800;
     public static final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 16);
     public static final Color COLOR = Color.decode("0x0050be");
-    
 
     private JFrame frame;
     private JPanel panel;
@@ -73,19 +73,6 @@ public class Gui {
 
         return listener;
     }
-    
-    private ActionListener getOrderActionListener(ActivityID activity, ActivityID oldActivity) {
-
-        ActionListener listener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                manager.addActivityID(oldActivity);
-                changeActivity(activity);
-            }
-        };
-
-        return listener;
-    }
 
     private ActionListener getActionListener(ActivityID activity) {
 
@@ -113,8 +100,10 @@ public class Gui {
     }
 
     private void changeActivity(ActivityID activity) {
+        Activity tempActivity = null;
         for (int i = 0; i < this.panel.getComponentCount(); i++) {
             if (!(this.panel.getComponent(i) instanceof MenuBar)) {
+                if(this.panel.getComponent(i) instanceof Activity)tempActivity = (Activity)this.panel.getComponent(i);
                 this.panel.getComponent(i).setVisible(false);
                 this.panel.remove(i);
                 i--;
@@ -127,39 +116,44 @@ public class Gui {
             this.menu.setVisible(true);
         }
 
-        Activity tempActivity = null;
         switch (activity) {
             case HOME_SCREEN:
                 tempActivity = new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity));
                 break;
             case GROCERY_LIST:
-                tempActivity = new GroceryList(getOrderActionListener(ActivityID.SHOW_ORDER_SCREEN, activity));
+                tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity));
                 break;
             case SHOW_ORDER_SCREEN:
-                tempActivity = new ShowOrder(GroceryList.activeList);
+                if (tempActivity != null){
+                    if(tempActivity instanceof GroceryList){
+                        GroceryList tempGroceryList = (GroceryList) tempActivity;
+                        tempActivity = new ShowOrder(tempGroceryList.getActiveList());
+                    }
+                }
                 break;
             case LOGIN_SCREEN:
                 LogInManager logInManager = new LogInManager();
                 tempActivity = new LoginScreen(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent ae) {
-                        if(logInManager.isValid()){
+                        if (logInManager.isValid()) {
                             changeActivity(ActivityID.HOME_SCREEN);
                         }
                     }
                 }, logInManager);
                 break;
         }
-        
-        if(tempActivity != null){
+
+        if (tempActivity != null) {
             this.panel.add(tempActivity);
         }
-        
+
         if (this.manager.isEmpty()) {
             this.menu.disableReturnButton("Paul");
         } else {
-            if(tempActivity != null)
-            this.menu.enableReturnButton(tempActivity.getTitle());
+            if (tempActivity != null) {
+                this.menu.enableReturnButton(tempActivity.getTitle());
+            }
         }
 
         this.frame.repaint();

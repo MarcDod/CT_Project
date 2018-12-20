@@ -39,7 +39,7 @@ public class GroceryList extends Activity{
 
     private List[] groceryList;
     
-    public static List activeList;
+    private List activeList;
     
     public GroceryList(ActionListener lists){
         super(ActivityID.GROCERY_LIST,"EINKAUFSLISTE", new Color(240, 240, 240));
@@ -74,7 +74,7 @@ public class GroceryList extends Activity{
         this.add(this.newList);
         this.add(this.jScrollPane);
 
-        this.groceryList = new List[]{new List("PETER", new int[99]),
+        this.groceryList = new List[]{new List("PETER", new int[5]),
             new List("Neue Liste2", new int[55]), new List("Neue Liste",
             new int[99]), new List("Neue Liste", new int[99]), new List(
             "Neue Liste", new int[99]), new List("Neue Liste", new int[99]),
@@ -94,7 +94,7 @@ public class GroceryList extends Activity{
             this.lists[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    orderAction(ae);
+                    activeList = getList(ae);
                 }
             });
             this.jPanel.add(this.lists[i]);
@@ -175,13 +175,17 @@ public class GroceryList extends Activity{
         super.paintComponent(g);
     }
 
-    private void orderAction(ActionEvent ae){
+    private List getList(ActionEvent ae){
         for(int i = 0; i < lists.length; i++){
             if(lists[i].equals(ae.getSource())){
-                activeList = groceryList[i];
-                break;
+                return groceryList[i];
             }
         }
+        return null;
+    }
+    
+    public List getActiveList(){
+        return activeList;
     }
     
 }
