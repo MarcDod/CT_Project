@@ -54,4 +54,8 @@ public class Connector{
     public boolean ping(int timeout) throws SQLException{
         return this.con.ping(timeout);
     }
+
+    public void reconnect() throws SQLException{
+        this.con.reconnect();
+    }
 }

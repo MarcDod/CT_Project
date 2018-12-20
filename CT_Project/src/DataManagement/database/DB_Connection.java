@@ -49,4 +49,8 @@ public class DB_Connection {
     protected boolean ping(int timeout) throws SQLException{
         return this.con.isValid(timeout);
     }
+
+    protected void reconnect() throws SQLException{
+        buildConnection();
+    }
 }

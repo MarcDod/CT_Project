@@ -15,8 +15,13 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  *
@@ -34,8 +39,30 @@ public class Gui {
     private MenuBar menu;
 
     private Manager manager;
+    private final Timer ping;
 
     public Gui() {
+        this.ping = new Timer(1000, (ActionEvent e) -> {
+            try {
+                if(!manager.ping(60)){
+                    Object[] options = {"Erneut Verbinden","Beenden"};
+                    int optionResult = JOptionPane.showOptionDialog(frame, "Die Verbindung zur Datenbank wurde verloren.", "Verbindung verloren",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, options,
+                            options[1]);
+                    switch(optionResult){
+                        case 0:
+                            manager.reconnect();
+                            break;
+                        case 1:
+                            System.exit(1);
+                            break;
+                    }
+                }
+            }catch (SQLException ex){
+                Logger.getLogger(Manager.class.getName()).
+                        log(Level.SEVERE, null, ex);
+            }
+        });
         this.frame = new JFrame("CT_Project");
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         final Dimension d = new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -57,6 +84,9 @@ public class Gui {
         this.frame.pack();
 
         this.manager = new Manager();
+        
+        this.ping.setInitialDelay(5000);
+        this.ping.start();
 
         changeActivity(ActivityID.HOME_SCREEN);
     }
@@ -146,6 +176,7 @@ public class Gui {
 
         if (tempActivity != null) {
             this.panel.add(tempActivity);
+            this.manager.setCurrentActivity(tempActivity);
         }
 
         if (this.manager.isEmpty()) {
