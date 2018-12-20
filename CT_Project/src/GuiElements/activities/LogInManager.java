@@ -16,15 +16,17 @@ import java.util.logging.Logger;
  */
 public class LogInManager {
     private static boolean valid;
+    private Connector database;
     
-    public LogInManager(){
+    public LogInManager(Connector database){
         valid = false;
+        this.database = database;
     }
     
     public void checkUserData(String password, String user){
         try {
-            Connector baum = new Connector();
-            valid = baum.getPassword(user).equals(password);
+            database = new Connector();
+            valid = database.getPassword(user).equals(password);
         }catch (SQLException ex){
             System.err.println("MENSCH");
         }

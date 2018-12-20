@@ -50,4 +50,8 @@ public class Connector{
         }
         return resultingAccount;
     }
+    
+    public boolean ping(int timeout) throws SQLException{
+        return this.con.ping(timeout);
+    }
 }

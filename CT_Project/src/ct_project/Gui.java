@@ -132,7 +132,7 @@ public class Gui {
                 }
                 break;
             case LOGIN_SCREEN:
-                LogInManager logInManager = new LogInManager();
+                LogInManager logInManager = manager.getLogInManager();
                 tempActivity = new LoginScreen(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent ae) {

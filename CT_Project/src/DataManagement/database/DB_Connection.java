@@ -23,7 +23,7 @@ public class DB_Connection {
     
     private Connection con;
     
-    public DB_Connection() throws SQLException{
+    protected DB_Connection() throws SQLException{
         this.url = "jdbc:mysql://localhost:3306/mydb";
         this.user = "root";
         this.password = "";
@@ -37,12 +37,16 @@ public class DB_Connection {
         
     }
     
-    public void deleteConnection() throws SQLException{
+    protected void deleteConnection() throws SQLException{
         con.close();
     }   
     
-    public ResultSet sendSqlStatement(String sqlQuery) throws SQLException{
+    protected ResultSet sendSqlStatement(String sqlQuery) throws SQLException{
         Statement stmt = this.con.createStatement();
         return stmt.executeQuery(sqlQuery);
+    }
+    
+    protected boolean ping(int timeout) throws SQLException{
+        return this.con.isValid(timeout);
     }
 }
