@@ -54,14 +54,16 @@ public class GroceryList extends Activity{
         this.newList.setLocation(0, this.getHeight() - this.newList.getHeight());
         this.newList.setFocusPainted(false);
 
-        this.jScrollPane.setSize(this.getWidth(), this.newList.getY());
+        this.jScrollPane.setSize(this.getWidth()+20, this.newList.getY());
         this.jScrollPane.setLocation(-1, 0);
         
-        this.jPanel.setBackground(Color.yellow);
         this.jPanel.setMaximumSize(new Dimension(this.getWidth(), Integer.MAX_VALUE));
         this.jPanel.setLayout(null);
           
         this.jScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+
+        this.jScrollPane.setBorder(null);
+        this.jPanel.setBorder(null);
         
         this.add(this.newList);
         this.add(this.jScrollPane);
@@ -85,9 +87,9 @@ public class GroceryList extends Activity{
             this.jPanel.add(lists[i]);
         }
 
-        this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.lists.length * (buttonHeight + 20)));
+        this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.lists.length * (buttonHeight + 20) + 20));
         this.jPanel.
-                setSize(buttonWidth, this.lists.length * (buttonHeight + 20));
+                setSize(buttonWidth, this.lists.length * (buttonHeight + 20) + 20);
 
         this.jPanel.setVisible(true);
         this.jScrollPane.setVisible(true);

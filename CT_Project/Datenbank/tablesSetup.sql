@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Account` (
   `groupID` INT NOT NULL,
   PRIMARY KEY (`accountID`),
   INDEX `fk_Account_Group_idx` (`groupID` ASC),
-  UNIQUE INDEX `User_UNIQUE` (`User` ASC),
   CONSTRAINT `fk_Account_Group`
     FOREIGN KEY (`groupID`)
     REFERENCES `mydb`.`Group` (`groupID`)
@@ -63,6 +62,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Order` (
   `closed` TINYINT NULL,
   `itemName` VARCHAR(45) NOT NULL,
   `accountID` INT NOT NULL,
+  `watched` TINYINT NULL,
   PRIMARY KEY (`orderID`),
   INDEX `fk_Order_item1_idx` (`itemName` ASC),
   INDEX `fk_Order_Account1_idx` (`accountID` ASC),
