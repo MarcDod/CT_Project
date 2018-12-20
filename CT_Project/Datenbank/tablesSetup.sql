@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Account` (
   CONSTRAINT `fk_Account_Group`
     FOREIGN KEY (`groupID`)
     REFERENCES `mydb`.`Group` (`groupID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -69,13 +69,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Order` (
   CONSTRAINT `fk_Order_item1`
     FOREIGN KEY (`itemName`)
     REFERENCES `mydb`.`Item` (`itemName`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Order_Account1`
     FOREIGN KEY (`accountID`)
     REFERENCES `mydb`.`Account` (`accountID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
