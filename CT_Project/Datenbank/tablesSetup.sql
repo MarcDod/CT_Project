@@ -27,11 +27,10 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Account`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Account` (
-  `accountID` INT NOT NULL,
-  `User` VARCHAR(45) NULL,
+  `User` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NULL,
   `groupID` INT NOT NULL,
-  PRIMARY KEY (`accountID`),
+  PRIMARY KEY (`User`),
   INDEX `fk_Account_Group_idx` (`groupID` ASC),
   CONSTRAINT `fk_Account_Group`
     FOREIGN KEY (`groupID`)
@@ -61,19 +60,19 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Order` (
   `number` INT NULL,
   `closed` TINYINT NULL,
   `itemName` VARCHAR(45) NOT NULL,
-  `accountID` INT NOT NULL,
   `watched` TINYINT NULL,
+  `User` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`orderID`),
   INDEX `fk_Order_item1_idx` (`itemName` ASC),
-  INDEX `fk_Order_Account1_idx` (`accountID` ASC),
+  INDEX `fk_Order_Account1_idx` (`User` ASC),
   CONSTRAINT `fk_Order_item1`
     FOREIGN KEY (`itemName`)
     REFERENCES `mydb`.`Item` (`itemName`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT `fk_Order_Account1`
-    FOREIGN KEY (`accountID`)
-    REFERENCES `mydb`.`Account` (`accountID`)
+    FOREIGN KEY (`User`)
+    REFERENCES `mydb`.`Account` (`User`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
