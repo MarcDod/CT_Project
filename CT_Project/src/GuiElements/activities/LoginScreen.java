@@ -33,7 +33,7 @@ public class LoginScreen extends Activity{
     
     public LoginScreen(ActionListener loginButton, LogInManager logInManager) {
         super(ActivityID.LOGIN_SCREEN, Gui.SCREEN_HEIGHT - 29, Color.WHITE);
-        this.logInManager = new LogInManager();
+        this.logInManager = logInManager;
         
         this.loginButton = new Button(Gui.SCREEN_WIDTH, 60);
         this.loginButton.setBackground(Gui.COLOR);

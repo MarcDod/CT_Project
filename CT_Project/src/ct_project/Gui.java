@@ -126,7 +126,7 @@ public class Gui {
                 this.panel.add(new GroceryList());
                 break;
             case LOGIN_SCREEN:
-                LogInManager logInManager = new LogInManager();
+                LogInManager logInManager = manager.getLogInManager();
                 this.panel.add(new LoginScreen(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent ae) {

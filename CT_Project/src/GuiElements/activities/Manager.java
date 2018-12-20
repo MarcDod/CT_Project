@@ -5,13 +5,11 @@
  */
 package GuiElements.activities;
 
-import GuiElements.MenuBar;
-import GuiElements.activities.ActivityID;
-import GuiElements.activities.GroceryList;
-import GuiElements.activities.HomeScreen;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import DataManagement.database.Connector;
+import java.sql.SQLException;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,9 +18,27 @@ import java.util.Stack;
 public class Manager {
     
     private Stack<ActivityID> activities;
+    private Thread ping;
+    private Connector database;
     
     public Manager(){
         this.activities = new Stack<>();
+        try {
+            this.database = new Connector();
+            ping = new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    try {
+                        database.ping(60);
+                    }catch (SQLException ex){
+                        Logger.getLogger(Manager.class.getName()).
+                                log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        }catch (SQLException ex){
+            Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public ActivityID getLastActivityID(){
@@ -41,5 +57,9 @@ public class Manager {
     
     public void resetStack(){
         this.activities.clear();
+    }
+    
+    public LogInManager getLogInManager(){
+        return new LogInManager(this.database);
     }
 }
