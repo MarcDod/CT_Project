@@ -10,15 +10,6 @@ package GuiElements.activities;
  * @author marc.doderer
  */
 public enum ActivityID {
-    HOME_SCREEN("HEIMBILDSCHIRM"), GROCERY_LIST("EINKAUFSLISTE"), LOGIN_SCREEN("ANMELDEFENSTER");
-    
-    private final String name;
-    
-    ActivityID(String s) {
-        name = s;
-    }
-    
-    public String getString(){
-        return name;
-    }
+    HOME_SCREEN, GROCERY_LIST, LOGIN_SCREEN, SHOW_ORDER_SCREEN;
+
 }

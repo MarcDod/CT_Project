@@ -18,9 +18,11 @@ import javax.swing.JPanel;
  */
 public abstract class Activity extends JPanel{
     private ActivityID activityID;
+    private String title;
     
-    public Activity(ActivityID activityID, Color background){
+    public Activity(ActivityID activityID,String title, Color background){
         this.activityID = activityID;
+        this.title = title;
         
         Dimension d = new Dimension(Gui.SCREEN_WIDTH,Gui.SCREEN_HEIGHT - 29 - MenuBar.MENUBAR_HEIGHT); // 29 = TopBar
         this.setPreferredSize(d);
@@ -34,8 +36,9 @@ public abstract class Activity extends JPanel{
         this.setBackground(background);
     }
     
-    public Activity(ActivityID activityID, int height, Color background){
+    public Activity(ActivityID activityID,String title ,int height, Color background){
         this.activityID = activityID;
+        this.title = title;
         
         Dimension d = new Dimension(Gui.SCREEN_WIDTH,height);
         this.setPreferredSize(d);
@@ -51,6 +54,10 @@ public abstract class Activity extends JPanel{
         
     public ActivityID getActivityID(){
         return this.activityID;
+    }
+    
+    public String getTitle(){
+        return this.title;
     }
     
 }

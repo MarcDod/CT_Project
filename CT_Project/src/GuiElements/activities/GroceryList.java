@@ -16,6 +16,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.image.BufferedImage;
@@ -30,21 +32,17 @@ import javax.swing.JScrollPane;
 public class GroceryList extends Activity{
 
     private Button lists[];
-    JScrollPane jScrollPane;
-    JPanel jPanel;
+    private JScrollPane jScrollPane;
+    private JPanel jPanel;
 
     private Button newList;
 
-    public GroceryList(){
-        super(ActivityID.GROCERY_LIST, new Color(240, 240, 240));
-        jPanel = new JPanel();
-        jScrollPane = new JScrollPane(jPanel);
-        jScrollPane.setWheelScrollingEnabled(true);
-        jScrollPane.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        int buttonWidth = Gui.SCREEN_WIDTH - 6 - 20;
-        int buttonHeight = Gui.SCREEN_HEIGHT / 7;
+    private List[] groceryList;
+    
+    public static List activeList;
+    
+    public GroceryList(ActionListener lists){
+        super(ActivityID.GROCERY_LIST,"EINKAUFSLISTE", new Color(240, 240, 240));
 
         this.newList = new Button(Gui.SCREEN_WIDTH, 60);
         this.newList.setBackground(Gui.COLOR);
@@ -54,6 +52,14 @@ public class GroceryList extends Activity{
         this.newList.setLocation(0, this.getHeight() - this.newList.getHeight());
         this.newList.setFocusPainted(false);
 
+        this.jPanel = new JPanel();
+        this.jScrollPane = new JScrollPane(jPanel);
+        this.jScrollPane.setWheelScrollingEnabled(true);
+        this.jScrollPane.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        int buttonWidth = Gui.SCREEN_WIDTH - 6 - 20;
+        int buttonHeight = Gui.SCREEN_HEIGHT / 7;
         this.jScrollPane.setSize(this.getWidth()+20, this.newList.getY());
         this.jScrollPane.setLocation(-1, 0);
         
@@ -68,7 +74,7 @@ public class GroceryList extends Activity{
         this.add(this.newList);
         this.add(this.jScrollPane);
 
-        List[] groceryList = new List[]{new List("Neue Liste", new int[99]),
+        this.groceryList = new List[]{new List("PETER", new int[99]),
             new List("Neue Liste2", new int[55]), new List("Neue Liste",
             new int[99]), new List("Neue Liste", new int[99]), new List(
             "Neue Liste", new int[99]), new List("Neue Liste", new int[99]),
@@ -76,15 +82,22 @@ public class GroceryList extends Activity{
             new int[99]), new List("Neue Liste", new int[99]), new List(
             "Neue Liste", new int[99]), new List("Neue Liste", new int[99])};
         this.lists = new Button[groceryList.length];
-        for(int i = 0; i < lists.length; i++){
-            lists[i] = new Button(buttonWidth, buttonHeight, drawGroceryList(
+        for(int i = 0; i < this.lists.length; i++){
+            this.lists[i] = new Button(buttonWidth, buttonHeight, drawGroceryList(
                     buttonWidth, buttonHeight, groceryList[i].getName(),
                     groceryList[i].getOrderIDs().length));
-            int bottomLast = (i != 0) ? lists[i - 1].getY() + lists[i - 1].
+            int bottomLast = (i != 0) ? this.lists[i - 1].getY() + this.lists[i - 1].
                     getHeight() : 0;
-            lists[i].setLocation((getWidth() - 6) / 2 - lists[i].getWidth() / 2,
+            this.lists[i].setLocation((getWidth() - 6) / 2 - this.lists[i].getWidth() / 2,
                     bottomLast + 20);
-            this.jPanel.add(lists[i]);
+            this.lists[i].addActionListener(lists);
+            this.lists[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    orderAction(ae);
+                }
+            });
+            this.jPanel.add(this.lists[i]);
         }
 
         this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.lists.length * (buttonHeight + 20) + 20));
@@ -162,4 +175,13 @@ public class GroceryList extends Activity{
         super.paintComponent(g);
     }
 
+    private void orderAction(ActionEvent ae){
+        for(int i = 0; i < lists.length; i++){
+            if(lists[i].equals(ae.getSource())){
+                activeList = groceryList[i];
+                break;
+            }
+        }
+    }
+    
 }

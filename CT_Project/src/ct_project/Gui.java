@@ -2,11 +2,13 @@ package ct_project;
 
 import GuiElements.activities.Manager;
 import GuiElements.MenuBar;
+import GuiElements.activities.Activity;
 import GuiElements.activities.ActivityID;
 import GuiElements.activities.GroceryList;
 import GuiElements.activities.HomeScreen;
 import GuiElements.activities.LogInManager;
 import GuiElements.activities.LoginScreen;
+import GuiElements.activities.ShowOrder;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -71,6 +73,19 @@ public class Gui {
 
         return listener;
     }
+    
+    private ActionListener getOrderActionListener(ActivityID activity, ActivityID oldActivity) {
+
+        ActionListener listener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                manager.addActivityID(oldActivity);
+                changeActivity(activity);
+            }
+        };
+
+        return listener;
+    }
 
     private ActionListener getActionListener(ActivityID activity) {
 
@@ -112,30 +127,39 @@ public class Gui {
             this.menu.setVisible(true);
         }
 
-        if (this.manager.isEmpty()) {
-            this.menu.disableReturnButton("Paul");
-        } else {
-            this.menu.enableReturnButton(activity.getString());
-        }
-
+        Activity tempActivity = null;
         switch (activity) {
             case HOME_SCREEN:
-                this.panel.add(new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity)));
+                tempActivity = new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity));
                 break;
             case GROCERY_LIST:
-                this.panel.add(new GroceryList());
+                tempActivity = new GroceryList(getOrderActionListener(ActivityID.SHOW_ORDER_SCREEN, activity));
+                break;
+            case SHOW_ORDER_SCREEN:
+                tempActivity = new ShowOrder(GroceryList.activeList);
                 break;
             case LOGIN_SCREEN:
                 LogInManager logInManager = new LogInManager();
-                this.panel.add(new LoginScreen(new ActionListener() {
+                tempActivity = new LoginScreen(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent ae) {
                         if(logInManager.isValid()){
                             changeActivity(ActivityID.HOME_SCREEN);
                         }
                     }
-                }, logInManager));
+                }, logInManager);
                 break;
+        }
+        
+        if(tempActivity != null){
+            this.panel.add(tempActivity);
+        }
+        
+        if (this.manager.isEmpty()) {
+            this.menu.disableReturnButton("Paul");
+        } else {
+            if(tempActivity != null)
+            this.menu.enableReturnButton(tempActivity.getTitle());
         }
 
         this.frame.repaint();

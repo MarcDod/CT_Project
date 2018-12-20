@@ -32,7 +32,7 @@ public class HomeScreen extends Activity {
     private Button[] buttons;
 
     public HomeScreen(ActionListener groceryListListener) {
-        super(ActivityID.HOME_SCREEN, new Color(240, 240, 240));
+        super(ActivityID.HOME_SCREEN,"STARTFENSTER" ,new Color(240, 240, 240));
 
         int buttonWidth = Gui.SCREEN_WIDTH - 6 - 20;
         int buttonHeight = Gui.SCREEN_HEIGHT / 7;
