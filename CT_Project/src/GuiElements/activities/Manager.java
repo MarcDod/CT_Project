@@ -18,24 +18,13 @@ import java.util.logging.Logger;
 public class Manager {
     
     private Stack<ActivityID> activities;
-    private Thread ping;
     private Connector database;
+    private Activity currentActivity;
     
     public Manager(){
         this.activities = new Stack<>();
         try {
             this.database = new Connector();
-            ping = new Thread(new Runnable() {
-                @Override
-                public void run(){
-                    try {
-                        database.ping(60);
-                    }catch (SQLException ex){
-                        Logger.getLogger(Manager.class.getName()).
-                                log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
         }catch (SQLException ex){
             Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -61,5 +50,17 @@ public class Manager {
     
     public LogInManager getLogInManager(){
         return new LogInManager(this.database);
+    }
+
+    public void setCurrentActivity(Activity tempActivity){
+        this.currentActivity = tempActivity;
+    }
+
+    public boolean ping(int timeout) throws SQLException{
+        return database.ping(timeout);
+    }
+
+    public void reconnect() throws SQLException{
+        this.database.reconnect();
     }
 }
