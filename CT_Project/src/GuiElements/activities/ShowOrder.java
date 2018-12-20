@@ -12,9 +12,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -30,14 +32,17 @@ public class ShowOrder extends Activity{
     private final JPanel jPanel;
     private final JScrollPane jScrollPane;
 
-    private JLabel orders[];
+    private ArrayList<JLabel> orders;
     
-    public ShowOrder(List list) {
-        super(ActivityID.SHOW_ORDER_SCREEN,list.getName() ,new Color(240, 240, 240));
-        
-        int orderHeight = 100;
+    private OrderManager manager;
+    
+    public ShowOrder(List list, Manager manager) {
+        super(ActivityID.SHOW_ORDER_SCREEN,list.getName() ,Color.WHITE);
+        this.manager = new OrderManager(list, manager);
+        int orderHeight = 70;
         
         this.jPanel = new JPanel();
+        this.jPanel.setBackground(this.getBackground());
         this.jScrollPane = new JScrollPane(jPanel);
         this.jScrollPane.setWheelScrollingEnabled(true);
         this.jScrollPane.setVerticalScrollBarPolicy(
@@ -56,27 +61,10 @@ public class ShowOrder extends Activity{
         
         this.add(this.jScrollPane);
         
-        this.orders = new JLabel[list.getOrderIDs().length];
-        
-        for(int i = 0; i < this.orders.length; i++){
-            this.orders[i] = new JLabel("Hallo");
-            this.orders[i].setIcon(getOrderIcon(this.getWidth(), orderHeight));
-            this.orders[i].setSize(this.getWidth(), orderHeight);
-            int bottomLast = (i != 0) ? this.orders[i - 1].getY() + this.orders[i - 1].
-                    getHeight() : 0;
-            this.orders[i].setLocation(0, bottomLast);
-            this.orders[i].setVisible(true);
-            this.jPanel.add(this.orders[i]);
-        }
-        this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.orders.length * orderHeight));
-        this.jPanel.
-                setSize(this.getWidth(), this.orders.length * orderHeight);
-
-        this.jPanel.setVisible(true);
-        this.jScrollPane.setVisible(true);
+        drawOrders(orderHeight);
     }
     
-    private Icon getOrderIcon(int width, int height){
+    private Icon getOrderIcon(int width, int height, int i){
                 BufferedImage image = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
 
@@ -90,11 +78,56 @@ public class ShowOrder extends Activity{
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Background
-        g2d.setColor(Color.WHITE);
+        g2d.setColor(this.getBackground());
         g2d.fillRect(0, 0, width, height);
-
-
+        if(i % 2 == 0){
+            g2d.setColor(Color.BLACK);
+            g2d.drawRect(1, 0, width - 7, height - 1);
+        }
+        
+        String productName = "Test";
+        String number = "4";
+        String price = "2.50€";
+         
+        // Text
+        g2d.setFont(Gui.BUTTON_FONT);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(productName, 16, (height - 1) / 2);
+        FontMetrics fm = g2d.getFontMetrics();
+        g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.BOLD, 40));
+        g2d.drawString(number, width - 6 - 30 - fm.stringWidth(number), (height - 1) / 2 + fm.getHeight() / 2);
+        
+        g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.PLAIN, Gui.BUTTON_FONT.getSize()));
+        fm = g2d.getFontMetrics();
+        g2d.setColor(new Color(150, 150, 150));
+        g2d.drawString(price, 16, (height - 1) / 2 + fm.getHeight() - 5);
+        
         return new ImageIcon(image);
     }
-    
+     @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+    }  
+
+    private void drawOrders(int orderHeight) {
+        this.orders = new ArrayList<>();
+        
+        for(int i = 0; i < manager.getSize(); i++){
+            JLabel temp = new JLabel("Hallo");
+            temp.setIcon(getOrderIcon(this.getWidth(), orderHeight, i));
+            temp.setSize(this.getWidth(), orderHeight);
+            int bottomLast = (i != 0) ? this.orders.get(i - 1).getY() + this.orders.get(i - 1).
+                    getHeight() : 0;
+            temp.setLocation(0, bottomLast);
+            temp .setVisible(true);
+            this.jPanel.add(temp);
+            this.orders.add(temp);
+        }
+        this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.orders.size() * orderHeight));
+        this.jPanel.
+                setSize(this.getWidth(), this.orders.size() * orderHeight);
+
+        this.jPanel.setVisible(true);
+        this.jScrollPane.setVisible(true);
+    }
 }

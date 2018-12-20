@@ -26,7 +26,7 @@ public class Gui {
 
     public static final int SCREEN_WIDTH = 450;
     public static final int SCREEN_HEIGHT = 800;
-    public static final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 16);
+    public static final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 20);
     public static final Color COLOR = Color.decode("0x0050be");
 
     private JFrame frame;
@@ -127,7 +127,7 @@ public class Gui {
                 if (tempActivity != null){
                     if(tempActivity instanceof GroceryList){
                         GroceryList tempGroceryList = (GroceryList) tempActivity;
-                        tempActivity = new ShowOrder(tempGroceryList.getActiveList());
+                        tempActivity = new ShowOrder(tempGroceryList.getActiveList(), manager);
                     }
                 }
                 break;
