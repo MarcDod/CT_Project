@@ -5,6 +5,7 @@
  */
 package GuiElements.activities;
 
+import DataManagement.Datatemplates.Account;
 import GuiElements.Button;
 import GuiElements.TextField;
 import ct_project.Gui;
@@ -16,6 +17,9 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextField;
 
 /**
@@ -73,6 +77,14 @@ public class LoginScreen extends Activity{
     }  
  
     private void loginAction(){
-        logInManager.checkUserData(this.password.getString(), this.userName.getString());
+        try {
+            logInManager.checkUserData(this.password.getString(), this.userName.getString());
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public Account getUser(){
+        return this.logInManager.getUser();
     }
 }

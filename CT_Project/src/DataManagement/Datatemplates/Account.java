@@ -10,20 +10,14 @@ package DataManagement.Datatemplates;
  * @author Julian
  */
 public class Account{
-    private int id;
     private String name;
     private int group;
 
-    public Account(int id, String name, int group){
-        this.id = id;
+    public Account(String name, int group){
         this.name = name;
         this.group = group;
     }
-
-    public int getId(){
-        return id;
-    }
-
+    
     public String getName(){
         return name;
     }

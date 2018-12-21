@@ -5,34 +5,32 @@
  */
 package GuiElements.activities;
 
+import DataManagement.Datatemplates.Account;
 import DataManagement.database.Connector;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Marc
  */
 public class LogInManager {
-    private static boolean valid;
     private Connector database;
     
+    private Account user;
+    
     public LogInManager(Connector database){
-        valid = false;
         this.database = database;
+        this.user = null;
     }
     
-    public void checkUserData(String password, String user){
-        try {
-            database = new Connector();
-            valid = database.getPassword(user).equals(password);
-        }catch (SQLException ex){
-            System.err.println("MENSCH");
+    public void checkUserData(String password, String user) throws SQLException{
+        database = new Connector();
+        if(database.getPassword(user).equals(password)){
+            this.user = database.getAccount(user);
         }
     }
     
-    public boolean isValid(){
-        return valid;
+    public Account getUser(){
+        return this.user;
     }
 }

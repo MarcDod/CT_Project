@@ -5,6 +5,8 @@
  */
 package GuiElements.activities;
 
+import DataManagement.Datatemplates.Account;
+import DataManagement.Datatemplates.List;
 import DataManagement.database.Connector;
 import java.sql.SQLException;
 import java.util.Stack;
@@ -21,8 +23,10 @@ public class Manager {
     private Connector database;
     private Activity currentActivity;
     
+    private Account user;
     public Manager(){
         this.activities = new Stack<>();
+        this.user = null;
     }
     
     public void newConnection() throws SQLException{
@@ -50,16 +54,37 @@ public class Manager {
     public LogInManager getLogInManager(){
         return new LogInManager(this.database);
     }
+    public OrderManager getOrderManager(){
+        return new OrderManager(getGroceryList(), this.database);
+    }
+    private List getGroceryList(){
+        if(this.currentActivity instanceof GroceryList){
+            return ((GroceryList) currentActivity).getActiveList();
+        }
+        return null;
+    }
 
+    public boolean loginIsValid(){
+        if(this.currentActivity instanceof LoginScreen){
+            this.user = ((LoginScreen) currentActivity).getUser();
+            return (user != null);
+        }    
+        return false;
+    }
+    
     public void setCurrentActivity(Activity tempActivity){
         this.currentActivity = tempActivity;
     }
-
+    
     public boolean ping(int timeout) throws SQLException{
         return database.ping(timeout);
     }
 
     public void reconnect() throws SQLException{
         this.database.reconnect();
+    }
+    
+    public String getUserName(){
+        return (this.user != null)? this.user.getName() : "Keine Information";
     }
 }

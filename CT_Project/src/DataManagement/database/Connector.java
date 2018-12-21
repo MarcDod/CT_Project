@@ -45,11 +45,10 @@ public class Connector{
             SQLException{
         Account resultingAccount = null;
         ResultSet result = this.sendSQLStatement(
-                "SELECT accountID,User,groupID FROM mydb.account WHERE User = \""
+                "SELECT User,groupID FROM mydb.account WHERE User = \""
                 + username + "\";");
         if(result.next()){
-            resultingAccount = new Account(result.getInt("accountID"),
-                    result.getString("User"), result.getInt("groupID"));
+            resultingAccount = new Account(result.getString("User"), result.getInt("groupID"));
         }
         return resultingAccount;
     }

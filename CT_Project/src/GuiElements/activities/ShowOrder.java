@@ -5,10 +5,9 @@
  */
 package GuiElements.activities;
 
-import DataManagement.Datatemplates.List;
+import DataManagement.Datatemplates.Order;
 import GuiElements.MovableLabel;
 import ct_project.Gui;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,12 +17,10 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -38,9 +35,9 @@ public class ShowOrder extends Activity{
 
     private OrderManager orderManager;
     
-    public ShowOrder(List list, Manager manager) {
-        super(ActivityID.SHOW_ORDER_SCREEN,list.getName() ,Color.WHITE);
-        this.orderManager = new OrderManager(list, manager);
+    public ShowOrder(OrderManager orderManager) throws SQLException {
+        super(ActivityID.SHOW_ORDER_SCREEN, orderManager.getListName(),Color.WHITE);
+        this.orderManager = orderManager;
         int orderHeight = 70;
         
         this.jPanel = new JPanel();
@@ -62,10 +59,11 @@ public class ShowOrder extends Activity{
         
         this.add(this.jScrollPane);
         
-        drawOrders(orderHeight);
+        buildOrders(orderHeight);
+        reSizeJScroolPane(orderHeight);
     }
     
-    private Icon getOrderIcon(int width, int height, int i){
+    private Icon getOrderIcon(int width, int height, int i) throws SQLException{
                 BufferedImage image = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
 
@@ -86,9 +84,12 @@ public class ShowOrder extends Activity{
             g2d.drawRect(1, 0, width - 2, height - 1);
         }
         
-        String productName = "Test";
-        String number = "4";
-        String price = "2.50€";
+        Order tempOrder = this.orderManager.getOrder(i);
+        
+        String productName = tempOrder.getItemName();
+        String number = String.valueOf(tempOrder.getNumber());
+        String price = tempOrder.getUser() +" hatt bestellt am: " 
+                + tempOrder.getDate() + " Bitte fertig bis zum: " + tempOrder.getDeadline();
          
         // Text
         g2d.setFont(Gui.BUTTON_FONT);
@@ -98,10 +99,10 @@ public class ShowOrder extends Activity{
         g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.BOLD, 40));
         g2d.drawString(number, width - 6 - 30 - fm.stringWidth(number), (height - 1) / 2 + fm.getHeight() / 2);
         
-        g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.PLAIN, Gui.BUTTON_FONT.getSize()));
+        g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.PLAIN, 13));
         fm = g2d.getFontMetrics();
         g2d.setColor(new Color(150, 150, 150));
-        g2d.drawString(price, 16, (height - 1) / 2 + fm.getHeight() - 5);
+        g2d.drawString(price, 16, (height - 1) / 2 + fm.getHeight());
         
         return new ImageIcon(image);
     }
@@ -110,13 +111,13 @@ public class ShowOrder extends Activity{
         super.paintComponent(g);
     }  
 
-    private void drawOrders(int orderHeight) { 
+    private void buildOrders(int orderHeight) throws SQLException { 
         for(int i = 0; i < orderManager.getListSize(); i++){
             MovableLabel temp = new MovableLabel();
             temp.setSize(this.getWidth() - 5, orderHeight);
             temp.setIcon(getOrderIcon(temp.getWidth(), temp.getHeight(), i));
-            int bottomLast = (i != 0) ? this.orderManager.getOrder(i - 1).getY()
-                    + this.orderManager.getOrder(i - 1).getHeight() : 0;
+            int bottomLast = (i != 0) ? this.orderManager.getOrderLabel(i - 1).getY()
+                    + this.orderManager.getOrderLabel(i - 1).getHeight() : 0;
             temp.setLocation(0, bottomLast);
             temp.setVisible(true);
             temp.addMouseListener(new MouseAdapter() {
@@ -126,11 +127,14 @@ public class ShowOrder extends Activity{
             
             });
             this.jPanel.add(temp);
-            this.orderManager.addOrder(temp);
+            this.orderManager.addOrderLabel(temp);
         }
-        this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.orderManager.getOrderSize() * orderHeight));
+    }
+  
+    private void reSizeJScroolPane(int orderHeight){
+        this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.orderManager.getOrderLabelSize() * orderHeight));
         this.jPanel.
-                setSize(this.getWidth(), this.orderManager.getOrderSize() * orderHeight);
+                setSize(this.getWidth(), this.orderManager.getOrderLabelSize() * orderHeight);
         int scrollHeight = (jPanel.getHeight() > this.getHeight()) ? this.getHeight():jPanel.getHeight();
         this.jScrollPane.setSize(jPanel.getWidth() + 20, scrollHeight);
         this.jPanel.setVisible(true);
@@ -138,12 +142,14 @@ public class ShowOrder extends Activity{
     }
     
     private void orderReleased(MouseEvent e){
-        MovableLabel temp = this.orderManager.getOrder(e.getSource());
+        MovableLabel temp = this.orderManager.getOrderLabel(e.getSource());
         if(temp == null) return;
         if(temp.getX() > temp.getWidth() / 4){
             removeOrder(temp);
         }else if(temp.getX() < -temp.getWidth() / 4){
             removeOrder(temp);
+        }else{
+            temp.setLocation(0, temp.getY());
         }
     }
     

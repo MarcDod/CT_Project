@@ -16,8 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -135,10 +133,8 @@ public class Gui {
     }
 
     private void changeActivity(ActivityID activity) {
-        Activity tempActivity = null;
         for (int i = 0; i < this.panel.getComponentCount(); i++) {
             if (!(this.panel.getComponent(i) instanceof MenuBar)) {
-                if(this.panel.getComponent(i) instanceof Activity)tempActivity = (Activity)this.panel.getComponent(i);
                 this.panel.getComponent(i).setVisible(false);
                 this.panel.remove(i);
                 i--;
@@ -151,6 +147,7 @@ public class Gui {
             this.menu.setVisible(true);
         }
 
+        Activity tempActivity = null;
         switch (activity) {
             case HOME_SCREEN:
                 tempActivity = new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity));
@@ -159,11 +156,10 @@ public class Gui {
                 tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity));
                 break;
             case SHOW_ORDER_SCREEN:
-                if (tempActivity != null){
-                    if(tempActivity instanceof GroceryList){
-                        GroceryList tempGroceryList = (GroceryList) tempActivity;
-                        tempActivity = new ShowOrder(tempGroceryList.getActiveList(), manager);
-                    }
+                try{
+                     tempActivity = new ShowOrder(manager.getOrderManager());
+                }catch(SQLException e){
+                    System.err.println("Liste konnte nicht geladen werden!");
                 }
                 break;
             case LOGIN_SCREEN:
@@ -171,9 +167,8 @@ public class Gui {
                 tempActivity = new LoginScreen(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent ae) {
-                        if (logInManager.isValid()) {
+                        if(manager.loginIsValid())
                             changeActivity(ActivityID.HOME_SCREEN);
-                        }
                     }
                 }, logInManager);
                 break;
@@ -185,7 +180,7 @@ public class Gui {
         }
 
         if (this.manager.isEmpty()) {
-            this.menu.disableReturnButton("MAX MUSTERMANN");
+            this.menu.disableReturnButton(this.manager.getUserName());
         } else {
             if (tempActivity != null) {
                 this.menu.enableReturnButton(tempActivity.getTitle());

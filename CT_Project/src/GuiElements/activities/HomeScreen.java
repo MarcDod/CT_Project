@@ -15,12 +15,8 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.util.Map;
 import javax.swing.JButton;
 
 /**
@@ -48,12 +44,12 @@ public class HomeScreen extends Activity {
         buttons[2].setText("ERLEDIGTE BESTELLUNGEN");
         
         // Button neue Bestellung
-        BufferedImage image = drawGroceryList(buttonWidth, buttonHeight, new Color(124, 252, 0), new Color(0, 100, 0), "NEUE BESTELLUNGEN");
+        BufferedImage image = drawGroceryList(buttonWidth, buttonHeight, new Color(124, 252, 0), new Color(0, 100, 0), "NEUE BESTELLUNGEN" , 0);
 
         buttons[0] = new Button(buttonWidth, buttonHeight, image);
 
         // Button einkaufsliste
-        image = drawGroceryList(buttonWidth, buttonHeight, new Color(100, 149, 237), new Color(025, 025, 112), "EINKAUFSLISTE");
+        image = drawGroceryList(buttonWidth, buttonHeight, new Color(100, 149, 237), new Color(025, 025, 112), "EINKAUFSLISTE", 100);
 
         buttons[1] = new Button(buttonWidth, buttonHeight, image);
         buttons[1].addActionListener(groceryListListener);;
@@ -66,7 +62,7 @@ public class HomeScreen extends Activity {
         }
     }
 
-    private BufferedImage drawGroceryList(int width, int height, Color beginColor, Color endColor, String text) {
+    private BufferedImage drawGroceryList(int width, int height, Color beginColor, Color endColor, String text, int number) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         Graphics2D g2d = image.createGraphics();
@@ -93,7 +89,7 @@ public class HomeScreen extends Activity {
         int ovalX = (width) / 2 + (width / 2 - ovalWidth) / 2;
         int ovalY = height / 2;
         g2d.fillRoundRect(ovalX, ovalY, ovalWidth, ovalHeight, ovalHeight, ovalHeight);
-        g2d.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.BOLD, 14));
         FontMetrics fm = g2d.getFontMetrics();
         g2d.setColor(Color.WHITE);
         int textY = ovalY + (ovalHeight / 2 + fm.getHeight() / 3);
@@ -103,6 +99,12 @@ public class HomeScreen extends Activity {
         g2d.setStroke(new BasicStroke(2.0f));
         g2d.drawPolyline(new int[]{ovalX + ovalWidth - ovalHeight + 5,ovalX + ovalWidth - ovalHeight + 10,ovalX + ovalWidth - ovalHeight + 5}, new int[]{textY - fm.getHeight() / 2,textY,textY + fm.getHeight() / 2}, 3);
         
+        // Nummer
+        String numberString = String.valueOf(number);
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.BOLD, 50));
+        fm = g2d.getFontMetrics();
+        g2d.drawString(numberString, width / 4 - fm.stringWidth(numberString) / 2, height / 2 + fm.getHeight() / 2);
         
         GradientPaint gradient = new GradientPaint(0, 0, beginColor, width, 0, endColor);
         g2d.setPaint(gradient);
