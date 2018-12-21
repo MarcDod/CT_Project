@@ -31,7 +31,7 @@ public class Gui {
 
     public static final int SCREEN_WIDTH = 450;
     public static final int SCREEN_HEIGHT = 800;
-    public static final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 16);
+    public static final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 20);
     public static final Color COLOR = Color.decode("0x0050be");
 
     private JFrame frame;
@@ -59,9 +59,9 @@ public class Gui {
                     }
                 }
             }catch (SQLException ex){
-                Logger.getLogger(Manager.class.getName()).
-                        log(Level.SEVERE, null, ex);
-            }
+                //Logger.getLogger(Manager.class.getName()).
+                        //log(Level.SEVERE, null, ex);
+            }catch (NullPointerException ex){}
         });
         this.frame = new JFrame("CT_Project");
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,8 +87,13 @@ public class Gui {
         
         this.ping.setInitialDelay(5000);
         this.ping.start();
-
+        
         changeActivity(ActivityID.HOME_SCREEN);
+        try {
+            this.manager.newConnection();
+        } catch (SQLException ex) {
+            //Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private ActionListener getActionListener(ActivityID activity, ActivityID oldActivity) {
@@ -157,7 +162,7 @@ public class Gui {
                 if (tempActivity != null){
                     if(tempActivity instanceof GroceryList){
                         GroceryList tempGroceryList = (GroceryList) tempActivity;
-                        tempActivity = new ShowOrder(tempGroceryList.getActiveList());
+                        tempActivity = new ShowOrder(tempGroceryList.getActiveList(), manager);
                     }
                 }
                 break;
@@ -180,7 +185,7 @@ public class Gui {
         }
 
         if (this.manager.isEmpty()) {
-            this.menu.disableReturnButton("Paul");
+            this.menu.disableReturnButton("MAX MUSTERMANN");
         } else {
             if (tempActivity != null) {
                 this.menu.enableReturnButton(tempActivity.getTitle());
