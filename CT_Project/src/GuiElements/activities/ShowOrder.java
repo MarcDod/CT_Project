@@ -19,6 +19,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -63,7 +65,7 @@ public class ShowOrder extends Activity{
         reSizeJScroolPane(orderHeight);
     }
     
-    private Icon getOrderIcon(int width, int height, int i) throws SQLException{
+    private Icon getOrderIcon(int width, int height, int i, int size) throws SQLException{
                 BufferedImage image = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
         Order tempOrder = this.orderManager.getOrder(i);
@@ -81,7 +83,8 @@ public class ShowOrder extends Activity{
         // Background
         g2d.setColor(this.getBackground());
         g2d.fillRect(0, 0, width, height);
-        if(i % 2 == 0){
+        int x = (size % 2 == 0) ? 1 : 0;
+        if(i % 2 == x){
             g2d.setColor(Color.BLACK);
             g2d.drawRect(1, 0, width - 2, height - 1);
         }
@@ -112,13 +115,15 @@ public class ShowOrder extends Activity{
     }  
 
     private void buildOrders(int orderHeight) throws SQLException { 
+        jPanel.removeAll();
+        this.orderManager.resetOrderLabel();
         for(int i = 0; i < orderManager.getListSize(); i++){
             MovableLabel temp = new MovableLabel();
             temp.setSize(this.getWidth() - 5, orderHeight);
-            Icon tempIcon = getOrderIcon(temp.getWidth(), temp.getHeight(), i);
+            Icon tempIcon = getOrderIcon(temp.getWidth(), temp.getHeight(), i, orderManager.getListSize());
             if(tempIcon == null){
-                //this.orderManager.removeIDFromOrder(int i);
-                //i--;
+                this.orderManager.removeIDFromOrder(i);
+                i--;
                 continue;
             }
             temp.setIcon(tempIcon);
@@ -150,9 +155,9 @@ public class ShowOrder extends Activity{
     private void orderReleased(MouseEvent e){
         MovableLabel temp = this.orderManager.getOrderLabel(e.getSource());
         if(temp == null) return;
-        if(temp.getX() > temp.getWidth() / 4){
+        if(temp.getX() > temp.getWidth() / 2){
             removeOrder(temp);
-        }else if(temp.getX() < -temp.getWidth() / 4){
+        }else if(temp.getX() < -temp.getWidth() / 2){
             removeOrder(temp);
         }else{
             temp.setLocation(0, temp.getY());
@@ -161,7 +166,12 @@ public class ShowOrder extends Activity{
     
     private void removeOrder(MovableLabel temp){
         this.orderManager.removeOrder(temp);
-        this.jPanel.remove(temp);
+        try {
+            buildOrders(temp.getHeight());
+        } catch (SQLException ex) {
+            Logger.getLogger(ShowOrder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        reSizeJScroolPane(temp.getHeight());
         repaint();
     }
 }

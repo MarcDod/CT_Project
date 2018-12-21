@@ -30,26 +30,10 @@ public class Manager {
     private Activity currentActivity;
     
     private Account user;
-    public Manager() throws IOException{
+    public Manager(){
         this.activities = new Stack<>();
         this.user = null;
-        this.xmlManager = new XMLManager();
-        ArrayList<Orderlist> test = new ArrayList<>();
-        ArrayList<Integer> testInt = new ArrayList<>();
-        testInt.add(1);
-        testInt.add(2);
-        test.add(new Orderlist(testInt, "Test XML"));
-        test.add(new Orderlist(testInt, "Test XML2"));
-        this.xmlManager.saveXMLOrderLists(test, new File(GroceryManager.XML_FILE_PATH));
-        
-        try {
-            ArrayList<Orderlist> t = xmlManager.loadXMLOrderLists(new File(GroceryManager.XML_FILE_PATH));
-            int i = t.get(0).getOrderIDs().get(0);
-            System.out.println(i);
-        } catch (JDOMException ex) {
-            Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        this.xmlManager = new XMLManager(); 
     }
     
     public void newConnection() throws SQLException{

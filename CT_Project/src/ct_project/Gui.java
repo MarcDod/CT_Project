@@ -85,11 +85,9 @@ public class Gui {
         this.panel.setLayout(null);
         this.frame.pack();
 
-        try {
-            this.manager = new Manager();
-        } catch (IOException ex) {
-            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        this.manager = new Manager();
+
 
         this.ping.setInitialDelay(5000);
         this.ping.start();

@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Orderlists>
-  <Orderlist Name="Test XML">
-    <IDs>1</IDs>
+  <Orderlist name="Test XML">
+    <IDs>
+      <ID id="2" />
+      <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+	  <ID id="1" />
+    </IDs>
   </Orderlist>
-  <Orderlist Name="Test XML2">
-    <IDs>12</IDs>
+  <Orderlist name="Test XML2">
+    <IDs>
+      <ID id="2" />
+      <ID id="1" />
+    </IDs>
   </Orderlist>
 </Orderlists>

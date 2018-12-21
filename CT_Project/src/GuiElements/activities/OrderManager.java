@@ -7,6 +7,7 @@ package GuiElements.activities;
 
 import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
+import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
 import GuiElements.MovableLabel;
 import java.sql.SQLException;
@@ -20,13 +21,14 @@ public class OrderManager {
     private ArrayList<Orderlist> list;
     private int index;
     private Connector connector;
+    private XMLManager xmlManager;
     private ArrayList<MovableLabel> orderLabels;
     
     public OrderManager(ArrayList<Orderlist> list, Connector connector, int index){
         this.index = index;
         this.list = list;
         this.connector = connector;
-        orderLabels = new ArrayList<>();
+        this.orderLabels = new ArrayList<>();
     }
     
     public Order getOrder(int index) throws SQLException{
@@ -46,7 +48,7 @@ public class OrderManager {
         return null;
     }
     
-    public void removerIDFromOrder(int i){
+    public void removeIDFromOrder(int i){
         this.list.get(this.index).getOrderIDs().remove(i);
     }
     
@@ -67,11 +69,25 @@ public class OrderManager {
     }
     
     public void removeOrder(MovableLabel label){
-        
+        int i = this.orderLabels.indexOf(label);
+        this.orderLabels.remove(label);
+        this.list.get(this.index).getOrderIDs().remove(i);
     }
  
+    public void orderCancel(){
+        
+    }
+    
+    public void orderBought(){
+        
+        
+    }
     public void listUpdate(int i){
 
+    }
+
+    void resetOrderLabel() {
+        this.orderLabels = new ArrayList<>();
     }
     
 }
