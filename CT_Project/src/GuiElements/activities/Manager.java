@@ -7,6 +7,7 @@ package GuiElements.activities;
 
 import DataManagement.Datatemplates.Account;
 import DataManagement.Datatemplates.List;
+import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
 import java.sql.SQLException;
 import java.util.Stack;
@@ -21,12 +22,14 @@ public class Manager {
     
     private Stack<ActivityID> activities;
     private Connector database;
+    private XMLManager xmlManager;
     private Activity currentActivity;
     
     private Account user;
     public Manager(){
         this.activities = new Stack<>();
         this.user = null;
+        this.xmlManager = new XMLManager();
     }
     
     public void newConnection() throws SQLException{
@@ -57,6 +60,10 @@ public class Manager {
     public OrderManager getOrderManager(){
         return new OrderManager(getGroceryList(), this.database);
     }
+    public GroceryManager getGroceryManager(){
+        return new GroceryManager(this.xmlManager);
+    }
+    
     private List getGroceryList(){
         if(this.currentActivity instanceof GroceryList){
             return ((GroceryList) currentActivity).getActiveList();

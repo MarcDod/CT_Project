@@ -153,7 +153,7 @@ public class Gui {
                 tempActivity = new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity));
                 break;
             case GROCERY_LIST:
-                tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity));
+                tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity), manager.getGroceryManager());
                 break;
             case SHOW_ORDER_SCREEN:
                 try{

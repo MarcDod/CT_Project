@@ -17,18 +17,19 @@ import java.util.ArrayList;
  * @author Marc
  */
 public class OrderManager {
-    private List list;
+    private List[] list;
+    private int index;
     private Connector connector;
     private ArrayList<MovableLabel> orderLabels;
     
-    public OrderManager(List list, Connector connector){
+    public OrderManager(List[] list, Connector connector, int index){
         this.list = list;
         this.connector = connector;
         orderLabels = new ArrayList<>();
     }
     
     public Order getOrder(int index) throws SQLException{
-        return this.connector.getOrder(this.list.getOrderIDs()[index]);
+        return this.connector.getOrder(this.list[this.index].getOrderIDs()[index]);
     }
     
     public MovableLabel getOrderLabel(int i){
@@ -45,7 +46,7 @@ public class OrderManager {
     }
     
     public String getListName(){
-        return this.list.getName();
+        return this.list[this.index].getName();
     }
     
     public void addOrderLabel(MovableLabel label){
@@ -53,7 +54,7 @@ public class OrderManager {
     }
     
     public int getListSize(){
-        return this.list.getOrderIDs().length;
+        return this.list[this.index].getOrderIDs().length;
     }
     
     public int getOrderLabelSize(){

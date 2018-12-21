@@ -33,14 +33,13 @@ public class GroceryList extends Activity{
     private JPanel jPanel;
 
     private Button newList;
+    
+    private GroceryManager groceryManager;
 
-    private List[] groceryList;
-    
-    private List activeList;
-    
-    public GroceryList(ActionListener lists){
+    public GroceryList(ActionListener lists, GroceryManager groceryManager){
         super(ActivityID.GROCERY_LIST,"EINKAUFSLISTE", new Color(240, 240, 240));
 
+        this.groceryManager = groceryManager;
         this.newList = new Button(Gui.SCREEN_WIDTH, 60);
         this.newList.setBackground(Gui.COLOR);
         this.newList.setForeground(Color.WHITE);
@@ -71,7 +70,7 @@ public class GroceryList extends Activity{
         this.add(this.newList);
         this.add(this.jScrollPane);
 
-        this.groceryList = new List[]{new List("TEST LISTE", new int[]{1})};
+        List[] groceryList = groceryManager.getGroceryList();
         this.lists = new Button[groceryList.length];
         for(int i = 0; i < this.lists.length; i++){
             this.lists[i] = new Button(buttonWidth, buttonHeight, drawGroceryList(
@@ -85,7 +84,7 @@ public class GroceryList extends Activity{
             this.lists[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    activeList = getList(ae);
+                    updateActiveList(ae);
                 }
             });
             this.jPanel.add(this.lists[i]);
@@ -166,17 +165,17 @@ public class GroceryList extends Activity{
         super.paintComponent(g);
     }
 
-    private List getList(ActionEvent ae){
+    private List updateActiveList(ActionEvent ae){
         for(int i = 0; i < lists.length; i++){
             if(lists[i].equals(ae.getSource())){
-                return groceryList[i];
+                this.groceryManager.setActivIndex(i);
             }
         }
         return null;
     }
     
     public List getActiveList(){
-        return activeList;
+        return this.groceryManager.getActiveList();
     }
     
 }
