@@ -18,6 +18,7 @@ import org.jdom2.Element;
  * @author Julian
  */
 public class Orderlist extends XMLDatatemplate{
+
     private ArrayList<Integer> orderIDs;
     private String name;
 
@@ -31,31 +32,32 @@ public class Orderlist extends XMLDatatemplate{
     }
 
     public Orderlist(Element e) throws DataConversionException{
-        List<Content> contents = e.getChild("IDs").getContent();
+        this(e.getAttributeValue("name"));
 
-        this.orderIDs = new ArrayList<>();
-        for(Content content : contents){
-            this.orderIDs.add(Integer.parseInt(content.getValue()));
-        }
-        this.name = e.getAttributeValue("Name");
+        List<Element> children = e.getChild("IDs").getChildren();
+
+        children.forEach((element) -> {
+            this.orderIDs.add(Integer.parseInt(element.getAttributeValue("id")));
+        });
     }
 
     @Override
     public Element pack(){
         Element representingElement = new Element("Orderlist");
-        representingElement.setAttribute("Name", this.name);
+        representingElement.setAttribute("name", this.name);
         Element ids = new Element("IDs");
         this.orderIDs.forEach((orderID) -> {
-            ids.addContent(new Element("ID").setAttribute("id", String.valueOf(orderID)));
+            ids.addContent(new Element("ID").setAttribute("id", String.valueOf(
+                    orderID)));
         });
         representingElement.addContent(ids);
         return representingElement;
     }
-    
+
     public ArrayList<Integer> getOrderIDs(){
         return this.orderIDs;
     }
-    
+
     public String getName(){
         return this.name;
     }
