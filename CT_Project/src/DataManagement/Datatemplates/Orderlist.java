@@ -45,7 +45,7 @@ public class Orderlist extends XMLDatatemplate{
         representingElement.setAttribute("Name", this.name);
         Element ids = new Element("IDs");
         this.orderIDs.forEach((orderID) -> {
-            ids.addContent(String.valueOf(orderID));
+            ids.addContent(new Element("ID").setAttribute("id", String.valueOf(orderID)));
         });
         representingElement.addContent(ids);
         return representingElement;
