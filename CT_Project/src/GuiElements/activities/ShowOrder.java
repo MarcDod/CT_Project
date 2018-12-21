@@ -66,6 +66,8 @@ public class ShowOrder extends Activity{
     private Icon getOrderIcon(int width, int height, int i) throws SQLException{
                 BufferedImage image = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
+        Order tempOrder = this.orderManager.getOrder(i);
+        if(tempOrder == null) return null; 
 
         Graphics2D g2d = image.createGraphics();
 
@@ -83,8 +85,6 @@ public class ShowOrder extends Activity{
             g2d.setColor(Color.BLACK);
             g2d.drawRect(1, 0, width - 2, height - 1);
         }
-        
-        Order tempOrder = this.orderManager.getOrder(i);
         
         String productName = tempOrder.getItemName();
         String number = String.valueOf(tempOrder.getNumber());
@@ -115,7 +115,13 @@ public class ShowOrder extends Activity{
         for(int i = 0; i < orderManager.getListSize(); i++){
             MovableLabel temp = new MovableLabel();
             temp.setSize(this.getWidth() - 5, orderHeight);
-            temp.setIcon(getOrderIcon(temp.getWidth(), temp.getHeight(), i));
+            Icon tempIcon = getOrderIcon(temp.getWidth(), temp.getHeight(), i);
+            if(tempIcon == null){
+                //this.orderManager.removeIDFromOrder(int i);
+                //i--;
+                continue;
+            }
+            temp.setIcon(tempIcon);
             int bottomLast = (i != 0) ? this.orderManager.getOrderLabel(i - 1).getY()
                     + this.orderManager.getOrderLabel(i - 1).getHeight() : 0;
             temp.setLocation(0, bottomLast);

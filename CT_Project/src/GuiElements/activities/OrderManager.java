@@ -5,8 +5,8 @@
  */
 package GuiElements.activities;
 
-import DataManagement.Datatemplates.List;
 import DataManagement.Datatemplates.Order;
+import DataManagement.Datatemplates.Orderlist;
 import DataManagement.database.Connector;
 import GuiElements.MovableLabel;
 import java.sql.SQLException;
@@ -17,19 +17,20 @@ import java.util.ArrayList;
  * @author Marc
  */
 public class OrderManager {
-    private List[] list;
+    private ArrayList<Orderlist> list;
     private int index;
     private Connector connector;
     private ArrayList<MovableLabel> orderLabels;
     
-    public OrderManager(List[] list, Connector connector, int index){
+    public OrderManager(ArrayList<Orderlist> list, Connector connector, int index){
+        this.index = index;
         this.list = list;
         this.connector = connector;
         orderLabels = new ArrayList<>();
     }
     
     public Order getOrder(int index) throws SQLException{
-        return this.connector.getOrder(this.list[this.index].getOrderIDs()[index]);
+        return this.connector.getOrder(this.list.get(this.index).getOrderIDs().get(index));
     }
     
     public MovableLabel getOrderLabel(int i){
@@ -45,8 +46,12 @@ public class OrderManager {
         return null;
     }
     
+    public void removerIDFromOrder(int i){
+        this.list.get(this.index).getOrderIDs().remove(i);
+    }
+    
     public String getListName(){
-        return this.list[this.index].getName();
+        return this.list.get(this.index).getName();
     }
     
     public void addOrderLabel(MovableLabel label){
@@ -54,7 +59,7 @@ public class OrderManager {
     }
     
     public int getListSize(){
-        return this.list[this.index].getOrderIDs().length;
+        return this.list.get(this.index).getOrderIDs().size();
     }
     
     public int getOrderLabelSize(){
