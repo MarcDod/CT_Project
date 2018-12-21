@@ -23,11 +23,10 @@ public class Manager {
     
     public Manager(){
         this.activities = new Stack<>();
-        try {
-            this.database = new Connector();
-        }catch (SQLException ex){
-            Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    }
+    
+    public void newConnection() throws SQLException{
+        this.database = new Connector();
     }
     
     public ActivityID getLastActivityID(){

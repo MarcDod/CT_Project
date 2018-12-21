@@ -59,9 +59,9 @@ public class Gui {
                     }
                 }
             }catch (SQLException ex){
-                Logger.getLogger(Manager.class.getName()).
-                        log(Level.SEVERE, null, ex);
-            }
+                //Logger.getLogger(Manager.class.getName()).
+                        //log(Level.SEVERE, null, ex);
+            }catch (NullPointerException ex){}
         });
         this.frame = new JFrame("CT_Project");
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,8 +87,13 @@ public class Gui {
         
         this.ping.setInitialDelay(5000);
         this.ping.start();
-
+        
         changeActivity(ActivityID.HOME_SCREEN);
+        try {
+            this.manager.newConnection();
+        } catch (SQLException ex) {
+            //Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private ActionListener getActionListener(ActivityID activity, ActivityID oldActivity) {
@@ -180,7 +185,7 @@ public class Gui {
         }
 
         if (this.manager.isEmpty()) {
-            this.menu.disableReturnButton("Paul");
+            this.menu.disableReturnButton("MAX MUSTERMANN");
         } else {
             if (tempActivity != null) {
                 this.menu.enableReturnButton(tempActivity.getTitle());

@@ -18,11 +18,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 /**
@@ -74,7 +71,7 @@ public class GroceryList extends Activity{
         this.add(this.newList);
         this.add(this.jScrollPane);
 
-        this.groceryList = new List[]{new List("PETER", new int[5]),
+        this.groceryList = new List[]{new List("NEUE LISTE", new int[11]),
             new List("Neue Liste2", new int[55]), new List("Neue Liste",
             new int[99]), new List("Neue Liste", new int[99]), new List(
             "Neue Liste", new int[99]), new List("Neue Liste", new int[99]),

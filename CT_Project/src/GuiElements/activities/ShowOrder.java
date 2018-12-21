@@ -6,6 +6,7 @@
 package GuiElements.activities;
 
 import DataManagement.Datatemplates.List;
+import GuiElements.MovableLabel;
 import ct_project.Gui;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -15,6 +16,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.Icon;
@@ -32,13 +36,11 @@ public class ShowOrder extends Activity{
     private final JPanel jPanel;
     private final JScrollPane jScrollPane;
 
-    private ArrayList<JLabel> orders;
-    
-    private OrderManager manager;
+    private OrderManager orderManager;
     
     public ShowOrder(List list, Manager manager) {
         super(ActivityID.SHOW_ORDER_SCREEN,list.getName() ,Color.WHITE);
-        this.manager = new OrderManager(list, manager);
+        this.orderManager = new OrderManager(list, manager);
         int orderHeight = 70;
         
         this.jPanel = new JPanel();
@@ -48,7 +50,6 @@ public class ShowOrder extends Activity{
         this.jScrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.jScrollPane.setSize(this.getWidth()+20, this.getHeight());
         this.jScrollPane.setLocation(-1, 0);
         
         this.jPanel.setMaximumSize(new Dimension(this.getWidth(), Integer.MAX_VALUE));
@@ -82,7 +83,7 @@ public class ShowOrder extends Activity{
         g2d.fillRect(0, 0, width, height);
         if(i % 2 == 0){
             g2d.setColor(Color.BLACK);
-            g2d.drawRect(1, 0, width - 7, height - 1);
+            g2d.drawRect(1, 0, width - 2, height - 1);
         }
         
         String productName = "Test";
@@ -109,25 +110,46 @@ public class ShowOrder extends Activity{
         super.paintComponent(g);
     }  
 
-    private void drawOrders(int orderHeight) {
-        this.orders = new ArrayList<>();
-        
-        for(int i = 0; i < manager.getSize(); i++){
-            JLabel temp = new JLabel("Hallo");
-            temp.setIcon(getOrderIcon(this.getWidth(), orderHeight, i));
-            temp.setSize(this.getWidth(), orderHeight);
-            int bottomLast = (i != 0) ? this.orders.get(i - 1).getY() + this.orders.get(i - 1).
-                    getHeight() : 0;
+    private void drawOrders(int orderHeight) { 
+        for(int i = 0; i < orderManager.getListSize(); i++){
+            MovableLabel temp = new MovableLabel();
+            temp.setSize(this.getWidth() - 5, orderHeight);
+            temp.setIcon(getOrderIcon(temp.getWidth(), temp.getHeight(), i));
+            int bottomLast = (i != 0) ? this.orderManager.getOrder(i - 1).getY()
+                    + this.orderManager.getOrder(i - 1).getHeight() : 0;
             temp.setLocation(0, bottomLast);
-            temp .setVisible(true);
+            temp.setVisible(true);
+            temp.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    orderReleased(e);  }
+            
+            });
             this.jPanel.add(temp);
-            this.orders.add(temp);
+            this.orderManager.addOrder(temp);
         }
-        this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.orders.size() * orderHeight));
+        this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.orderManager.getOrderSize() * orderHeight));
         this.jPanel.
-                setSize(this.getWidth(), this.orders.size() * orderHeight);
-
+                setSize(this.getWidth(), this.orderManager.getOrderSize() * orderHeight);
+        int scrollHeight = (jPanel.getHeight() > this.getHeight()) ? this.getHeight():jPanel.getHeight();
+        this.jScrollPane.setSize(jPanel.getWidth() + 20, scrollHeight);
         this.jPanel.setVisible(true);
         this.jScrollPane.setVisible(true);
+    }
+    
+    private void orderReleased(MouseEvent e){
+        MovableLabel temp = this.orderManager.getOrder(e.getSource());
+        if(temp == null) return;
+        if(temp.getX() > temp.getWidth() / 4){
+            removeOrder(temp);
+        }else if(temp.getX() < -temp.getWidth() / 4){
+            removeOrder(temp);
+        }
+    }
+    
+    private void removeOrder(MovableLabel temp){
+        this.orderManager.removeOrder(temp);
+        this.jPanel.remove(temp);
+        repaint();
     }
 }
