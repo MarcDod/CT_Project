@@ -63,6 +63,5 @@ public class MovableLabel extends JLabel{
     
     private void labelReleased(MouseEvent e){
         this.leftButtonPressed = false;
-        this.setLocation(0, this.getY());
     }
 }
