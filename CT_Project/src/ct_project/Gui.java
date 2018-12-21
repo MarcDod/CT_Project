@@ -1,6 +1,5 @@
 package ct_project;
 
-import DataManagement.Datatemplates.List;
 import GuiElements.activities.Manager;
 import GuiElements.MenuBar;
 import GuiElements.activities.Activity;
@@ -15,11 +14,15 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import org.jdom2.JDOMException;
 
 /**
  *
@@ -42,12 +45,12 @@ public class Gui {
     public Gui() {
         this.ping = new Timer(1000, (ActionEvent e) -> {
             try {
-                if(!manager.ping(60)){
-                    Object[] options = {"Erneut Verbinden","Beenden"};
+                if (!manager.ping(60)) {
+                    Object[] options = {"Erneut Verbinden", "Beenden"};
                     int optionResult = JOptionPane.showOptionDialog(frame, "Die Verbindung zur Datenbank wurde verloren.", "Verbindung verloren",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, options,
                             options[1]);
-                    switch(optionResult){
+                    switch (optionResult) {
                         case 0:
                             manager.reconnect();
                             break;
@@ -56,10 +59,11 @@ public class Gui {
                             break;
                     }
                 }
-            }catch (SQLException ex){
+            } catch (SQLException ex) {
                 //Logger.getLogger(Manager.class.getName()).
-                        //log(Level.SEVERE, null, ex);
-            }catch (NullPointerException ex){}
+                //log(Level.SEVERE, null, ex);
+            } catch (NullPointerException ex) {
+            }
         });
         this.frame = new JFrame("CT_Project");
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,11 +85,15 @@ public class Gui {
         this.panel.setLayout(null);
         this.frame.pack();
 
-        this.manager = new Manager();
-        
+        try {
+            this.manager = new Manager();
+        } catch (IOException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         this.ping.setInitialDelay(5000);
         this.ping.start();
-        
+
         changeActivity(ActivityID.HOME_SCREEN);
         try {
             this.manager.newConnection();
@@ -152,13 +160,20 @@ public class Gui {
             case HOME_SCREEN:
                 tempActivity = new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity));
                 break;
-            case GROCERY_LIST:
-                tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity));
-                break;
+            case GROCERY_LIST: {
+                try {
+                    tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity), manager.getGroceryManager());
+                } catch (JDOMException ex) {
+                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            break;
             case SHOW_ORDER_SCREEN:
-                try{
-                     tempActivity = new ShowOrder(manager.getOrderManager());
-                }catch(SQLException e){
+                try {
+                    tempActivity = new ShowOrder(manager.getOrderManager());
+                } catch (SQLException e) {
                     System.err.println("Liste konnte nicht geladen werden!");
                 }
                 break;
@@ -167,8 +182,9 @@ public class Gui {
                 tempActivity = new LoginScreen(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent ae) {
-                        if(manager.loginIsValid())
+                        if (manager.loginIsValid()) {
                             changeActivity(ActivityID.HOME_SCREEN);
+                        }
                     }
                 }, logInManager);
                 break;

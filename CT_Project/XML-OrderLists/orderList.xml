@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Orderlists>
+  <Orderlist Name="Test XML">
+    <IDs>12</IDs>
+  </Orderlist>
+  <Orderlist Name="Test XML2">
+    <IDs>12</IDs>
+  </Orderlist>
+</Orderlists>

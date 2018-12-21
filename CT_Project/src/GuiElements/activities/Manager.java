@@ -6,12 +6,17 @@
 package GuiElements.activities;
 
 import DataManagement.Datatemplates.Account;
-import DataManagement.Datatemplates.List;
+import DataManagement.Datatemplates.Orderlist;
+import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jdom2.JDOMException;
 
 /**
  *
@@ -21,12 +26,30 @@ public class Manager {
     
     private Stack<ActivityID> activities;
     private Connector database;
+    private XMLManager xmlManager;
     private Activity currentActivity;
     
     private Account user;
-    public Manager(){
+    public Manager() throws IOException{
         this.activities = new Stack<>();
         this.user = null;
+        this.xmlManager = new XMLManager();
+        ArrayList<Orderlist> test = new ArrayList<>();
+        ArrayList<Integer> testInt = new ArrayList<>();
+        testInt.add(1);
+        testInt.add(2);
+        test.add(new Orderlist(testInt, "Test XML"));
+        test.add(new Orderlist(testInt, "Test XML2"));
+        this.xmlManager.saveXMLOrderLists(test, new File(GroceryManager.XML_FILE_PATH));
+        
+        try {
+            ArrayList<Orderlist> t = xmlManager.loadXMLOrderLists(new File(GroceryManager.XML_FILE_PATH));
+            int i = t.get(0).getOrderIDs().get(0);
+            System.out.println(i);
+        } catch (JDOMException ex) {
+            Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     public void newConnection() throws SQLException{
@@ -55,13 +78,24 @@ public class Manager {
         return new LogInManager(this.database);
     }
     public OrderManager getOrderManager(){
-        return new OrderManager(getGroceryList(), this.database);
+        return new OrderManager(getGroceryList(), this.database, getGroceryIndex());
     }
-    private List getGroceryList(){
+    public GroceryManager getGroceryManager() throws JDOMException, IOException{
+        return new GroceryManager(this.xmlManager);
+    }
+    
+    private ArrayList<Orderlist> getGroceryList(){
         if(this.currentActivity instanceof GroceryList){
-            return ((GroceryList) currentActivity).getActiveList();
+            return ((GroceryList) currentActivity).getList();
         }
         return null;
+    }
+    
+    private int getGroceryIndex(){
+        if(this.currentActivity instanceof GroceryList){
+            return ((GroceryList) currentActivity).getCurrentIndex();
+        }
+        return Integer.MAX_VALUE;
     }
 
     public boolean loginIsValid(){

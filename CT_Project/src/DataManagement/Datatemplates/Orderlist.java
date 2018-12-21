@@ -18,8 +18,8 @@ import org.jdom2.Element;
  * @author Julian
  */
 public class Orderlist extends XMLDatatemplate{
-    ArrayList<Integer> orderIDs;
-    String name;
+    private ArrayList<Integer> orderIDs;
+    private String name;
 
     public Orderlist(ArrayList<Integer> orderIDs, String name){
         this.orderIDs = orderIDs;
@@ -32,7 +32,8 @@ public class Orderlist extends XMLDatatemplate{
 
     public Orderlist(Element e) throws DataConversionException{
         List<Content> contents = e.getChild("IDs").getContent();
-        ArrayList<Integer> ids = new ArrayList<>();
+
+        this.orderIDs = new ArrayList<>();
         for(Content content : contents){
             this.orderIDs.add(Integer.parseInt(content.getValue()));
         }
@@ -49,5 +50,13 @@ public class Orderlist extends XMLDatatemplate{
         });
         representingElement.addContent(ids);
         return representingElement;
+    }
+    
+    public ArrayList<Integer> getOrderIDs(){
+        return this.orderIDs;
+    }
+    
+    public String getName(){
+        return this.name;
     }
 }
