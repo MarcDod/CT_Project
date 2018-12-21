@@ -71,13 +71,7 @@ public class GroceryList extends Activity{
         this.add(this.newList);
         this.add(this.jScrollPane);
 
-        this.groceryList = new List[]{new List("NEUE LISTE", new int[11]),
-            new List("Neue Liste2", new int[55]), new List("Neue Liste",
-            new int[99]), new List("Neue Liste", new int[99]), new List(
-            "Neue Liste", new int[99]), new List("Neue Liste", new int[99]),
-            new List("Neue Liste", new int[99]), new List("Neue Liste",
-            new int[99]), new List("Neue Liste", new int[99]), new List(
-            "Neue Liste", new int[99]), new List("Neue Liste", new int[99])};
+        this.groceryList = new List[]{new List("TEST LISTE", new int[]{1})};
         this.lists = new Button[groceryList.length];
         for(int i = 0; i < this.lists.length; i++){
             this.lists[i] = new Button(buttonWidth, buttonHeight, drawGroceryList(
