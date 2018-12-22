@@ -17,20 +17,22 @@ public class Order {
     private Date date;
     private String deadline;
     private int number;
-    private boolean closed;
+    private boolean canceld;
     private String itemName;
     private String user;
     private boolean watched;
+    private boolean bought;
 
-    public Order(int orderID, Date date, String deadline, int number, boolean closed, String itemName, String user , boolean watched){
+    public Order(int orderID, Date date, String deadline, int number, boolean canceld, String itemName, String user , boolean watched, boolean bought){
         this.orderID = orderID;
         this.date = date;
         this.deadline = deadline;
         this.number = number;
-        this.closed = closed;
+        this.canceld = canceld;
         this.itemName = itemName;
         this.user = user;
         this.watched = watched;
+        this.bought = bought;
     }
 
     public int getOrderID() {
@@ -65,18 +67,25 @@ public class Order {
         this.number = number;
     }
 
-    public boolean isClosed() {
-        return closed;
+    public boolean isCanceld() {
+        return canceld;
     }
 
-    public void setClosed(boolean closed) {
-        this.closed = closed;
+    public void setCanceld(boolean closed) {
+        this.canceld = closed;
     }
 
     public String getItemName() {
         return itemName;
     }
 
+    public boolean isBought() {
+        return bought;
+    }
+
+    public void setBought(boolean bought) {
+        this.bought = bought;
+    }
 //    public void setItemName(String itemName) {
 //        this.itemName = itemName;
 //    }

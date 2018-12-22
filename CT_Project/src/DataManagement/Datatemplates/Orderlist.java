@@ -8,8 +8,6 @@ package DataManagement.Datatemplates;
 import DataManagement.XML.XMLDatatemplate;
 import java.util.ArrayList;
 import java.util.List;
-import org.jdom2.Attribute;
-import org.jdom2.Content;
 import org.jdom2.DataConversionException;
 import org.jdom2.Element;
 
@@ -31,6 +29,9 @@ public class Orderlist extends XMLDatatemplate{
         this(new ArrayList<Integer>(), name);
     }
 
+    public void removeID(int i){
+        orderIDs.remove(i);
+    }
     public Orderlist(Element e) throws DataConversionException{
         this(e.getAttributeValue("name"));
 

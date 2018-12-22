@@ -6,7 +6,6 @@
 package managers;
 
 import DataManagement.Datatemplates.Order;
-import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
 import GuiElements.MovableLabel;
@@ -18,21 +17,20 @@ import java.util.ArrayList;
  * @author Marc
  */
 public class OrderManager {
-    private ArrayList<Orderlist> list;
-    private int index;
+    private ArrayList<Order> orders;
     private Connector connector;
-    private XMLManager xmlManager;
     private ArrayList<MovableLabel> orderLabels;
+    private String name;
     
-    public OrderManager(ArrayList<Orderlist> list, Connector connector, int index){
-        this.index = index;
-        this.list = list;
+    public OrderManager(ArrayList<Order> orders, Connector connector, String name){
+        this.orders = orders;
         this.connector = connector;
         this.orderLabels = new ArrayList<>();
+        this.name = name;
     }
     
     public Order getOrder(int index) throws SQLException, NullPointerException{
-        return this.connector.getOrder(this.list.get(this.index).getOrderIDs().get(index));
+        return orders.get(index);
     }
     
     public MovableLabel getOrderLabel(int i){
@@ -48,13 +46,12 @@ public class OrderManager {
         return null;
     }
     
-    public void removeIDFromOrder(int i){
-        this.list.get(this.index).getOrderIDs().remove(i);
+    public void removeOrderWithID(int i){
+        this.orders.remove(i);
     }
     
     public String getListName(){
-        
-        return (list!= null) ? this.list.get(this.index).getName() : "";
+        return this.name;
     }
     
     public void addOrderLabel(MovableLabel label){
@@ -62,7 +59,7 @@ public class OrderManager {
     }
     
     public int getListSize(){
-        return this.list.get(this.index).getOrderIDs().size();
+        return this.orders.size();
     }
     
     public int getOrderLabelSize(){
@@ -72,19 +69,15 @@ public class OrderManager {
     public void removeOrder(MovableLabel label){
         int i = this.orderLabels.indexOf(label);
         this.orderLabels.remove(label);
-        this.list.get(this.index).getOrderIDs().remove(i);
+        this.removeOrderWithID(i);
     }
  
     public void orderCancel(){
         
     }
     
-    public void orderBought(){
+    public void orderAccept(){
         
-        
-    }
-    public void listUpdate(int i){
-
     }
 
     public void resetOrderLabel() {

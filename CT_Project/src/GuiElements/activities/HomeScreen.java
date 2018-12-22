@@ -8,14 +8,12 @@ package GuiElements.activities;
 import managers.HomeManager;
 import GuiElements.Button;
 import ct_project.Gui;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
@@ -30,27 +28,36 @@ public class HomeScreen extends Activity {
     
     private HomeManager homeManager;
 
-    public HomeScreen(ActionListener groceryListListener, HomeManager homeManager) {
+    public HomeScreen(ActionListener groceryListListener, ActionListener allOrders,HomeManager homeManager) {
         super(ActivityID.HOME_SCREEN,"STARTFENSTER" ,new Color(240, 240, 240));
 
         this.homeManager = homeManager;
 
-        buttons = new Button[3];
+        buttons = new Button[4];
 
+        buttons[3] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
+        buttons[3].setBackground(Color.WHITE);
+        buttons[3].setFont(Gui.BUTTON_FONT);
+        buttons[3].setHorizontalAlignment(JButton.LEFT);
+        buttons[3].setForeground(Color.BLACK);
+        buttons[3].setFocusPainted(false);
+        buttons[3].setText("ERLEDIGTE BESTELLUNGEN");
+        
         buttons[2] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
         buttons[2].setBackground(Color.WHITE);
         buttons[2].setFont(Gui.BUTTON_FONT);
         buttons[2].setHorizontalAlignment(JButton.LEFT);
         buttons[2].setForeground(Color.BLACK);
         buttons[2].setFocusPainted(false);
-        buttons[2].setText("ERLEDIGTE BESTELLUNGEN");
+        buttons[2].setText("ALLE BESTELLUNGEN");
+        buttons[2].addActionListener(allOrders);
         
         // Button neue Bestellung
         BufferedImage image = drawGroceryList(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(124, 252, 0), new Color(0, 100, 0), "NEUE BESTELLUNGEN" , 0);
         buttons[0] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, image);
 
         // Button einkaufsliste
-        image = drawGroceryList(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(100, 149, 237), new Color(025, 025, 112), "EINKAUFSLISTE", homeManager.getGrocerySize());
+        image = drawGroceryList(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(100, 149, 237), new Color(025, 025, 112), "EINKAUFSLISTEN", homeManager.getGrocerySize());
         buttons[1] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, image);
         buttons[1].addActionListener(groceryListListener);
 

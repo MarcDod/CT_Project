@@ -9,12 +9,14 @@ import managers.LogInManager;
 import managers.HomeManager;
 import managers.GroceryManager;
 import DataManagement.Datatemplates.Account;
+import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
 import GuiElements.activities.Activity;
 import GuiElements.activities.ActivityID;
 import GuiElements.activities.GroceryList;
+import GuiElements.activities.HomeScreen;
 import GuiElements.activities.LoginScreen;
 import java.io.File;
 import java.io.IOException;
@@ -66,14 +68,29 @@ public class Manager {
     public LogInManager getLogInManager(){
         return new LogInManager(this.database);
     }
-    public OrderManager getOrderManager() throws JDOMException, IOException{
-        return new OrderManager(getGroceryList(), this.database, getGroceryIndex());
+    public OrderManager getOrderManager() throws JDOMException, IOException, SQLException{
+        return new OrderManager(getOrder(), this.database, getOrderName());
     }
-    public GroceryManager getGroceryManager() throws JDOMException, IOException{
-        return new GroceryManager(getGroceryList());
+    public GroceryManager getGroceryManager() throws JDOMException, IOException, SQLException{
+        return new GroceryManager(getGroceryList(), getAllOrder(), xmlManager, database);
     }
     public HomeManager getHomeManager() throws JDOMException, IOException{
         return new HomeManager(getGroceryList());
+    }
+    
+    private ArrayList<Order> getOrder() throws JDOMException, IOException, SQLException{
+        ArrayList<Order> tempOrders = new ArrayList<>();
+
+        if(currentActivity instanceof GroceryList){
+            ArrayList<Orderlist> tempOrderlist = getGroceryList();
+            for(Integer id : tempOrderlist.get(getOrderIndex()).getOrderIDs()){
+                tempOrders.add(this.database.getOrder(id));
+            }
+        } if(currentActivity instanceof HomeScreen){
+            tempOrders = this.database.getAllOrders();
+        }
+        
+        return tempOrders;
     }
     
     private ArrayList<Orderlist> getGroceryList() throws JDOMException, IOException{
@@ -81,13 +98,26 @@ public class Manager {
         return (temp.canRead()) ? xmlManager.loadXMLOrderLists(temp) : null;
     }
     
-    private int getGroceryIndex(){
+    private ArrayList<Order> getAllOrder() throws SQLException{
+        return database.getAllOrders();
+    }
+    
+    private String getOrderName(){
+        if(this.currentActivity instanceof GroceryList){
+            return ((GroceryList) currentActivity).getCurrentName();
+        }if(this.currentActivity instanceof HomeScreen){
+            return "ALLE BESTELLUNGEN";
+        }
+        return "";
+    }
+
+    private int getOrderIndex(){
         if(this.currentActivity instanceof GroceryList){
             return ((GroceryList) currentActivity).getCurrentIndex();
         }
         return Integer.MAX_VALUE;
     }
-
+    
     public boolean loginIsValid(){
         if(this.currentActivity instanceof LoginScreen){
             this.user = ((LoginScreen) currentActivity).getUser();

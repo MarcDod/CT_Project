@@ -36,19 +36,20 @@ public class GroceryList extends Activity{
     
     private GroceryManager groceryManager;
 
-    public GroceryList(ActionListener lists, GroceryManager groceryManager){
+    public GroceryList(ActionListener lists, ActionListener newList ,GroceryManager groceryManager){
         super(ActivityID.GROCERY_LIST,"EINKAUFSLISTE", new Color(240, 240, 240));
 
         this.groceryManager = groceryManager;
         
         //<editor-fold defaultstate="collapsed" desc="init NewList">
-this.newList = new Button(Gui.SCREEN_WIDTH, 60);
-this.newList.setBackground(Gui.COLOR);
-this.newList.setForeground(Color.WHITE);
-this.newList.setFont(Gui.BUTTON_FONT);
-this.newList.setText("NEUE LISTE");
-this.newList.setLocation(0, this.getHeight() - this.newList.getHeight());
-this.newList.setFocusPainted(false);
+        this.newList = new Button(Gui.SCREEN_WIDTH, 60);
+        this.newList.setBackground(Gui.COLOR);
+        this.newList.setForeground(Color.WHITE);
+        this.newList.setFont(Gui.BUTTON_FONT);
+        this.newList.setText("NEUE LISTE");
+        this.newList.setLocation(0, this.getHeight() - this.newList.getHeight());
+        this.newList.setFocusPainted(false);
+        this.newList.addActionListener(newList);
 //</editor-fold>
 
         //<editor-fold defaultstate="collapsed" desc="inti scrollPane and panel">
@@ -137,7 +138,11 @@ this.jPanel.setBorder(null);
         return this.groceryManager.getGroceryList();
     }
     
-    public int getCurrentIndex(){
+    public String getCurrentName(){
+        return this.groceryManager.getActiveName();
+    }
+
+    public int getCurrentIndex() {
         return this.groceryManager.getActiveIndex();
     }
 }

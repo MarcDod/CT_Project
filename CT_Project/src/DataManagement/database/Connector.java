@@ -9,6 +9,7 @@ import DataManagement.Datatemplates.Account;
 import DataManagement.Datatemplates.Order;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -69,9 +70,25 @@ public class Connector{
         if(result.next()){
             resultingOrder = new Order(result.getInt("orderID"), result.getDate(
                     "date"), result.getString("deadline"), result.getInt(
-                    "number"), result.getBoolean("closed"), result.getString(
+                    "number"), result.getBoolean("canceld"), result.getString(
                     "itemName"), result.getString("user"),result.getBoolean(
-                    "watched"));
+                    "watched"), result.getBoolean(
+                    "bought"));
+        }
+        return resultingOrder;
+    }
+    
+    public ArrayList<Order> getAllOrders() throws SQLException{
+        ArrayList<Order> resultingOrder = new ArrayList<>();
+        ResultSet result = this.sendSQLStatement(
+                "SELECT * FROM mydb.order;");
+        while(result.next()){
+            resultingOrder.add(new Order(result.getInt("orderID"), result.getDate(
+                    "date"), result.getString("deadline"), result.getInt(
+                    "number"), result.getBoolean("canceld"), result.getString(
+                    "itemName"), result.getString("user"),result.getBoolean(
+                    "watched"), result.getBoolean(
+                    "bought")));
         }
         return resultingOrder;
     }

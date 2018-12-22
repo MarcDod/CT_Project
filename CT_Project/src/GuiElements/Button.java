@@ -36,6 +36,9 @@ public class Button extends JButton{
         
     }
  
+    public void setImage(BufferedImage image){
+        this.image = image;
+    }
     
     private void initButton(int width,int height){
         Dimension d = new Dimension(width, height);

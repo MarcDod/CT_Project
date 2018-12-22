@@ -8,6 +8,7 @@ import GuiElements.activities.GroceryList;
 import GuiElements.activities.HomeScreen;
 import managers.LogInManager;
 import GuiElements.activities.LoginScreen;
+import GuiElements.activities.NewList;
 import GuiElements.activities.ShowOrder;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,8 +17,6 @@ import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -92,13 +91,13 @@ public class Gui {
         this.ping.setInitialDelay(5000);
         this.ping.start();
 
-        changeActivity(ActivityID.HOME_SCREEN);
-        
         try {
             this.manager.newConnection();
         } catch (SQLException ex) {
             //Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
+        changeActivity(ActivityID.NEW_LIST);
+        
     }
 
     private ActionListener getActionListener(ActivityID activity, ActivityID oldActivity) {
@@ -152,13 +151,16 @@ public class Gui {
         try {
             switch (activity) {
                 case HOME_SCREEN:
-                    tempActivity = new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity), manager.getHomeManager());
+                    tempActivity = new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity), getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity),manager.getHomeManager());
                     break;
                 case GROCERY_LIST:
-                    tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity), manager.getGroceryManager());
+                    tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity),getActionListener(ActivityID.NEW_LIST, activity), manager.getGroceryManager());
                     break;
                 case SHOW_ORDER_SCREEN:
                     tempActivity = new ShowOrder(manager.getOrderManager());
+                    break;
+                case NEW_LIST:
+                    tempActivity = new NewList();
                     break;
                 case LOGIN_SCREEN:
                     LogInManager logInManager = manager.getLogInManager();
@@ -176,7 +178,7 @@ public class Gui {
 
         } catch (IOException ex) {
 
-        } catch (SQLException ex0) {
+        } catch (SQLException ex) {
 
         }
 

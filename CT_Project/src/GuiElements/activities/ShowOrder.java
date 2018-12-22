@@ -95,7 +95,6 @@ public class ShowOrder extends Activity{
             g2d.setColor(Color.BLACK);
             g2d.drawRect(1, 0, width - 2, height - 1);
         }
-        
         String productName = tempOrder.getItemName();
         String number = String.valueOf(tempOrder.getNumber());
         String price = tempOrder.getUser() +" hatt bestellt am: " 
@@ -114,6 +113,8 @@ public class ShowOrder extends Activity{
         g2d.setColor(new Color(150, 150, 150));
         g2d.drawString(price, 16, (height - 1) / 2 + fm.getHeight());
         
+        g2d.dispose();
+        
         return new ImageIcon(image);
     }
      @Override
@@ -129,7 +130,7 @@ public class ShowOrder extends Activity{
             temp.setSize(this.getWidth() - 5, orderHeight);
             Icon tempIcon = getOrderIcon(temp.getWidth(), temp.getHeight(), i, orderManager.getListSize());
             if(tempIcon == null){
-                this.orderManager.removeIDFromOrder(i);
+                this.orderManager.removeOrderWithID(i);
                 i--;
                 continue;
             }
@@ -164,8 +165,10 @@ public class ShowOrder extends Activity{
         if(temp == null) return;
         if(temp.getX() > temp.getWidth() / 2){
             removeOrder(temp);
+            orderManager.orderAccept();
         }else if(temp.getX() < -temp.getWidth() / 2){
             removeOrder(temp);
+            orderManager.orderCancel();
         }else{
             temp.setLocation(0, temp.getY());
         }

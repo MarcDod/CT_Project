@@ -10,6 +10,6 @@ package GuiElements.activities;
  * @author marc.doderer
  */
 public enum ActivityID {
-    HOME_SCREEN, GROCERY_LIST, LOGIN_SCREEN, SHOW_ORDER_SCREEN;
+    HOME_SCREEN, GROCERY_LIST, LOGIN_SCREEN, SHOW_ORDER_SCREEN, NEW_LIST;
 
 }
