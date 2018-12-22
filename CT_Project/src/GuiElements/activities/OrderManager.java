@@ -31,7 +31,7 @@ public class OrderManager {
         this.orderLabels = new ArrayList<>();
     }
     
-    public Order getOrder(int index) throws SQLException{
+    public Order getOrder(int index) throws SQLException, NullPointerException{
         return this.connector.getOrder(this.list.get(this.index).getOrderIDs().get(index));
     }
     
@@ -53,7 +53,8 @@ public class OrderManager {
     }
     
     public String getListName(){
-        return this.list.get(this.index).getName();
+        
+        return (list!= null) ? this.list.get(this.index).getName() : "";
     }
     
     public void addOrderLabel(MovableLabel label){

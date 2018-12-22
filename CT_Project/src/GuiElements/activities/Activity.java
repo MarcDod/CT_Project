@@ -7,9 +7,13 @@ package GuiElements.activities;
 
 import GuiElements.MenuBar;
 import ct_project.Gui;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import javax.swing.JPanel;
 
 /**
@@ -19,6 +23,9 @@ import javax.swing.JPanel;
 public abstract class Activity extends JPanel{
     private ActivityID activityID;
     private String title;
+    
+    public static final int STANDART_BUTTON_WIDTH = Gui.SCREEN_WIDTH - 6 - 20;
+    public static final int STANDART_BUTTON_HEIGHT = Gui.SCREEN_HEIGHT / 7;
     
     public Activity(ActivityID activityID,String title, Color background){
         this.activityID = activityID;
@@ -58,6 +65,41 @@ public abstract class Activity extends JPanel{
     
     public String getTitle(){
         return this.title;
+    }
+    
+    public void drawStandartButton
+        (Graphics2D g2d,int buttonWidth,int buttonHeight, String text){
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, 
+            RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+            RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        // Background
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, buttonWidth, buttonHeight);
+
+        // Text
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(Gui.BUTTON_FONT);
+        g2d.drawString(text, 16, 30);
+        
+        // Anzeigen
+        g2d.setColor(Gui.COLOR);
+        int ovalWidth = (int)((buttonWidth / 2) * 0.9);
+        int ovalHeight = 37;
+        int ovalX = (buttonWidth) / 2 + (buttonWidth / 2 - ovalWidth) / 2;
+        int ovalY = buttonHeight / 2;
+        g2d.fillRoundRect(ovalX, ovalY, ovalWidth, ovalHeight, ovalHeight, ovalHeight);
+        g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.BOLD, 14));
+        FontMetrics fm = g2d.getFontMetrics();
+        g2d.setColor(Color.WHITE);
+        int textY = ovalY + (ovalHeight / 2 + fm.getHeight() / 3);
+        int textX = ovalX + ((ovalWidth)/2 - fm.stringWidth("ANZEIGEN") / 2);
+        g2d.drawString("ANZEIGEN", textX,textY);
+        textY -= (fm.getHeight() / 4);
+        g2d.setStroke(new BasicStroke(2.0f));
+        g2d.drawPolyline(new int[]{ovalX + ovalWidth - ovalHeight + 5,ovalX + ovalWidth - ovalHeight + 10,ovalX + ovalWidth - ovalHeight + 5}, new int[]{textY - fm.getHeight() / 2,textY,textY + fm.getHeight() / 2}, 3);
     }
     
 }

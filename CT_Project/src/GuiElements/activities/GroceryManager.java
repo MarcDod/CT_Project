@@ -21,11 +21,9 @@ public class GroceryManager {
     
     private ArrayList<Orderlist> groceryList;
     private int activeIndex;
-    private  XMLManager xmlManager;
     
-    public GroceryManager(XMLManager xmlManager) throws JDOMException, IOException{
-        this.xmlManager = xmlManager;
-        this.groceryList = xmlManager.loadXMLOrderLists(new File(XML_FILE_PATH));
+    public GroceryManager(ArrayList<Orderlist> grList) throws JDOMException, IOException{
+        this.groceryList = grList;
     }
     
     public ArrayList<Orderlist> getGroceryList(){

@@ -10,13 +10,9 @@ import GuiElements.Button;
 import GuiElements.TextField;
 import ct_project.Gui;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +35,7 @@ public class LoginScreen extends Activity{
         super(ActivityID.LOGIN_SCREEN,"" ,Gui.SCREEN_HEIGHT - 29, Color.WHITE);
         this.logInManager = logInManager;
         
+        //<editor-fold defaultstate="collapsed" desc="init loginButton">
         this.loginButton = new Button(Gui.SCREEN_WIDTH, 60);
         this.loginButton.setBackground(Gui.COLOR);
         this.loginButton.setForeground(Color.WHITE);
@@ -52,6 +49,7 @@ public class LoginScreen extends Activity{
                 loginAction();
             }
         });
+//</editor-fold>
         
         this.userName = initTextField(300, "Username",false);
         this.password = initTextField(350, "Password",true);

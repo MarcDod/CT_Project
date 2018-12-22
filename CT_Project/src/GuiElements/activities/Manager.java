@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Stack;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jdom2.JDOMException;
 
 /**
@@ -61,18 +59,19 @@ public class Manager {
     public LogInManager getLogInManager(){
         return new LogInManager(this.database);
     }
-    public OrderManager getOrderManager(){
+    public OrderManager getOrderManager() throws JDOMException, IOException{
         return new OrderManager(getGroceryList(), this.database, getGroceryIndex());
     }
     public GroceryManager getGroceryManager() throws JDOMException, IOException{
-        return new GroceryManager(this.xmlManager);
+        return new GroceryManager(getGroceryList());
+    }
+    public HomeManager getHomeManager() throws JDOMException, IOException{
+        return new HomeManager(getGroceryList());
     }
     
-    private ArrayList<Orderlist> getGroceryList(){
-        if(this.currentActivity instanceof GroceryList){
-            return ((GroceryList) currentActivity).getList();
-        }
-        return null;
+    private ArrayList<Orderlist> getGroceryList() throws JDOMException, IOException{
+        File temp = new File(GroceryManager.XML_FILE_PATH);
+        return (temp.canRead()) ? xmlManager.loadXMLOrderLists(temp) : null;
     }
     
     private int getGroceryIndex(){

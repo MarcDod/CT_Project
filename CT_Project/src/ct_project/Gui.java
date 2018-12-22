@@ -65,6 +65,7 @@ public class Gui {
             } catch (NullPointerException ex) {
             }
         });
+        //<editor-fold defaultstate="collapsed" desc="Init frame and panel">
         this.frame = new JFrame("CT_Project");
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         final Dimension d = new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -77,22 +78,22 @@ public class Gui {
         this.panel.setPreferredSize(d);
         this.panel.setSize(d);
         this.menu = new MenuBar(getActionListener(), getActionListener(ActivityID.LOGIN_SCREEN));
-
+        
         this.frame.setLayout(null);
-
+        
         this.panel.add(menu);
         this.frame.add(panel);
         this.panel.setLayout(null);
         this.frame.pack();
-
+//</editor-fold>
 
         this.manager = new Manager();
-
 
         this.ping.setInitialDelay(5000);
         this.ping.start();
 
         changeActivity(ActivityID.HOME_SCREEN);
+        
         try {
             this.manager.newConnection();
         } catch (SQLException ex) {
@@ -115,12 +116,9 @@ public class Gui {
 
     private ActionListener getActionListener(ActivityID activity) {
 
-        ActionListener listener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                manager.resetStack();
-                changeActivity(activity);
-            }
+        ActionListener listener = (ActionEvent e) -> {
+            manager.resetStack();
+            changeActivity(activity);
         };
 
         return listener;
@@ -128,11 +126,8 @@ public class Gui {
 
     private ActionListener getActionListener() {
 
-        ActionListener listener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeActivity(manager.getLastActivityID());
-            }
+        ActionListener listener = (ActionEvent e) -> {
+            changeActivity(manager.getLastActivityID());
         };
 
         return listener;
@@ -154,38 +149,35 @@ public class Gui {
         }
 
         Activity tempActivity = null;
-        switch (activity) {
-            case HOME_SCREEN:
-                tempActivity = new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity));
-                break;
-            case GROCERY_LIST: {
-                try {
+        try {
+            switch (activity) {
+                case HOME_SCREEN:
+                    tempActivity = new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity), manager.getHomeManager());
+                    break;
+                case GROCERY_LIST:
                     tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity), manager.getGroceryManager());
-                } catch (JDOMException ex) {
-                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            break;
-            case SHOW_ORDER_SCREEN:
-                try {
+                    break;
+                case SHOW_ORDER_SCREEN:
                     tempActivity = new ShowOrder(manager.getOrderManager());
-                } catch (SQLException e) {
-                    System.err.println("Liste konnte nicht geladen werden!");
-                }
-                break;
-            case LOGIN_SCREEN:
-                LogInManager logInManager = manager.getLogInManager();
-                tempActivity = new LoginScreen(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent ae) {
-                        if (manager.loginIsValid()) {
-                            changeActivity(ActivityID.HOME_SCREEN);
+                    break;
+                case LOGIN_SCREEN:
+                    LogInManager logInManager = manager.getLogInManager();
+                    tempActivity = new LoginScreen(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            if (manager.loginIsValid()) {
+                                changeActivity(ActivityID.HOME_SCREEN);
+                            }
                         }
-                    }
-                }, logInManager);
-                break;
+                    }, logInManager);
+                    break;
+            }
+        } catch (JDOMException ex) {
+
+        } catch (IOException ex) {
+
+        } catch (SQLException ex0) {
+
         }
 
         if (tempActivity != null) {

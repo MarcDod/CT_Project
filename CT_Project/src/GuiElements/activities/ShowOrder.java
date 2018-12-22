@@ -61,11 +61,17 @@ public class ShowOrder extends Activity{
         
         this.add(this.jScrollPane);
         
+        try{
         buildOrders(orderHeight);
+        } catch(NullPointerException ex){
+              System.err.println("Keine Verbindung!");  
+        } catch(SQLException ex){
+            System.err.println("Fehler!");
+        }
         reSizeJScroolPane(orderHeight);
     }
     
-    private Icon getOrderIcon(int width, int height, int i, int size) throws SQLException{
+    private Icon getOrderIcon(int width, int height, int i, int size) throws SQLException, NullPointerException{
                 BufferedImage image = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
         Order tempOrder = this.orderManager.getOrder(i);
@@ -114,7 +120,7 @@ public class ShowOrder extends Activity{
         super.paintComponent(g);
     }  
 
-    private void buildOrders(int orderHeight) throws SQLException { 
+    private void buildOrders(int orderHeight) throws SQLException, NullPointerException{ 
         jPanel.removeAll();
         this.orderManager.resetOrderLabel();
         for(int i = 0; i < orderManager.getListSize(); i++){
@@ -170,6 +176,8 @@ public class ShowOrder extends Activity{
             buildOrders(temp.getHeight());
         } catch (SQLException ex) {
             Logger.getLogger(ShowOrder.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(NullPointerException ex){
+            System.err.println("Keine Verbidnung");
         }
         reSizeJScroolPane(temp.getHeight());
         repaint();
