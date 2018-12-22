@@ -5,6 +5,7 @@
  */
 package GuiElements.activities;
 
+import managers.OrderManager;
 import DataManagement.Datatemplates.Order;
 import GuiElements.MovableLabel;
 import ct_project.Gui;

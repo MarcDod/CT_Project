@@ -1,12 +1,12 @@
 package ct_project;
 
-import GuiElements.activities.Manager;
+import managers.Manager;
 import GuiElements.MenuBar;
 import GuiElements.activities.Activity;
 import GuiElements.activities.ActivityID;
 import GuiElements.activities.GroceryList;
 import GuiElements.activities.HomeScreen;
-import GuiElements.activities.LogInManager;
+import managers.LogInManager;
 import GuiElements.activities.LoginScreen;
 import GuiElements.activities.ShowOrder;
 import java.awt.Dimension;

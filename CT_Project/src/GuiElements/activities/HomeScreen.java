@@ -5,6 +5,7 @@
  */
 package GuiElements.activities;
 
+import managers.HomeManager;
 import GuiElements.Button;
 import ct_project.Gui;
 import java.awt.BasicStroke;

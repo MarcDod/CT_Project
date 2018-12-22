@@ -5,6 +5,7 @@
  */
 package GuiElements.activities;
 
+import managers.LogInManager;
 import DataManagement.Datatemplates.Account;
 import GuiElements.Button;
 import GuiElements.TextField;

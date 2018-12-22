@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package GuiElements.activities;
+package managers;
 
 import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
@@ -87,7 +87,7 @@ public class OrderManager {
 
     }
 
-    void resetOrderLabel() {
+    public void resetOrderLabel() {
         this.orderLabels = new ArrayList<>();
     }
     

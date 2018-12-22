@@ -3,12 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package GuiElements.activities;
+package managers;
 
+import managers.LogInManager;
+import managers.HomeManager;
+import managers.GroceryManager;
 import DataManagement.Datatemplates.Account;
 import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
+import GuiElements.activities.Activity;
+import GuiElements.activities.ActivityID;
+import GuiElements.activities.GroceryList;
+import GuiElements.activities.LoginScreen;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
