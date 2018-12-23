@@ -43,23 +43,38 @@ public class ColorPalette extends JLabel {
     
     private JPanel panel;
 
-    public ColorPalette(ArrayList<Color> colors, int x, int y, int width, int height) {
-        this.width = width;
-        this.height = height;
-        this.unFolded = false;
-        this.activeColor = Gui.COLOR;
-        this.setLocation(x, y);
-        this.setSize(width, height);
-
-        this.unFold = new Button(20, 10, getOpenImage(20, 10, unFolded));
-        this.unFold.setLocation(width / 2 - unFold.getWidth() / 2, height - unFold.getHeight() - 5);
-        this.unFold.setBorder(null);
+    public ColorPalette(Color startColor, ArrayList<Color> colors, int x, int y, int width, int height) {
+        init(colors, x, y, width, height, startColor);
         this.unFold.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 action();
             }
         });
+    }
+    
+    public ColorPalette(Color startColor, ArrayList<Color> colors, int x, int y, int width, int height, ActionListener unFoldListener) {
+        init(colors, x, y, width, height, startColor);
+        this.unFold.addActionListener(unFoldListener);
+        this.unFold.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                action();
+            }
+        });
+    }
+
+    private void init(ArrayList<Color> colors, int x, int y, int width, int height, Color startColor){
+                this.width = width;
+        this.height = height;
+        this.unFolded = false;
+        this.activeColor = startColor;
+        this.setLocation(x, y);
+        this.setSize(width, height);
+
+        this.unFold = new Button(20, 10, getOpenImage(20, 10, unFolded));
+        this.unFold.setLocation(width / 2 - unFold.getWidth() / 2, height - unFold.getHeight() - 5);
+        this.unFold.setBorder(null);
         this.add(unFold);
         
         this.panel = new JPanel(null);
@@ -92,9 +107,8 @@ public class ColorPalette extends JLabel {
         panel.setBackground(new Color(0,0,0,0));
         panel.setVisible(unFolded);
         this.add(panel);
-        
     }
-
+    
     private void setColor(Color color){
         this.activeColor = color;
         this.repaint();

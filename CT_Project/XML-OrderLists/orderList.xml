@@ -2,10 +2,18 @@
 <Orderlists>
   <Orderlist name="ALLE OHNE LISTE" color="#0050be">
     <IDs>
-      <ID id="1" />
-      <ID id="2" />
-      <ID id="3" />
       <ID id="4" />
+    </IDs>
+  </Orderlist>
+  <Orderlist name="MEDIA MARKT" color="#ff0000">
+    <IDs>
+      <ID id="2" />
+      <ID id="1" />
+    </IDs>
+  </Orderlist>
+  <Orderlist name="TEST" color="#00ff00">
+    <IDs>
+      <ID id="3" />
     </IDs>
   </Orderlist>
 </Orderlists>

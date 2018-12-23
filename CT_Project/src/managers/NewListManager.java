@@ -5,11 +5,15 @@
  */
 package managers;
 
+import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
+import DataManagement.database.Connector;
+import ct_project.Gui;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -19,16 +23,60 @@ import java.util.ArrayList;
 public class NewListManager {
     private XMLManager xmlManager;
     private ArrayList<Orderlist> orderList;
+    private ArrayList<Order> allOrders;
     
-    public NewListManager(XMLManager xmlManager, ArrayList orderList){
+    private int index;
+    
+    private String title;
+    
+    public NewListManager(XMLManager xmlManager,Connector database ,ArrayList orderList, String title, int index) throws SQLException{
         this.xmlManager = xmlManager;
         this.orderList = orderList;
+        this.allOrders = new ArrayList<>();
+        this.title = (title.equals(GroceryManager.ORDERS_WITHOUT_LIST))? "NEUE LISTE": title;
+        this.index = index;
+        
+        for(int i = 0; i < this.orderList.get(0).getOrderIDs().size(); i++){
+            this.allOrders.add(database.getOrder(this.orderList.get(0).getOrderIDs().get(i)));
+        }
+        if(index == 0) return;
+        
+        for(int i = 0; i < this.orderList.get(index).getOrderIDs().size(); i++){
+            this.allOrders.add(database.getOrder(this.orderList.get(index).getOrderIDs().get(i)));
+        }
+        
     }
     
-    public void saveOrderList(Color color, String listName) throws IOException{
-        ArrayList<Integer> temp = new ArrayList<>();
-        Orderlist newList = new Orderlist(temp,listName.toUpperCase(), String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()));
-        this.orderList.add(newList);
+    public String getTitle(){
+        return this.title;
+    }
+    
+    public ArrayList<Integer> getOrderlist(){
+        if(index == 0) return null;
+        return orderList.get(index).getOrderIDs();
+    }
+    
+    public Color getColor(){
+        return Color.decode(orderList.get(index).getColor());
+    }
+    
+    public String getListName(){
+        if(index == 0) return "";
+        return orderList.get(index).getName();
+    }
+    
+    public ArrayList getAllOrders(){
+        return this.allOrders;
+    }
+    
+    public void saveOrderList(Color color, String listName, ArrayList<Integer> orders) throws IOException{
+        Orderlist newList = new Orderlist(orders,listName.toUpperCase(), String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()));
+        if(index == 0)
+            this.orderList.add(newList);
+        else{
+            this.orderList.remove(index);
+            this.orderList.add(index, newList);
+        }
         this.xmlManager.saveXMLOrderLists(orderList, new File(GroceryManager.XML_FILE_PATH));
     }
     

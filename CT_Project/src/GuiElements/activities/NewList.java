@@ -7,6 +7,7 @@ package GuiElements.activities;
 
 import GuiElements.Button;
 import GuiElements.ColorPalette;
+import GuiElements.OrderSelector;
 import GuiElements.TextField;
 
 import ct_project.Gui;
@@ -19,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import managers.NewListManager;
 
 /**
@@ -31,17 +33,19 @@ public class NewList extends Activity {
     private ColorPalette palette;
     private JPanel listName;
 
+    private OrderSelector orderSelector;
+    
     private NewListManager newListManager;
     
     public NewList(ActionListener newListListener, NewListManager newListManager) {
-        super(ActivityID.NEW_LIST, "Neue Liste", new Color(240, 240, 240));
+        super(ActivityID.NEW_LIST, newListManager.getTitle(), new Color(240, 240, 240));
 
         this.newListManager = newListManager;
         
         //<editor-fold defaultstate="collapsed" desc="init listName">
-        int componentWidth = (int) (this.getWidth() * 0.9);
-        int componentHeight = 50;
-        int componentX = (this.getWidth() - 6 - (int) (this.getWidth() * 0.9)) / 2;
+        final int componentWidth = (int) (this.getWidth() * 0.9);
+        final int componentHeight = 50;
+        final int componentX = (this.getWidth() - 6 - (int) (this.getWidth() * 0.9)) / 2;
         this.listName = new JPanel(null);
         this.listName.setSize(componentWidth, componentHeight);
         this.listName.setLocation(componentX, 30);
@@ -50,6 +54,7 @@ public class NewList extends Activity {
         int textFieldWidth = (int)(componentWidth * 0.8);
         tempTextField.setSize(textFieldWidth, 20);
         tempTextField.setLocation(13, (componentHeight / 2) - tempTextField.getHeight() / 2);
+        tempTextField.setText(newListManager.getListName());
         this.listName.add(tempTextField);
         this.listName.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150)));
         this.add(listName);
@@ -67,7 +72,12 @@ public class NewList extends Activity {
         colors.add(Color.PINK);
         colors.add(Color.DARK_GRAY);
 
-        this.palette = new ColorPalette(colors, componentX, listName.getY() + listName.getHeight() + 20, componentWidth, componentHeight);
+        this.palette = new ColorPalette(newListManager.getColor(), colors, componentX, listName.getY() + listName.getHeight() + 20, componentWidth, componentHeight, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                reLocate(componentX);
+            }
+        });
         this.add(palette);
 //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="init createButton">
@@ -86,12 +96,19 @@ public class NewList extends Activity {
         });
         this.add(createListButton);
 //</editor-fold> 
-
+        
+        this.orderSelector = new OrderSelector(componentWidth, 400, this.newListManager.getAllOrders(), new JPanel(), this.newListManager.getOrderlist());
+        reLocate(componentX);
+        this.add(this.orderSelector);
     }
 
+    private void reLocate(int componentX){
+        this.orderSelector.setLocation(componentX, this.palette.getY() + this.palette.getHeight() + 20);
+    }
+    
     private void saveNewList(){
         try {
-            newListManager.saveOrderList(palette.getColor(), ((TextField)listName.getComponent(0)).getString());
+            newListManager.saveOrderList(palette.getColor(), ((TextField)listName.getComponent(0)).getString(), this.orderSelector.getOrders());
         } catch (IOException ex) {
             Logger.getLogger(NewList.class.getName()).log(Level.SEVERE, null, ex);
         }

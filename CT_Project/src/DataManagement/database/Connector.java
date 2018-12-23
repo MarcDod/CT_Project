@@ -72,7 +72,7 @@ public class Connector{
         if(result.next()){
             resultingOrder = new Order(result.getInt("orderID"), result.getDate(
                     "date"), result.getString("deadline"), result.getInt(
-                    "number"), result.getBoolean("canceld"), result.getString(
+                    "number"), result.getBoolean("canceled"), result.getString(
                     "itemName"), result.getString("user"), result.getBoolean(
                     "watched"), result.getBoolean(
                             "bought"));
@@ -89,7 +89,7 @@ public class Connector{
                     getDate(
                             "date"), result.getString("deadline"), result.
                     getInt(
-                            "number"), result.getBoolean("canceld"), result.
+                            "number"), result.getBoolean("canceled"), result.
                     getString(
                             "itemName"), result.getString("user"), result.
                     getBoolean(

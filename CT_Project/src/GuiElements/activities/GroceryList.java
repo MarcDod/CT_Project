@@ -114,7 +114,7 @@ public class GroceryList extends Activity {
             temp.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    deleteList(e);  
+                    updateList(e);  
                 }
             });
             temp.add(this.lists[i]);
@@ -134,13 +134,13 @@ public class GroceryList extends Activity {
         return Integer.MAX_VALUE;
     }
     
-    private void deleteList(MouseEvent e){
+    private void updateList(MouseEvent e){
         try{
             MovableLabel temp = (MovableLabel) e.getSource();
             if(temp == null) return;
             if(temp.getX() > temp.getWidth() / 2){
-                this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
-                createButtons();
+                this.groceryManager.setActivIndex(getIndexFromButtonInLabel(temp));
+                newList.getActionListeners()[0].actionPerformed(new ActionEvent(this, 0, ""));
             }else if(temp.getX() < -temp.getWidth() / 2){
                 this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
                 createButtons();
