@@ -72,7 +72,7 @@ public class Manager {
         return new LogInManager(this.database);
     }
     public OrderManager getOrderManager() throws JDOMException, IOException, SQLException{
-        return new OrderManager(getOrder(), this.database, getOrderName());
+        return new OrderManager(getOrder(),getOrderIndex(),getGroceryList(),this.database, getOrderName(), this.xmlManager);
     }
     public GroceryManager getGroceryManager() throws JDOMException, IOException, SQLException{
         return new GroceryManager(getGroceryList(), getAllOrder(), xmlManager, database);
