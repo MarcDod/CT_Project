@@ -20,9 +20,38 @@ public class MovableLabel extends JLabel{
     
     private int oldMouseX;
     private boolean leftButtonPressed;        
+    private Color colorLeft;
+    private Color colorRight;
+    
     
     public MovableLabel(){
         this.leftButtonPressed = false;
+        this.colorLeft = Color.RED;
+        this.colorRight = Color.GREEN;
+        this.addMouseMotionListener(new MouseMotionAdapter(){
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                labelDragged(e);
+            }      
+        });
+        
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                labelPressed(e);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                labelReleased(e);
+            }        
+        });
+    }
+    
+    public MovableLabel(Color left, Color right){
+        this.leftButtonPressed = false;
+        this.colorLeft = left;
+        this.colorRight = right;
         this.addMouseMotionListener(new MouseMotionAdapter(){
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -48,9 +77,9 @@ public class MovableLabel extends JLabel{
         int move = (e.getX() - oldMouseX);
         this.setLocation(this.getX() + move, this.getY());
         if(this.getX() > 0){
-            this.getParent().setBackground(Color.GREEN);
+            this.getParent().setBackground(colorRight);
         }else{
-            this.getParent().setBackground(Color.RED);
+            this.getParent().setBackground(colorLeft);
         }
     }
     

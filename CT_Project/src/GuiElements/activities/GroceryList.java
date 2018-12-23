@@ -8,6 +8,7 @@ package GuiElements.activities;
 import managers.GroceryManager;
 import DataManagement.Datatemplates.Orderlist;
 import GuiElements.Button;
+import GuiElements.MovableLabel;
 import ct_project.Gui;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,7 +22,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -29,6 +33,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.event.EventListenerList;
 
 /**
  *
@@ -43,14 +48,13 @@ public class GroceryList extends Activity {
     private Button newList;
 
     private GroceryManager groceryManager;
-
-    private JPopupMenu popMenu;
-    private int indexPopupSource;
+    private ActionListener listsListener;
     
-    public GroceryList(ActionListener lists, ActionListener newList, GroceryManager groceryManager) {
+    public GroceryList(ActionListener listsListener, ActionListener newList, GroceryManager groceryManager) {
         super(ActivityID.GROCERY_LIST, "EINKAUFSLISTE", new Color(240, 240, 240));
 
         this.groceryManager = groceryManager;
+        this.listsListener = listsListener;
 
         //<editor-fold defaultstate="collapsed" desc="init NewList">
         this.newList = new Button(Gui.SCREEN_WIDTH, 60);
@@ -78,76 +82,74 @@ public class GroceryList extends Activity {
         this.add(this.newList);
         this.add(this.jScrollPane);
 
-        popMenu = new JPopupMenu();
+        createButtons();
+        
+        this.jPanel.setVisible(true);
+        this.jScrollPane.setVisible(true);
+    }
 
+    private void createButtons(){
         ArrayList<Orderlist> groceryList = groceryManager.getGroceryList();
         if (groceryList == null) {
             return;
         }
-
-        JMenuItem deleteList = new JMenuItem(new AbstractAction("DELETE LIST") {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                deleteList(ae);
-            }
-        });
-        this.popMenu.add(deleteList);
+        
+        this.jPanel.removeAll();
         
         this.lists = new Button[groceryList.size()];
         for (int i = 0; i < this.lists.length; i++) {
+            MovableLabel temp = new MovableLabel(this.getBackground(), this.getBackground());
+            temp.setSize(this.getWidth(), Activity.STANDART_BUTTON_HEIGHT);
             this.lists[i] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, drawGroceryList(
                     Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, groceryList.get(i).getName(),
                     groceryList.get(i).getOrderIDs().size()));
-            int bottomLast = (i != 0) ? this.lists[i - 1].getY() + this.lists[i - 1].
-                    getHeight() : 0;
+            int bottomLast = (i != 0) ? (this.lists[i - 1].getHeight()  + 20) * (i): 0;
+            temp.setLocation(0, bottomLast + 20);
             this.lists[i].setLocation((getWidth() - 6) / 2 - this.lists[i].getWidth() / 2,
-                    bottomLast + 20);
-            this.lists[i].addActionListener(lists);
+                    0);
+            this.lists[i].addActionListener(this.listsListener);
             this.lists[i].addActionListener((ActionEvent ae) -> {
                 updateActiveList(ae);
             });
-            this.lists[i].addMouseListener(new MouseAdapter() {
+            temp.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseReleased(MouseEvent me) {
-                    super.mouseReleased(me);
-                    popUpMouseReleased(me);
+                public void mouseReleased(MouseEvent e) {
+                    deleteList(e);  
                 }
             });
-            this.jPanel.add(this.lists[i]);
+            temp.add(this.lists[i]);
+            this.jPanel.add(temp);
         }
 
         this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.lists.length * (Activity.STANDART_BUTTON_HEIGHT + 20) + 20));
         this.jPanel.
                 setSize(Activity.STANDART_BUTTON_HEIGHT, this.lists.length * (Activity.STANDART_BUTTON_HEIGHT + 20) + 20);
-
-        this.jPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent me) {
-                super.mouseReleased(me);
-                popMenu.setVisible(false);
-            }
-        });
-
-        this.jPanel.setVisible(true);
-        this.jScrollPane.setVisible(true);
     }
 
-    private void popUpMouseReleased(MouseEvent me) {
-        if (me.getButton() != MouseEvent.BUTTON3) {
-            return;
-        }
-        this.popMenu.setLocation(me.getLocationOnScreen());
-        this.popMenu.setVisible(true);
+    private int getIndexFromButtonInLabel(MovableLabel label){
         for(int i = 0; i < lists.length; i++){
-            if(lists[i].equals(me.getSource())){
-                this.indexPopupSource = i;
-            }
+            if(lists[i].equals(label.getComponent(0)))
+                return i;
         }
-        
+        return Integer.MAX_VALUE;
     }
-
-    private void deleteList(ActionEvent e) {
-        System.out.println(indexPopupSource);
+    
+    private void deleteList(MouseEvent e){
+        try{
+            MovableLabel temp = (MovableLabel) e.getSource();
+            if(temp == null) return;
+            if(temp.getX() > temp.getWidth() / 2){
+                this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
+                createButtons();
+            }else if(temp.getX() < -temp.getWidth() / 2){
+                this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
+                createButtons();
+            }else{
+                temp.setLocation(0, temp.getY());
+            }
+        }catch(IOException ex){
+            
+        }
     }
 
     private BufferedImage drawGroceryList(int width, int height, String text,

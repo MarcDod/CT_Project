@@ -96,7 +96,7 @@ public class Gui {
         } catch (SQLException ex) {
             //Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
-        changeActivity(ActivityID.GROCERY_LIST);
+        changeActivity(ActivityID.HOME_SCREEN);
         
     }
 

@@ -9,6 +9,7 @@ import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -24,9 +25,11 @@ public class GroceryManager {
     public final static String XML_FILE_PATH = "XML-OrderLists/orderList.xml";
     public final static String ORDERS_WITHOUT_LIST = "ALLE OHNE LISTE";
 
+    private XMLManager xmlManager;
+    
     private ArrayList<Orderlist> groceryList;
     private int activeIndex;
-
+    
     public GroceryManager(ArrayList<Orderlist> grList, ArrayList<Order> allOrders, XMLManager xmlManager, Connector database) throws JDOMException, IOException, SQLException {
         if (database == null) {
             return;
@@ -63,9 +66,15 @@ public class GroceryManager {
 
         grList.add(0, new Orderlist(allOrderIdsWithoutList, ORDERS_WITHOUT_LIST));
         this.groceryList = grList;
+        this.xmlManager = xmlManager;
         xmlManager.saveXMLOrderLists(grList, new File(GroceryManager.XML_FILE_PATH));
     }
-
+    
+    public void removeList(int index) throws IOException{
+        this.groceryList.remove(index);
+        xmlManager.saveXMLOrderLists(this.groceryList, new File(GroceryManager.XML_FILE_PATH));
+    }
+    
     public ArrayList<Orderlist> getGroceryList() {
         return this.groceryList;
     }
