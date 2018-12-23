@@ -53,4 +53,9 @@ public class DB_Connection {
     protected void reconnect() throws SQLException{
         buildConnection();
     }
+    
+    protected void executeUpdate(String statement) throws SQLException{
+        Statement stmt = this.con.createStatement();
+        stmt.executeUpdate(statement);
+    }
 }
