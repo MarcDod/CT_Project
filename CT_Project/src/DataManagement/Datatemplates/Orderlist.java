@@ -6,7 +6,6 @@
 package DataManagement.Datatemplates;
 
 import DataManagement.XML.XMLDatatemplate;
-import ct_project.Gui;
 import java.util.ArrayList;
 import java.util.List;
 import org.jdom2.DataConversionException;
@@ -36,7 +35,7 @@ public class Orderlist extends XMLDatatemplate{
         orderIDs.remove(i);
     }
     public Orderlist(Element e) throws DataConversionException{
-        this(e.getAttributeValue("name"), "0x000000");
+        this(e.getAttributeValue("name"), e.getAttributeValue("color"));
 
         List<Element> children = e.getChild("IDs").getChildren();
 
@@ -49,6 +48,7 @@ public class Orderlist extends XMLDatatemplate{
     public Element pack(){
         Element representingElement = new Element("Orderlist");
         representingElement.setAttribute("name", this.name);
+        representingElement.setAttribute("color", this.color);
         Element ids = new Element("IDs");
         this.orderIDs.forEach((orderID) -> {
             ids.addContent(new Element("ID").setAttribute("id", String.valueOf(
