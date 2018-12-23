@@ -7,6 +7,7 @@ package DataManagement.database;
 
 import DataManagement.Datatemplates.Account;
 import DataManagement.Datatemplates.Order;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -49,7 +50,8 @@ public class Connector{
                 "SELECT User,groupID FROM mydb.account WHERE User = \""
                 + username + "\";");
         if(result.next()){
-            resultingAccount = new Account(result.getString("User"), result.getInt("groupID"));
+            resultingAccount = new Account(result.getString("User"), result.
+                    getInt("groupID"));
         }
         return resultingAccount;
     }
@@ -71,25 +73,71 @@ public class Connector{
             resultingOrder = new Order(result.getInt("orderID"), result.getDate(
                     "date"), result.getString("deadline"), result.getInt(
                     "number"), result.getBoolean("canceld"), result.getString(
-                    "itemName"), result.getString("user"),result.getBoolean(
+                    "itemName"), result.getString("user"), result.getBoolean(
                     "watched"), result.getBoolean(
-                    "bought"));
+                            "bought"));
         }
         return resultingOrder;
     }
-    
+
     public ArrayList<Order> getAllOrders() throws SQLException{
         ArrayList<Order> resultingOrder = new ArrayList<>();
         ResultSet result = this.sendSQLStatement(
                 "SELECT * FROM mydb.order;");
         while(result.next()){
-            resultingOrder.add(new Order(result.getInt("orderID"), result.getDate(
-                    "date"), result.getString("deadline"), result.getInt(
-                    "number"), result.getBoolean("canceld"), result.getString(
-                    "itemName"), result.getString("user"),result.getBoolean(
-                    "watched"), result.getBoolean(
-                    "bought")));
+            resultingOrder.add(new Order(result.getInt("orderID"), result.
+                    getDate(
+                            "date"), result.getString("deadline"), result.
+                    getInt(
+                            "number"), result.getBoolean("canceld"), result.
+                    getString(
+                            "itemName"), result.getString("user"), result.
+                    getBoolean(
+                            "watched"), result.getBoolean(
+                            "bought")));
         }
         return resultingOrder;
     }
+
+    public void addItem(String itemName, float defaultPrice) throws SQLException{
+        String[] attributes = {"itemName", "defaultPrice"};
+        String[] values = {itemName, String.valueOf(defaultPrice)};
+        this.insert("item", attributes, values);
+    }
+
+    public void addOrder(int orderID, Date date, String deadline, int number,
+            boolean closed, String itemName, boolean watched, String user) throws SQLException{
+        String[] attributes = {"odererID", "date", "deadline", "number",
+            "closed", "itemName", "watched", "User"};
+        int closedint = (closed) ? 1 : 0;
+        int watchedint = (watched) ? 1 : 0;
+        String[] values = {String.valueOf(orderID), "" + date, deadline, String.
+            valueOf(number), String.valueOf(closedint),itemName,String.
+            valueOf(watchedint),user};
+        this.insert("order", attributes, values);
+    }
+
+    private void insert(String table, String[] attributes, String[] values)
+            throws SQLException{
+        String statementString = "INSERT INTO `mydb`.`" + table + "` (`";
+        for(int i = 0; i < attributes.length; i++){
+            String attribute = attributes[i];
+            if(i == attributes.length - 1){
+                statementString += attribute + "`) ";
+            }else{
+                statementString += attribute + "`, `";
+            }
+        }
+        statementString += "VALUES ('";
+        for(int i = 0; i < values.length; i++){
+            String value = values[i];
+            if(i == values.length - 1){
+                statementString += value + "');";
+            }else{
+                statementString += value + "', '";
+            }
+        }
+        this.con.executeUpdate(statementString);
+    }//INSERT INTO `mydb`.`item` (`itemName`, `defaultPrice`) VALUES ('Nutella', '1.50');
+
 }
