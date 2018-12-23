@@ -2,29 +2,13 @@
 <Orderlists>
   <Orderlist name="ALLE OHNE LISTE">
     <IDs>
+      <ID id="1" />
       <ID id="2" />
       <ID id="3" />
       <ID id="4" />
     </IDs>
   </Orderlist>
-  <Orderlist name="Test Name">
-    <IDs>
-      <ID id="1" />
-      <ID id="1" />
-      <ID id="1" />
-      <ID id="1" />
-    </IDs>
-  </Orderlist>
-  <Orderlist name="Test Name2">
-    <IDs>
-      <ID id="1" />
-      <ID id="1" />
-    </IDs>
-  </Orderlist>
-  <Orderlist name="Test Name3">
-    <IDs>
-      <ID id="1" />
-      <ID id="1" />
-    </IDs>
+  <Orderlist name="MEDIA-MARKT">
+    <IDs />
   </Orderlist>
 </Orderlists>

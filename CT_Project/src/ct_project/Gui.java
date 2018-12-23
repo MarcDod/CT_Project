@@ -96,7 +96,7 @@ public class Gui {
         } catch (SQLException ex) {
             //Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
-        changeActivity(ActivityID.NEW_LIST);
+        changeActivity(ActivityID.GROCERY_LIST);
         
     }
 
@@ -105,7 +105,8 @@ public class Gui {
         ActionListener listener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                manager.addActivityID(oldActivity);
+                if(oldActivity != null)
+                    manager.addActivityID(oldActivity);
                 changeActivity(activity);
             }
         };
@@ -160,7 +161,7 @@ public class Gui {
                     tempActivity = new ShowOrder(manager.getOrderManager());
                     break;
                 case NEW_LIST:
-                    tempActivity = new NewList();
+                    tempActivity = new NewList(getActionListener(ActivityID.GROCERY_LIST, null), manager.getNewListManager());
                     break;
                 case LOGIN_SCREEN:
                     LogInManager logInManager = manager.getLogInManager();

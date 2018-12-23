@@ -47,7 +47,7 @@ public class ColorPalette extends JLabel {
         this.width = width;
         this.height = height;
         this.unFolded = false;
-        this.activeColor = Color.CYAN;
+        this.activeColor = Gui.COLOR;
         this.setLocation(x, y);
         this.setSize(width, height);
 
@@ -67,14 +67,20 @@ public class ColorPalette extends JLabel {
         double maxColorInOneRow = panelWitdh / (BLOB_RADIUS+ GAP_BETWEEN_BLOBS);
         int col = (int)Math.ceil(maxColorInOneRow / colors.size());
         col++;
-        this.panel.setSize((int)maxColorInOneRow * (BLOB_RADIUS + GAP_BETWEEN_BLOBS) - GAP_BETWEEN_BLOBS, col * (BLOB_RADIUS + GAP_BETWEEN_BLOBS) - GAP_BETWEEN_BLOBS);
+        this.panel.setSize((int)maxColorInOneRow * (BLOB_RADIUS + GAP_BETWEEN_BLOBS) - GAP_BETWEEN_BLOBS, col * (BLOB_RADIUS + GAP_BETWEEN_BLOBS));
         int z = 0;
         for(int i = 0; i < col; i++){
             for(int j = 0; j < maxColorInOneRow; j++){
-                System.out.println(j);
                 Button temp = new Button(BLOB_RADIUS, BLOB_RADIUS, getColorImage(colors.get(z)));
                 temp.setLocation(j * (BLOB_RADIUS + GAP_BETWEEN_BLOBS), i * (BLOB_RADIUS + GAP_BETWEEN_BLOBS));
                 temp.setBorder(null);
+                final int colorIndex = z; 
+                temp.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        setColor(colors.get(colorIndex));
+                    }
+                });
                 z++;
                 panel.add(temp);
                 if(z >= colors.size()) break;
@@ -82,13 +88,18 @@ public class ColorPalette extends JLabel {
             if(z >= colors.size()) break;
         
         }
-        this.panel.setLocation((this.getWidth() - panel.getWidth()) / 2, this.unFold.getY() - 5);
-        panel.setBackground(Color.WHITE);
+        this.panel.setLocation((this.getWidth() - panel.getWidth()) / 2, this.unFold.getY() +  10);
+        panel.setBackground(new Color(0,0,0,0));
         panel.setVisible(unFolded);
         this.add(panel);
         
     }
 
+    private void setColor(Color color){
+        this.activeColor = color;
+        this.repaint();
+    }
+    
     private BufferedImage getColorImage(Color color) {
         BufferedImage image = new BufferedImage(BLOB_RADIUS, BLOB_RADIUS,
                 BufferedImage.TYPE_INT_RGB);
@@ -182,5 +193,9 @@ public class ColorPalette extends JLabel {
         this.unFold.setLocation(width / 2 - unFold.getWidth() / 2, this.getHeight() - unFold.getHeight() - 5);
         this.unFold.setImage(getOpenImage(unFold.getWidth(), unFold.getHeight(), unFolded));
         this.panel.setVisible(unFolded);
+    }
+    
+    public Color getColor(){
+        return this.activeColor;
     }
 }

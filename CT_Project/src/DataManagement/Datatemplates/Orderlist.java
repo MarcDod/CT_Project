@@ -19,6 +19,7 @@ public class Orderlist extends XMLDatatemplate{
 
     private ArrayList<Integer> orderIDs;
     private String name;
+    private String color;
 
     public Orderlist(ArrayList<Integer> orderIDs, String name){
         this.orderIDs = orderIDs;

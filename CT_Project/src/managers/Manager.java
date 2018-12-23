@@ -48,8 +48,11 @@ public class Manager {
     }
     
     public ActivityID getLastActivityID(){
-        if(!this.activities.isEmpty())
+        if(!this.activities.isEmpty()){
+            if(this.activities.peek() == currentActivity.getActivityID())
+                this.activities.pop();
             return this.activities.pop();
+        }
         return null;
     }
     
@@ -77,6 +80,9 @@ public class Manager {
     public HomeManager getHomeManager() throws JDOMException, IOException{
         return new HomeManager(getGroceryList());
     }
+    public NewListManager getNewListManager() throws JDOMException, IOException{
+        return new NewListManager(xmlManager, getGroceryList());
+    }
     
     private ArrayList<Order> getOrder() throws JDOMException, IOException, SQLException{
         ArrayList<Order> tempOrders = new ArrayList<>();
@@ -99,7 +105,9 @@ public class Manager {
     }
     
     private ArrayList<Order> getAllOrder() throws SQLException{
-        return database.getAllOrders();
+        if(database != null)
+            return database.getAllOrders();
+        return null;
     }
     
     private String getOrderName(){

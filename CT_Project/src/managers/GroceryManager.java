@@ -23,38 +23,44 @@ public class GroceryManager {
 
     public final static String XML_FILE_PATH = "XML-OrderLists/orderList.xml";
     public final static String ORDERS_WITHOUT_LIST = "ALLE OHNE LISTE";
-    
+
     private ArrayList<Orderlist> groceryList;
     private int activeIndex;
 
-    public GroceryManager(ArrayList<Orderlist> grList,ArrayList<Order> allOrders, XMLManager xmlManager, Connector database) throws JDOMException, IOException, SQLException {
-        if(grList == null)
+    public GroceryManager(ArrayList<Orderlist> grList, ArrayList<Order> allOrders, XMLManager xmlManager, Connector database) throws JDOMException, IOException, SQLException {
+        if (database == null) {
+            return;
+        }
+        if (grList == null) {
             grList = new ArrayList<Orderlist>();
-        
+        }
         for (Orderlist list : grList) {
-            for (int i = list.getOrderIDs().size() - 1 ; i >= 0; i--) {   
+            for (int i = list.getOrderIDs().size() - 1; i >= 0; i--) {
                 Order order = database.getOrder(list.getOrderIDs().get(i));
                 if (order == null || order.isCanceld() || order.isBought()) {
                     list.removeID(i);
                 }
             }
         }
-        if(grList.size()!= 0) 
-            if (ORDERS_WITHOUT_LIST.equals(grList.get(0).getName()))
+        if (grList.size() != 0) {
+            if (ORDERS_WITHOUT_LIST.equals(grList.get(0).getName())) {
                 grList.remove(0);
-        
+            }
+        }
+
         ArrayList<Integer> allOrderIdsWithoutList = new ArrayList<>();
-        for(Order order : allOrders){
+        for (Order order : allOrders) {
             boolean withoutList = true;
-            for(Orderlist list: grList){
-                if(order.isCanceld() || order.isBought() || list.getOrderIDs().contains(order.getOrderID())){
+            for (Orderlist list : grList) {
+                if (order.isCanceld() || order.isBought() || list.getOrderIDs().contains(order.getOrderID())) {
                     withoutList = false;
                 }
             }
-            if(withoutList)
+            if (withoutList) {
                 allOrderIdsWithoutList.add(order.getOrderID());
+            }
         }
-        
+
         grList.add(0, new Orderlist(allOrderIdsWithoutList, ORDERS_WITHOUT_LIST));
         this.groceryList = grList;
         xmlManager.saveXMLOrderLists(grList, new File(GroceryManager.XML_FILE_PATH));
@@ -75,7 +81,7 @@ public class GroceryManager {
     public String getActiveName() {
         return this.groceryList.get(activeIndex).getName();
     }
-    
+
     public int getActiveIndex() {
         return this.activeIndex;
     }
