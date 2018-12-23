@@ -68,7 +68,7 @@ public abstract class Activity extends JPanel{
     }
     
     public void drawStandartButton
-        (Graphics2D g2d,int buttonWidth,int buttonHeight, String text){
+        (Graphics2D g2d,int buttonWidth,int buttonHeight, String text, Color color){
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, 
             RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
@@ -85,7 +85,7 @@ public abstract class Activity extends JPanel{
         g2d.drawString(text, 16, 30);
         
         // Anzeigen
-        g2d.setColor(Gui.COLOR);
+        g2d.setColor(color);
         int ovalWidth = (int)((buttonWidth / 2) * 0.9);
         int ovalHeight = 37;
         int ovalX = (buttonWidth) / 2 + (buttonWidth / 2 - ovalWidth) / 2;

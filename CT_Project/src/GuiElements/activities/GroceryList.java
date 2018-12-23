@@ -102,7 +102,7 @@ public class GroceryList extends Activity {
             temp.setSize(this.getWidth(), Activity.STANDART_BUTTON_HEIGHT);
             this.lists[i] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, drawGroceryList(
                     Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, groceryList.get(i).getName(),
-                    groceryList.get(i).getOrderIDs().size()));
+                    groceryList.get(i).getOrderIDs().size(), Color.decode(groceryList.get(i).getColor())));
             int bottomLast = (i != 0) ? (this.lists[i - 1].getHeight()  + 20) * (i): 0;
             temp.setLocation(0, bottomLast + 20);
             this.lists[i].setLocation((getWidth() - 6) / 2 - this.lists[i].getWidth() / 2,
@@ -153,13 +153,13 @@ public class GroceryList extends Activity {
     }
 
     private BufferedImage drawGroceryList(int width, int height, String text,
-            int numberOrders) {
+            int numberOrders, Color color) {
         BufferedImage image = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
 
         Graphics2D g2d = image.createGraphics();
 
-        drawStandartButton(g2d, width, height, text);
+        drawStandartButton(g2d, width, height, text, color);
 
         g2d.setColor(Color.BLACK);
         Font font = new Font(Gui.BUTTON_FONT.getName(), Gui.BUTTON_FONT.

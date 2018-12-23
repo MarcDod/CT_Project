@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Orderlists>
-  <Orderlist name="ALLE OHNE LISTE">
+  <Orderlist name="ALLE OHNE LISTE" color="#0050be">
     <IDs>
       <ID id="1" />
       <ID id="2" />
       <ID id="3" />
       <ID id="4" />
     </IDs>
+  </Orderlist>
+  <Orderlist name="TROSTEHÜLZHOF STRASSE" color="#404040">
+    <IDs />
   </Orderlist>
 </Orderlists>
