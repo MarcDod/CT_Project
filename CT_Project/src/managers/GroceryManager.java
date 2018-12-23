@@ -64,7 +64,7 @@ public class GroceryManager {
             }
         }
 
-        grList.add(0, new Orderlist(allOrderIdsWithoutList, ORDERS_WITHOUT_LIST));
+        grList.add(0, new Orderlist(allOrderIdsWithoutList,ORDERS_WITHOUT_LIST, null));
         this.groceryList = grList;
         this.xmlManager = xmlManager;
         xmlManager.saveXMLOrderLists(grList, new File(GroceryManager.XML_FILE_PATH));

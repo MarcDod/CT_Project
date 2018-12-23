@@ -27,7 +27,7 @@ public class NewListManager {
     
     public void saveOrderList(Color color, String listName) throws IOException{
         ArrayList<Integer> temp = new ArrayList<>();
-        Orderlist newList = new Orderlist(temp, listName.toUpperCase());
+        Orderlist newList = new Orderlist(temp,listName.toUpperCase(), null);
         this.orderList.add(newList);
         this.xmlManager.saveXMLOrderLists(orderList, new File(GroceryManager.XML_FILE_PATH));
     }
