@@ -9,6 +9,7 @@ import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
+import ct_project.Gui;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +65,7 @@ public class GroceryManager {
             }
         }
 
-        grList.add(0, new Orderlist(allOrderIdsWithoutList,ORDERS_WITHOUT_LIST, null));
+        grList.add(0, new Orderlist(allOrderIdsWithoutList,ORDERS_WITHOUT_LIST, String.format("#%02x%02x%02x", Gui.COLOR.getRed(), Gui.COLOR.getGreen(), Gui.COLOR.getBlue())));
         this.groceryList = grList;
         this.xmlManager = xmlManager;
         xmlManager.saveXMLOrderLists(grList, new File(GroceryManager.XML_FILE_PATH));

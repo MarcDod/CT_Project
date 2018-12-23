@@ -75,7 +75,7 @@ public class HomeScreen extends Activity {
 
         Graphics2D g2d = image.createGraphics();
 
-        drawStandartButton(g2d, width, height, text);
+        drawStandartButton(g2d, width, height, text, Gui.COLOR);
         
         // Nummer
         String numberString = String.valueOf(number);
