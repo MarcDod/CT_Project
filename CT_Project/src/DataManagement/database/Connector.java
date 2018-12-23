@@ -72,7 +72,7 @@ public class Connector{
         if(result.next()){
             resultingOrder = new Order(result.getInt("orderID"), result.getDate(
                     "date"), result.getString("deadline"), result.getInt(
-                    "number"), result.getBoolean("canceld"), result.getString(
+                    "number"), result.getBoolean("canceled"), result.getString(
                     "itemName"), result.getString("user"), result.getBoolean(
                     "watched"), result.getBoolean(
                             "bought"));
@@ -89,7 +89,7 @@ public class Connector{
                     getDate(
                             "date"), result.getString("deadline"), result.
                     getInt(
-                            "number"), result.getBoolean("canceld"), result.
+                            "number"), result.getBoolean("canceled"), result.
                     getString(
                             "itemName"), result.getString("user"), result.
                     getBoolean(
@@ -106,14 +106,15 @@ public class Connector{
     }
 
     public void addOrder(int orderID, Date date, String deadline, int number,
-            boolean closed, String itemName, boolean watched, String user) throws SQLException{
+            boolean canceled, String itemName, boolean watched, String user,boolean bought) throws SQLException{
         String[] attributes = {"odererID", "date", "deadline", "number",
-            "closed", "itemName", "watched", "User"};
-        int closedint = (closed) ? 1 : 0;
+            "canceled", "itemName", "watched", "User","bought"};
+        int canceledint = (canceled) ? 1 : 0;
         int watchedint = (watched) ? 1 : 0;
+        int boughtint = (bought) ? 1:0;
         String[] values = {String.valueOf(orderID), "" + date, deadline, String.
-            valueOf(number), String.valueOf(closedint),itemName,String.
-            valueOf(watchedint),user};
+            valueOf(number), String.valueOf(canceledint),itemName,String.
+            valueOf(watchedint),user ,String.valueOf(boughtint)};
         this.insert("order", attributes, values);
     }
 
