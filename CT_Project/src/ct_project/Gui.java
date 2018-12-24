@@ -77,6 +77,8 @@ public class Gui {
         this.panel.setPreferredSize(d);
         this.panel.setSize(d);
         this.menu = new MenuBar(getActionListener(), getActionListener(ActivityID.LOGIN_SCREEN));
+        this.frame.setLocationRelativeTo(null);
+        
         
         this.frame.setLayout(null);
         

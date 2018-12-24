@@ -19,6 +19,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -165,23 +166,24 @@ public class ShowOrder extends Activity{
         if(temp == null) return;
         if(temp.getX() > temp.getWidth() / 2){
             removeOrder(temp);
-            orderManager.orderAccept();
+            orderManager.orderAccept(temp);
         }else if(temp.getX() < -temp.getWidth() / 2){
             removeOrder(temp);
-            orderManager.orderCancel();
         }else{
             temp.setLocation(0, temp.getY());
         }
     }
     
     private void removeOrder(MovableLabel temp){
-        this.orderManager.removeOrder(temp);
         try {
+            this.orderManager.removeOrder(temp);
             buildOrders(temp.getHeight());
         } catch (SQLException ex) {
             Logger.getLogger(ShowOrder.class.getName()).log(Level.SEVERE, null, ex);
         } catch(NullPointerException ex){
             System.err.println("Keine Verbidnung");
+        } catch(IOException ex){
+            
         }
         reSizeJScroolPane(temp.getHeight());
         repaint();

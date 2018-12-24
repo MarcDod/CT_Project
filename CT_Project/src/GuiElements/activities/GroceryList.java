@@ -29,7 +29,9 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -49,7 +51,7 @@ public class GroceryList extends Activity {
 
     private GroceryManager groceryManager;
     private ActionListener listsListener;
-    
+
     public GroceryList(ActionListener listsListener, ActionListener newList, GroceryManager groceryManager) {
         super(ActivityID.GROCERY_LIST, "EINKAUFSLISTE", new Color(240, 240, 240));
 
@@ -83,19 +85,19 @@ public class GroceryList extends Activity {
         this.add(this.jScrollPane);
 
         createButtons();
-        
+
         this.jPanel.setVisible(true);
         this.jScrollPane.setVisible(true);
     }
 
-    private void createButtons(){
+    private void createButtons() {
         ArrayList<Orderlist> groceryList = groceryManager.getGroceryList();
         if (groceryList == null) {
             return;
         }
-        
+
         this.jPanel.removeAll();
-        
+
         this.lists = new Button[groceryList.size()];
         for (int i = 0; i < this.lists.length; i++) {
             MovableLabel temp = new MovableLabel(this.getBackground(), this.getBackground());
@@ -103,7 +105,7 @@ public class GroceryList extends Activity {
             this.lists[i] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, drawGroceryList(
                     Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, groceryList.get(i).getName(),
                     groceryList.get(i).getOrderIDs().size(), Color.decode(groceryList.get(i).getColor())));
-            int bottomLast = (i != 0) ? (this.lists[i - 1].getHeight()  + 20) * (i): 0;
+            int bottomLast = (i != 0) ? (this.lists[i - 1].getHeight() + 20) * (i) : 0;
             temp.setLocation(0, bottomLast + 20);
             this.lists[i].setLocation((getWidth() - 6) / 2 - this.lists[i].getWidth() / 2,
                     0);
@@ -114,7 +116,7 @@ public class GroceryList extends Activity {
             temp.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    deleteList(e);  
+                    updateList(e);
                 }
             });
             temp.add(this.lists[i]);
@@ -126,30 +128,55 @@ public class GroceryList extends Activity {
                 setSize(Activity.STANDART_BUTTON_HEIGHT, this.lists.length * (Activity.STANDART_BUTTON_HEIGHT + 20) + 20);
     }
 
-    private int getIndexFromButtonInLabel(MovableLabel label){
-        for(int i = 0; i < lists.length; i++){
-            if(lists[i].equals(label.getComponent(0)))
+    private int getIndexFromButtonInLabel(MovableLabel label) {
+        for (int i = 0; i < lists.length; i++) {
+            if (lists[i].equals(label.getComponent(0))) {
                 return i;
+            }
         }
         return Integer.MAX_VALUE;
     }
-    
-    private void deleteList(MouseEvent e){
-        try{
+
+    private void updateList(MouseEvent e) {
+        try {
             MovableLabel temp = (MovableLabel) e.getSource();
-            if(temp == null) return;
-            if(temp.getX() > temp.getWidth() / 2){
-                this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
-                createButtons();
-            }else if(temp.getX() < -temp.getWidth() / 2){
-                this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
-                createButtons();
-            }else{
+            if (temp == null) {
+                return;
+            }
+            if(getIndexFromButtonInLabel(temp) == 0){
+                temp.setLocation(0, temp.getY());
+            }else if (temp.getX() > temp.getWidth() / 2) {
+                this.groceryManager.setActivIndex(getIndexFromButtonInLabel(temp));
+                newList.getActionListeners()[0].actionPerformed(new ActionEvent(this, 0, ""));
+            } else if (temp.getX() < -temp.getWidth() * 0.8) {
+                Object[] options = {"LÖSCHEN", "ZURÜCK"};
+                int optionResult = JOptionPane.showOptionDialog(this, "Die Liste wirklich löschen?.", "Liste löschen",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+
+                
+                switch (optionResult) {
+                    case 0:
+                        this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
+                        createButtons();
+                        break;
+                    case 1:
+                    default:
+                        temp.setLocation(0, temp.getY());
+                        break;
+                }
+            } else {
                 temp.setLocation(0, temp.getY());
             }
-        }catch(IOException ex){
-            
+        } catch (IOException ex) {
+
         }
+    }
+
+    private BufferedImage drawOptionButton(String text, int width, int height) {
+        BufferedImage image = new BufferedImage(width, height,
+                BufferedImage.TYPE_INT_RGB);
+
+        return image;
     }
 
     private BufferedImage drawGroceryList(int width, int height, String text,

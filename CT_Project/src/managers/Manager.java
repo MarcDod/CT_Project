@@ -18,6 +18,7 @@ import GuiElements.activities.ActivityID;
 import GuiElements.activities.GroceryList;
 import GuiElements.activities.HomeScreen;
 import GuiElements.activities.LoginScreen;
+import GuiElements.activities.NewList;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -72,7 +73,7 @@ public class Manager {
         return new LogInManager(this.database);
     }
     public OrderManager getOrderManager() throws JDOMException, IOException, SQLException{
-        return new OrderManager(getOrder(), this.database, getOrderName());
+        return new OrderManager(getOrder(),getOrderIndex(),getGroceryList(),this.database, getActivityName(), this.xmlManager);
     }
     public GroceryManager getGroceryManager() throws JDOMException, IOException, SQLException{
         return new GroceryManager(getGroceryList(), getAllOrder(), xmlManager, database);
@@ -80,8 +81,8 @@ public class Manager {
     public HomeManager getHomeManager() throws JDOMException, IOException{
         return new HomeManager(getGroceryList());
     }
-    public NewListManager getNewListManager() throws JDOMException, IOException{
-        return new NewListManager(xmlManager, getGroceryList());
+    public NewListManager getNewListManager() throws JDOMException, IOException, SQLException{
+        return new NewListManager(xmlManager, database ,getGroceryList(), getActivityName(), getOrderIndex());
     }
     
     private ArrayList<Order> getOrder() throws JDOMException, IOException, SQLException{
@@ -89,11 +90,17 @@ public class Manager {
 
         if(currentActivity instanceof GroceryList){
             ArrayList<Orderlist> tempOrderlist = getGroceryList();
-            for(Integer id : tempOrderlist.get(getOrderIndex()).getOrderIDs()){
+            int index = (getOrderIndex() == Integer.MAX_VALUE) ? 0 : getOrderIndex();
+            for(Integer id : tempOrderlist.get(index).getOrderIDs()){
                 tempOrders.add(this.database.getOrder(id));
             }
         } if(currentActivity instanceof HomeScreen){
             tempOrders = this.database.getAllOrders();
+        } if(currentActivity instanceof NewList){
+            ArrayList<Orderlist> tempOrderlist = getGroceryList();
+            for(Integer id : tempOrderlist.get(0).getOrderIDs()){
+                tempOrders.add(this.database.getOrder(id));
+            }
         }
         
         return tempOrders;
@@ -110,7 +117,7 @@ public class Manager {
         return null;
     }
     
-    private String getOrderName(){
+    private String getActivityName(){
         if(this.currentActivity instanceof GroceryList){
             return ((GroceryList) currentActivity).getCurrentName();
         }if(this.currentActivity instanceof HomeScreen){
