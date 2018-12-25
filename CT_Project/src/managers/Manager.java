@@ -11,7 +11,7 @@ import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
 import GuiElements.activities.ActivityID;
-import GuiElements.activities.HomeScreen;
+import GuiElements.activities.HomeScreenResourceManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -44,6 +44,10 @@ public class Manager {
         this.database = new Connector();
     }
 
+    public boolean getUserIsReosourceManager(){
+        return (user.getGroup() == 0);
+    }
+    
     public ActivityID getLastActivityID() {
         if (!this.activities.isEmpty()) {
             if (this.activities.peek() == currentActivityManager.getActivityID()) {
@@ -78,10 +82,18 @@ public class Manager {
         return new GroceryManager(getGroceryList(), getAllValidOrders(), xmlManager);
     }
 
-    public HomeManager getHomeManager() throws JDOMException, IOException, SQLException {
-        return new HomeManager(getGroceryList(), getAllValidOrders());
+    public HomeManagerResourceManager getHomeManagerResourceManager() throws JDOMException, IOException, SQLException {
+        return new HomeManagerResourceManager(getGroceryList(), getAllValidOrders());
     }
 
+    public HomeManager getHomeManager(){
+        return new HomeManager();
+    }
+    
+    public NewOrderManager getNewOrderManager(){
+        return new NewOrderManager();
+    }
+    
     public NewListManager getNewListManager() throws JDOMException, IOException, SQLException {
         return new NewListManager(xmlManager, database, getGroceryList(), getActivityName(), getOrderIndex());
     }
@@ -156,19 +168,19 @@ public class Manager {
                 tempOrders.add(this.database.getOrder(id));
             }
         }
-        if (currentActivityManager instanceof HomeManager) {
+        if (currentActivityManager instanceof HomeManagerResourceManager) {
             String activeName = getActivityName();
             switch (activeName) {
-                case HomeScreen.ALL_ORDERS:
+                case HomeScreenResourceManager.ALL_ORDERS:
                     tempOrders = getAllValidOrders();
                     break;
-                case HomeScreen.NEW_ORDERS:
+                case HomeScreenResourceManager.NEW_ORDERS:
                     tempOrders = getAllNewOrders();
                     break;
-                case HomeScreen.ORDER_DONE:
+                case HomeScreenResourceManager.ORDER_DONE:
                     tempOrders = getAllBoughtOrders();
                     break;
-                case HomeScreen.CANCLED_ORDERS:
+                case HomeScreenResourceManager.CANCLED_ORDERS:
                     tempOrders = getAllCanceldOrders();
                     break;
                 default:
@@ -229,20 +241,20 @@ public class Manager {
         ActionListener[] tempListeners = new ActionListener[2];
         String name = currentActivityManager.getTitle();
         switch (name) {
-            case HomeScreen.NEW_ORDERS:
+            case HomeScreenResourceManager.NEW_ORDERS:
                 tempListeners[0] = getOrderCancelListener();
                 tempListeners[1] = getOrderSetWatchedListener();
                 break;
-            case HomeScreen.ALL_ORDERS:
+            case HomeScreenResourceManager.ALL_ORDERS:
             case GroceryManager.ORDERS_WITHOUT_LIST:    
                 tempListeners[0] = getOrderCancelListener();
                 tempListeners[1] = getOrderBuyListener();
                 break;
-            case HomeScreen.ORDER_DONE:
+            case HomeScreenResourceManager.ORDER_DONE:
                 tempListeners[0] = getOrderSetBoughtFalseListener();
                 tempListeners[1] = null;
                 break;
-            case HomeScreen.CANCLED_ORDERS:
+            case HomeScreenResourceManager.CANCLED_ORDERS:
                 tempListeners[0] = null;
                 tempListeners[1] = getOrderSetCanceledFalseListener();
                 break;
@@ -258,20 +270,20 @@ public class Manager {
         boolean[] temp = new boolean[2];
         String name = currentActivityManager.getTitle();
         switch (name) {
-            case HomeScreen.NEW_ORDERS:
+            case HomeScreenResourceManager.NEW_ORDERS:
                 temp[0] = true;
                 temp[1] = true;
                 break;
-            case HomeScreen.ALL_ORDERS:
+            case HomeScreenResourceManager.ALL_ORDERS:
             case GroceryManager.ORDERS_WITHOUT_LIST:    
                 temp[0] = true;
                 temp[1] = true;
                 break;
-            case HomeScreen.ORDER_DONE:
+            case HomeScreenResourceManager.ORDER_DONE:
                 temp[0] = true;
                 temp[1] = false;
                 break;
-            case HomeScreen.CANCLED_ORDERS:
+            case HomeScreenResourceManager.CANCLED_ORDERS:
                 temp[0] = false;
                 temp[1] = true;
                 break;
