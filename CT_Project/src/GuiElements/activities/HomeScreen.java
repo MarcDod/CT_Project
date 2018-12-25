@@ -35,7 +35,7 @@ public class HomeScreen extends Activity {
     private HomeManager homeManager;
 
     public HomeScreen(ActionListener groceryListListener, ActionListener showOrders,HomeManager homeManager) {
-        super(ActivityID.HOME_SCREEN,"STARTFENSTER" ,new Color(240, 240, 240));
+        super(ActivityID.HOME_SCREEN,"STARTFENSTER" ,new Color(240, 240, 240), homeManager);
 
         this.homeManager = homeManager;
 
@@ -131,9 +131,5 @@ public class HomeScreen extends Activity {
     private void buttonsAction(ActionEvent e){
         Button temp = (Button) e.getSource();
         this.homeManager.setButtonName(temp.getText());
-    }
-    
-    public String getButtonName(){
-        return this.homeManager.getButtonName();
     }
 }

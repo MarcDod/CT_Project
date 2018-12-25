@@ -19,7 +19,7 @@ import java.util.ArrayList;
  *
  * @author Marc
  */
-public class NewListManager {
+public class NewListManager extends ActivityManager{
     private XMLManager xmlManager;
     private ArrayList<Orderlist> orderList;
     private ArrayList<Order> allOrders;

@@ -17,7 +17,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -40,7 +39,7 @@ public class ShowOrder extends Activity{
     private OrderManager orderManager;
     
     public ShowOrder(OrderManager orderManager) throws SQLException {
-        super(ActivityID.SHOW_ORDER_SCREEN, orderManager.getListName(),Color.WHITE);
+        super(ActivityID.SHOW_ORDER_SCREEN, orderManager.getListName(),Color.WHITE, orderManager);
         this.orderManager = orderManager;
         int orderHeight = 70;
         
@@ -140,14 +139,25 @@ public class ShowOrder extends Activity{
                     + this.orderManager.getOrderLabel(i - 1).getHeight() : 0;
             temp.setLocation(1, bottomLast);
             temp.setVisible(true);
-            temp.addActionListenerLeft((ActionEvent ae) -> {
-                swipedLeft(ae);
-            });
-            temp.addActionListenerRight((ActionEvent ae) -> {
-                swipedRight(ae);
-            });
-            temp.setActionXLeft(-temp.getWidth() / 2);
-            temp.setActionXRight(temp.getWidth() / 2);
+            if(orderManager.swipeLeftAllowed()){
+                temp.addActionListenerLeft((ActionEvent ae) -> {
+                    removeOrder(temp);
+                    orderManager.leftSwipe(temp);
+                });
+                temp.setActionXLeft(-temp.getWidth() / 2);
+            }else{
+                temp.disableSwipeLeft();
+            }
+            if(orderManager.swipeRightAllowed()){
+                temp.addActionListenerRight((ActionEvent ae) -> {
+                    removeOrder(temp);
+                    orderManager.rightSwipe(temp);
+                });
+                temp.setActionXRight(temp.getWidth() / 2);
+            }else{
+                temp.disableSwipeRight();
+            }
+
             this.jPanel.add(temp);
             this.orderManager.addOrderLabel(temp);
         }
@@ -163,21 +173,8 @@ public class ShowOrder extends Activity{
         this.jScrollPane.setVisible(true);
     }
     
-    private void swipedLeft(ActionEvent e){
-        MovableLabel temp = this.orderManager.getOrderLabel(e.getSource());
-        if(temp == null) return;
-        removeOrder(temp);
-        orderManager.leftSwipe(temp);
-    }
-    
-    private void swipedRight(ActionEvent e){
-        MovableLabel temp = this.orderManager.getOrderLabel(e.getSource());
-        if(temp == null) return;
-        removeOrder(temp);
-        orderManager.rightSwipe(temp);
-    }
-    
     private void removeOrder(MovableLabel temp){
+        if (temp == null) return;
         try {
             this.orderManager.removeOrder(temp);
             buildOrders(temp.getHeight());

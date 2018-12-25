@@ -53,7 +53,7 @@ public class GroceryList extends Activity {
     private ActionListener listsListener;
 
     public GroceryList(ActionListener listsListener, ActionListener newListListener, GroceryManager groceryManager) {
-        super(ActivityID.GROCERY_LIST, "EINKAUFSLISTE", new Color(240, 240, 240));
+        super(ActivityID.GROCERY_LIST, "EINKAUFSLISTE", new Color(240, 240, 240), groceryManager);
 
         this.groceryManager = groceryManager;
         this.listsListener = listsListener;
@@ -109,7 +109,8 @@ public class GroceryList extends Activity {
             int bottomLast;
             if (i == 0) {
                 bottomLast = 0;
-                temp.disableSwipe();
+                temp.disableSwipeLeft();
+                temp.disableSwipeRight();
             } else {
                 bottomLast = (this.lists[i - 1].getHeight() + 20) * (i);
             }
@@ -256,17 +257,5 @@ public class GroceryList extends Activity {
             }
         }
         return null;
-    }
-
-    public ArrayList<Orderlist> getList() {
-        return this.groceryManager.getGroceryList();
-    }
-
-    public String getCurrentName() {
-        return this.groceryManager.getActiveName();
-    }
-
-    public int getCurrentIndex() {
-        return this.groceryManager.getActiveIndex();
     }
 }

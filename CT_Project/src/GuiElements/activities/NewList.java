@@ -37,7 +37,7 @@ public class NewList extends Activity {
     private NewListManager newListManager;
     
     public NewList(ActionListener newListListener, NewListManager newListManager) {
-        super(ActivityID.NEW_LIST, newListManager.getTitle(), new Color(240, 240, 240));
+        super(ActivityID.NEW_LIST, newListManager.getTitle(), new Color(240, 240, 240), newListManager);
 
         this.newListManager = newListManager;
         

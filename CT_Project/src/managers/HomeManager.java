@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author Marc
  */
-public class HomeManager {
+public class HomeManager extends ActivityManager{
     private ArrayList<Orderlist> groceryList;
     
     private String buttonName;

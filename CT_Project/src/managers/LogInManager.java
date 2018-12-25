@@ -13,7 +13,7 @@ import java.sql.SQLException;
  *
  * @author Marc
  */
-public class LogInManager {
+public class LogInManager extends ActivityManager{
     private Connector database;
     
     private Account user;

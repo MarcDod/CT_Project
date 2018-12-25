@@ -10,6 +10,7 @@ import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
 import GuiElements.MovableLabel;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,16 +20,21 @@ import java.util.ArrayList;
  *
  * @author Marc
  */
-public class OrderManager {
+public class OrderManager extends ActivityManager{
     private ArrayList<Order> orders;
     private ArrayList<Orderlist> orderList; 
-    private Connector database;
+    protected Connector database;
     private ArrayList<MovableLabel> orderLabels;
     private String name;
     private XMLManager xmlManager;
     private int index;
     
-    public OrderManager(ArrayList<Order> orders,int index ,ArrayList<Orderlist> orderList, Connector database, String name, XMLManager xmlManager){
+    protected boolean leftSwipe;
+    protected boolean rightSwipe;
+    
+    public OrderManager(ArrayList<Order> orders,int index ,
+            ArrayList<Orderlist> orderList, Connector database, String name, 
+            XMLManager xmlManager){
         this.orders = orders;
         this.orderList = orderList;
         this.database = database;
@@ -36,6 +42,8 @@ public class OrderManager {
         this.name = name;
         this.xmlManager = xmlManager;
         this.index = index;
+        this.leftSwipe = false;
+        this.rightSwipe = true;
     }
     
     public Order getOrder(int index) throws SQLException, NullPointerException{
@@ -98,4 +106,10 @@ public class OrderManager {
         this.orderLabels = new ArrayList<>();
     }
     
+    public boolean swipeLeftAllowed(){
+        return leftSwipe;
+    }
+    public boolean swipeRightAllowed(){
+        return rightSwipe;
+    }
 }

@@ -8,7 +8,6 @@ package managers;
 import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
-import DataManagement.database.Connector;
 import ct_project.Gui;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +19,7 @@ import org.jdom2.JDOMException;
  *
  * @author Marc
  */
-public class GroceryManager {
+public class GroceryManager extends ActivityManager{
 
     public final static String XML_FILE_PATH = "XML-OrderLists/orderList.xml";
     public final static String ORDERS_WITHOUT_LIST = "ALLE BESTELLUNGEN OHNE LISTE";

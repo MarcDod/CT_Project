@@ -187,7 +187,7 @@ public class Gui {
 
         if (tempActivity != null) {
             this.panel.add(tempActivity);
-            this.manager.setCurrentActivity(tempActivity);
+            this.manager.setCurrentActivity(tempActivity.getActivityManager());
         }
 
         if (this.manager.isEmpty()) {

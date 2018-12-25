@@ -26,7 +26,8 @@ public class MovableLabel extends JLabel {
     private Color colorLeft;
     private Color colorRight;
 
-    private boolean swipe;
+    private boolean swipeRight;
+    private boolean swipeLeft;
 
     private ArrayList<ActionListener> actionLeft;
     private ArrayList<ActionListener> actionRight;
@@ -48,7 +49,8 @@ public class MovableLabel extends JLabel {
         this.leftButtonPressed = false;
         this.colorLeft = left;
         this.colorRight = right;
-        this.swipe = true;
+        this.swipeRight = true;
+        this.swipeLeft = true;
         this.actionLeft = new ArrayList<>();
         this.actionRight = new ArrayList<>();
         this.addMouseMotionListener(new MouseMotionAdapter() {
@@ -72,10 +74,11 @@ public class MovableLabel extends JLabel {
     }
 
     private void labelDragged(MouseEvent e) {
-        if (!this.leftButtonPressed || !this.swipe) {
+        if (!this.leftButtonPressed || (!this.swipeLeft && !this.swipeRight)) {
             return;
         }
         int move = (e.getX() - oldMouseX);
+        if(!this.swipeLeft && move < 0 || !this.swipeRight && move > 0) return;
         this.setLocation(this.getX() + move, this.getY());
         if (this.getX() > startX) {
             this.getParent().setBackground(colorRight);
@@ -115,12 +118,20 @@ public class MovableLabel extends JLabel {
         }
     }
 
-    public void enableSwipe() {
-        this.swipe = true;
+    public void enableSwipeLeft() {
+        this.swipeLeft = true;
     }
 
-    public void disableSwipe() {
-        this.swipe = false;
+    public void disableSwipeLeft() {
+        this.swipeLeft = false;
+    }
+    
+    public void enableSwipeRight() {
+        this.swipeRight = true;
+    }
+
+    public void disableSwipeRight() {
+        this.swipeRight = false;
     }
 
     public void setActionXLeft(double x) {
