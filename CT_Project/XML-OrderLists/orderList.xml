@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Orderlists>
   <Orderlist name="ALLE BESTELLUNGEN OHNE LISTE" color="#0050be">
+    <IDs />
+  </Orderlist>
+  <Orderlist name="ALDI" color="#ffc800">
     <IDs>
       <ID id="3" />
       <ID id="4" />
     </IDs>
-  </Orderlist>
-  <Orderlist name="ALDI" color="#ffc800">
-    <IDs />
   </Orderlist>
 </Orderlists>

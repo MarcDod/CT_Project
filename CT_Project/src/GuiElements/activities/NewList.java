@@ -98,7 +98,7 @@ public class NewList extends Activity {
         
 
         int maxHeight = this.createListButton.getY() - (this.palette.getY() +this.palette.getMaxHeight() + 20);
-        this.orderSelector = new OrderSelector(componentWidth, maxHeight, this.newListManager.getAllOrders(), new JPanel(), this.newListManager.getOrderlist());
+        this.orderSelector = new OrderSelector(componentWidth, maxHeight, this.newListManager.getAllOrders(), this.newListManager.getOrderlist());
         reLocate(componentX);
         this.add(this.orderSelector);
     }
@@ -109,7 +109,7 @@ public class NewList extends Activity {
     
     private void saveNewList(){
         try {
-            newListManager.saveOrderList(palette.getColor(), ((TextField)listName.getComponent(0)).getString(), this.orderSelector.getOrders());
+            newListManager.saveOrderList(palette.getColor(), ((TextField)listName.getComponent(0)).getString(), this.orderSelector.getSelectedElements());
         } catch (IOException ex) {
             Logger.getLogger(NewList.class.getName()).log(Level.SEVERE, null, ex);
         }

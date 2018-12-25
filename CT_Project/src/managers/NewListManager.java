@@ -68,7 +68,7 @@ public class NewListManager extends ActivityManager{
         return this.allOrders;
     }
     
-    public void saveOrderList(Color color, String listName, ArrayList<Integer> orders) throws IOException{
+    public void saveOrderList(Color color, String listName, ArrayList orders) throws IOException{
         String name = listName.toUpperCase();
         if(name.equals(GroceryManager.ORDERS_WITHOUT_LIST)) name += "!";
         Orderlist newList = new Orderlist(orders,name, String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()));
