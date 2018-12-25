@@ -31,18 +31,18 @@ import javax.swing.JScrollPane;
  *
  * @author Marc
  */
-public class ShowOrder extends Activity{
+public class ShowOrder extends Activity {
 
     private final JPanel jPanel;
     private final JScrollPane jScrollPane;
 
     private OrderManager orderManager;
-    
+
     public ShowOrder(OrderManager orderManager) throws SQLException {
-        super(ActivityID.SHOW_ORDER_SCREEN, orderManager.getListName(),Color.WHITE, orderManager);
+        super(ActivityID.SHOW_ORDER_SCREEN, orderManager.getTitle(), Color.WHITE, orderManager);
         this.orderManager = orderManager;
         int orderHeight = 70;
-        
+
         this.jPanel = new JPanel();
         this.jPanel.setBackground(this.getBackground());
         this.jScrollPane = new JScrollPane(jPanel);
@@ -51,32 +51,34 @@ public class ShowOrder extends Activity{
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.jScrollPane.setLocation(-1, 0);
-        
+
         this.jPanel.setMaximumSize(new Dimension(this.getWidth(), Integer.MAX_VALUE));
         this.jPanel.setLayout(null);
-          
+
         this.jScrollPane.getVerticalScrollBar().setUnitIncrement(10);
 
         this.jScrollPane.setBorder(null);
         this.jPanel.setBorder(null);
-        
+
         this.add(this.jScrollPane);
-        
-        try{
-        buildOrders(orderHeight);
-        } catch(NullPointerException ex){
-              System.err.println("Keine Verbindung!");  
-        } catch(SQLException ex){
+
+        try {
+            buildOrders(orderHeight);
+        } catch (NullPointerException ex) {
+            System.err.println("Keine Verbindung!");
+        } catch (SQLException ex) {
             System.err.println("Fehler!");
         }
         reSizeJScroolPane(orderHeight);
     }
-    
-    private Icon getOrderIcon(int width, int height, int i, int size) throws SQLException, NullPointerException{
-                BufferedImage image = new BufferedImage(width, height,
+
+    private Icon getOrderIcon(int width, int height, int i, int size) throws SQLException, NullPointerException {
+        BufferedImage image = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
         Order tempOrder = this.orderManager.getOrder(i);
-        if(tempOrder == null) return null; 
+        if (tempOrder == null) {
+            return null;
+        }
 
         Graphics2D g2d = image.createGraphics();
 
@@ -91,15 +93,15 @@ public class ShowOrder extends Activity{
         g2d.setColor(this.getBackground());
         g2d.fillRect(0, 0, width, height);
         int x = (size % 2 == 0) ? 1 : 0;
-        if(i % 2 == x){
+        if (i % 2 == x) {
             g2d.setColor(Color.BLACK);
             g2d.drawRect(0, 0, width - 1, height - 1);
         }
         String productName = tempOrder.getItemName();
         String number = String.valueOf(tempOrder.getNumber());
-        String price = tempOrder.getUser() +" hatt bestellt am: " 
+        String price = tempOrder.getUser() + " hatt bestellt am: "
                 + tempOrder.getDate() + " Bitte fertig bis zum: " + tempOrder.getDeadline();
-         
+
         // Text
         g2d.setFont(Gui.BUTTON_FONT);
         g2d.setColor(Color.BLACK);
@@ -107,30 +109,31 @@ public class ShowOrder extends Activity{
         FontMetrics fm = g2d.getFontMetrics();
         g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.BOLD, 40));
         g2d.drawString(number, width - 6 - 30 - fm.stringWidth(number), (height - 1) / 2 + fm.getHeight() / 2);
-        
+
         g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.PLAIN, 13));
         fm = g2d.getFontMetrics();
         g2d.setColor(new Color(150, 150, 150));
         g2d.drawString(price, 16, (height - 1) / 2 + fm.getHeight());
-        
+
         g2d.dispose();
-        
+
         return new ImageIcon(image);
     }
-     @Override
+
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-    }  
+    }
 
-    private void buildOrders(int orderHeight) throws SQLException, NullPointerException{ 
+    private void buildOrders(int orderHeight) throws SQLException, NullPointerException {
         jPanel.removeAll();
         this.orderManager.resetOrderLabel();
-        for(int i = 0; i < orderManager.getListSize(); i++){
+        for (int i = 0; i < orderManager.getListSize(); i++) {
             MovableLabel temp = new MovableLabel();
             temp.setSize(this.getWidth() - 6, orderHeight);
             Icon tempIcon = getOrderIcon(temp.getWidth(), temp.getHeight(), i, orderManager.getListSize());
-            if(tempIcon == null){
-                this.orderManager.removeOrderWithID(i);
+            if (tempIcon == null) {
+                this.orderManager.removeOrderWithIndex(i);
                 i--;
                 continue;
             }
@@ -139,51 +142,53 @@ public class ShowOrder extends Activity{
                     + this.orderManager.getOrderLabel(i - 1).getHeight() : 0;
             temp.setLocation(1, bottomLast);
             temp.setVisible(true);
-            if(orderManager.swipeLeftAllowed()){
-                temp.addActionListenerLeft((ActionEvent ae) -> {
-                    removeOrder(temp);
-                    orderManager.leftSwipe(temp);
-                });
-                temp.setActionXLeft(-temp.getWidth() / 2);
-            }else{
+            if (orderManager.getLeftSwipeListener() != null && orderManager.swipeLeftAllowed()) {
+                temp.addActionListenerLeft(orderManager.getLeftSwipeListener());
+            } else if(!orderManager.swipeLeftAllowed()){
                 temp.disableSwipeLeft();
             }
-            if(orderManager.swipeRightAllowed()){
-                temp.addActionListenerRight((ActionEvent ae) -> {
-                    removeOrder(temp);
-                    orderManager.rightSwipe(temp);
-                });
-                temp.setActionXRight(temp.getWidth() / 2);
-            }else{
+            if (orderManager.getRightSwipeListener() != null && orderManager.swipeRightAllowed()) {
+                temp.addActionListenerRight(orderManager.getRightSwipeListener());
+            } else if(!orderManager.swipeRightAllowed()){
                 temp.disableSwipeRight();
             }
+            temp.addActionListenerLeft((ActionEvent ae) -> {
+                removeOrder(temp);
+            });
+            temp.setActionXLeft(-temp.getWidth() / 2);
+            temp.addActionListenerRight((ActionEvent ae) -> {
+                removeOrder(temp);
+            });
+            temp.setActionXRight(temp.getWidth() / 2);
 
             this.jPanel.add(temp);
             this.orderManager.addOrderLabel(temp);
         }
     }
-  
-    private void reSizeJScroolPane(int orderHeight){
+
+    private void reSizeJScroolPane(int orderHeight) {
         this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.orderManager.getOrderLabelSize() * orderHeight));
         this.jPanel.
                 setSize(this.getWidth(), this.orderManager.getOrderLabelSize() * orderHeight);
-        int scrollHeight = (jPanel.getHeight() > this.getHeight()) ? this.getHeight():jPanel.getHeight();
+        int scrollHeight = (jPanel.getHeight() > this.getHeight()) ? this.getHeight() : jPanel.getHeight();
         this.jScrollPane.setSize(jPanel.getWidth() + 20, scrollHeight);
         this.jPanel.setVisible(true);
         this.jScrollPane.setVisible(true);
     }
-    
-    private void removeOrder(MovableLabel temp){
-        if (temp == null) return;
+
+    private void removeOrder(MovableLabel temp) {
+        if (temp == null) {
+            return;
+        }
         try {
             this.orderManager.removeOrder(temp);
             buildOrders(temp.getHeight());
         } catch (SQLException ex) {
             Logger.getLogger(ShowOrder.class.getName()).log(Level.SEVERE, null, ex);
-        } catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.err.println("Keine Verbidnung");
-        } catch(IOException ex){
-            
+        } catch (IOException ex) {
+
         }
         reSizeJScroolPane(temp.getHeight());
         repaint();

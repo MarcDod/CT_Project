@@ -90,11 +90,12 @@ public class GroceryManager extends ActivityManager{
         return this.groceryList.get(activeIndex);
     }
 
-    public String getActiveName() {
-        return this.groceryList.get(activeIndex).getName();
-    }
-
     public int getActiveIndex() {
         return this.activeIndex;
+    }
+
+    @Override
+    public String getTitle() {
+        return this.groceryList.get(activeIndex).getName();
     }
 }

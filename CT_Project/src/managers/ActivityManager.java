@@ -25,4 +25,6 @@ public abstract class ActivityManager {
     public ActivityID getActivityID(){
         return this.activityID;
     }
+    
+    public abstract String getTitle();
 }

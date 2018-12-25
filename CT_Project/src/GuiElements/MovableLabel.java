@@ -78,7 +78,10 @@ public class MovableLabel extends JLabel {
             return;
         }
         int move = (e.getX() - oldMouseX);
-        if(!this.swipeLeft && move < 0 || !this.swipeRight && move > 0) return;
+        if(!this.swipeLeft && move < startX && this.getX() <= startX|| !this.swipeRight && move > startX && this.getX() >= startX){
+            this.setLocation(startX, this.getY());
+            return;
+        }
         this.setLocation(this.getX() + move, this.getY());
         if (this.getX() > startX) {
             this.getParent().setBackground(colorRight);

@@ -38,11 +38,12 @@ public class HomeManager extends ActivityManager{
         this.buttonName = buttonName;
     }
 
-    public String getButtonName() {
-        return this.buttonName;
-    }
-
     public int getNotWatchedOrdes() {
         return this.notWatchedOrder;
+    }
+
+    @Override
+    public String getTitle() {
+        return this.buttonName;
     }
 }

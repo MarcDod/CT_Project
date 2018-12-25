@@ -33,4 +33,9 @@ public class LogInManager extends ActivityManager{
     public Account getUser(){
         return this.user;
     }
+
+    @Override
+    public String getTitle() {
+        return "";
+    }
 }

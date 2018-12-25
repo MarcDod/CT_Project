@@ -12,6 +12,8 @@ import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
 import GuiElements.activities.ActivityID;
 import GuiElements.activities.HomeScreen;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -69,7 +71,7 @@ public class Manager {
     }
 
     public OrderManager getOrderManager() throws JDOMException, IOException, SQLException {
-        return new OrderManager(getOrder(), getOrderIndex(), getGroceryList(), this.database, getActivityName(), this.xmlManager);
+        return new OrderManager(getOrder(), getOrderIndex(), getGroceryList(), getActivityName(), this.xmlManager, getOrderListener(), getSwipeAllowed());
     }
 
     public GroceryManager getGroceryManager() throws JDOMException, IOException, SQLException {
@@ -189,13 +191,7 @@ public class Manager {
     }
 
     private String getActivityName() {
-        if (this.currentActivityManager instanceof GroceryManager) {
-            return ((GroceryManager) currentActivityManager).getActiveName();
-        }
-        if (this.currentActivityManager instanceof HomeManager) {
-            return ((HomeManager) currentActivityManager).getButtonName();
-        }
-        return "";
+        return currentActivityManager.getTitle();
     }
 
     private int getOrderIndex() {
@@ -228,4 +224,132 @@ public class Manager {
     public String getUserName() {
         return (this.user != null) ? this.user.getName() : "Keine Information";
     }
+
+    private ActionListener[] getOrderListener() {
+        ActionListener[] tempListeners = new ActionListener[2];
+        String name = currentActivityManager.getTitle();
+        switch (name) {
+            case HomeScreen.NEW_ORDERS:
+                tempListeners[0] = getOrderCancelListener();
+                tempListeners[1] = getOrderSetWatchedListener();
+                break;
+            case HomeScreen.ALL_ORDERS:
+            case GroceryManager.ORDERS_WITHOUT_LIST:    
+                tempListeners[0] = getOrderCancelListener();
+                tempListeners[1] = getOrderBuyListener();
+                break;
+            case HomeScreen.ORDER_DONE:
+                tempListeners[0] = getOrderSetBoughtFalseListener();
+                tempListeners[1] = null;
+                break;
+            case HomeScreen.CANCLED_ORDERS:
+                tempListeners[0] = null;
+                tempListeners[1] = getOrderSetCanceledFalseListener();
+                break;
+            default:
+                tempListeners[0] = null;
+                tempListeners[1] = getOrderBuyListener();
+                break;
+        }
+        return tempListeners;
+    }
+
+    private boolean[] getSwipeAllowed() {
+        boolean[] temp = new boolean[2];
+        String name = currentActivityManager.getTitle();
+        switch (name) {
+            case HomeScreen.NEW_ORDERS:
+                temp[0] = true;
+                temp[1] = true;
+                break;
+            case HomeScreen.ALL_ORDERS:
+            case GroceryManager.ORDERS_WITHOUT_LIST:    
+                temp[0] = true;
+                temp[1] = true;
+                break;
+            case HomeScreen.ORDER_DONE:
+                temp[0] = true;
+                temp[1] = false;
+                break;
+            case HomeScreen.CANCLED_ORDERS:
+                temp[0] = false;
+                temp[1] = true;
+                break;
+            default:
+                temp[0] = true;
+                temp[1] = true;
+                break;
+        }
+
+        return temp;
+    }
+
+    private ActionListener getOrderCancelListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (!(currentActivityManager instanceof OrderManager)) {
+                    return;
+                }
+                int orderID = ((OrderManager) currentActivityManager).getOrderIDWithActionEvent(ae);
+                // CAncel order
+            }
+        };
+    }
+
+    private ActionListener getOrderSetWatchedListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (!(currentActivityManager instanceof OrderManager)) {
+                    return;
+                }
+                int orderID = ((OrderManager) currentActivityManager).getOrderIDWithActionEvent(ae);
+                // wacthed order
+            }
+        };
+    }
+
+    private ActionListener getOrderBuyListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (!(currentActivityManager instanceof OrderManager)) {
+                    return;
+                }
+                int orderID = ((OrderManager) currentActivityManager).getOrderIDWithActionEvent(ae);
+
+                // Buy order
+            }
+        };
+    }
+
+    private ActionListener getOrderSetBoughtFalseListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (!(currentActivityManager instanceof OrderManager)) {
+                    return;
+                }
+                int orderID = ((OrderManager) currentActivityManager).getOrderIDWithActionEvent(ae);
+
+                // Buy order
+            }
+        };
+    }
+
+    private ActionListener getOrderSetCanceledFalseListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (!(currentActivityManager instanceof OrderManager)) {
+                    return;
+                }
+                int orderID = ((OrderManager) currentActivityManager).getOrderIDWithActionEvent(ae);
+
+                // Buy order
+            }
+        };
+    }
+
 }

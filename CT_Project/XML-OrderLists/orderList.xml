@@ -6,4 +6,7 @@
       <ID id="4" />
     </IDs>
   </Orderlist>
+  <Orderlist name="ALDI" color="#ffc800">
+    <IDs />
+  </Orderlist>
 </Orderlists>
