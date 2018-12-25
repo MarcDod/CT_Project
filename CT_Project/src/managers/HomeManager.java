@@ -5,7 +5,10 @@
  */
 package managers;
 
+import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
+import DataManagement.database.Connector;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -15,11 +18,31 @@ import java.util.ArrayList;
 public class HomeManager {
     private ArrayList<Orderlist> groceryList;
     
-    public HomeManager(ArrayList<Orderlist> groceryList){
-        this.groceryList = groceryList;
-    }
+    private String buttonName;
     
+    private int notWatchedOrder;
+    
+    public HomeManager(ArrayList<Orderlist> groceryList, ArrayList<Order> allOrder) throws SQLException{
+        this.groceryList = groceryList;
+        this.notWatchedOrder = 0;
+        allOrder.stream().filter((order) -> (!order.isWatched())).forEachOrdered((_item) -> {
+            notWatchedOrder++;
+        });
+    }
+   
     public int getGrocerySize(){
         return (groceryList != null) ? this.groceryList.size() : 0;
+    }
+    
+    public void setButtonName(String buttonName){
+        this.buttonName = buttonName;
+    }
+
+    public String getButtonName() {
+        return this.buttonName;
+    }
+
+    public int getNotWatchedOrdes() {
+        return this.notWatchedOrder;
     }
 }

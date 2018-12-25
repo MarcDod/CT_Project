@@ -73,16 +73,67 @@ public class Manager {
         return new LogInManager(this.database);
     }
     public OrderManager getOrderManager() throws JDOMException, IOException, SQLException{
+        if(this.currentActivity instanceof HomeScreen)
+            return new CancelOrderManager(getOrder(),getOrderIndex(),getGroceryList(),this.database, getActivityName(), this.xmlManager);
         return new OrderManager(getOrder(),getOrderIndex(),getGroceryList(),this.database, getActivityName(), this.xmlManager);
     }
     public GroceryManager getGroceryManager() throws JDOMException, IOException, SQLException{
-        return new GroceryManager(getGroceryList(), getAllOrder(), xmlManager, database);
+        return new GroceryManager(getGroceryList(), getAllValidOrders(), xmlManager);
     }
-    public HomeManager getHomeManager() throws JDOMException, IOException{
-        return new HomeManager(getGroceryList());
+    public HomeManager getHomeManager() throws JDOMException, IOException, SQLException{
+        return new HomeManager(getGroceryList(), getAllValidOrders());
     }
     public NewListManager getNewListManager() throws JDOMException, IOException, SQLException{
         return new NewListManager(xmlManager, database ,getGroceryList(), getActivityName(), getOrderIndex());
+    }
+    
+    private ArrayList<Order> getAllValidOrders() throws SQLException{
+        if(database == null) return null;
+        
+        ArrayList<Order> temp = this.database.getAllOrders();
+        
+        for(int i = temp.size() - 1; i >= 0; i--){
+            Order o = temp.get(i);
+            if(o.isBought() || o.isCanceld())
+                temp.remove(o);
+        }
+        
+        return temp;
+    }
+    private ArrayList<Order> getAllBoughtOrders() throws SQLException{
+        if(database == null) return null;
+        
+        ArrayList<Order> temp = this.database.getAllOrders();
+        
+        for(int i = temp.size() - 1; i >= 0; i--){
+            Order o = temp.get(i);
+            if(!o.isBought())
+                temp.remove(o);
+        }
+        
+        return temp;
+    }
+    private ArrayList<Order> getAllNewOrders() throws SQLException {
+        ArrayList<Order> temp = getAllValidOrders();
+        
+        for(int i = temp.size() - 1; i >= 0; i--){
+            Order o = temp.get(i);
+            if(o.isWatched())
+                temp.remove(o);
+        }
+        
+        return temp;
+    }
+    private ArrayList<Order> getAllCanceldOrders() throws SQLException{
+        ArrayList<Order> temp = this.database.getAllOrders();
+        
+        for(int i = temp.size() - 1; i >= 0; i--){
+            Order o = temp.get(i);
+            if(!o.isCanceld())
+                temp.remove(o);
+        }
+        
+        return temp;
     }
     
     private ArrayList<Order> getOrder() throws JDOMException, IOException, SQLException{
@@ -95,7 +146,23 @@ public class Manager {
                 tempOrders.add(this.database.getOrder(id));
             }
         } if(currentActivity instanceof HomeScreen){
-            tempOrders = this.database.getAllOrders();
+            String activeName = getActivityName();
+            switch (activeName) {
+                case HomeScreen.ALL_ORDERS:
+                    tempOrders = getAllValidOrders();
+                    break;
+                case HomeScreen.NEW_ORDERS:
+                    tempOrders = getAllNewOrders();
+                    break;
+                case HomeScreen.ORDER_DONE:
+                    tempOrders = getAllBoughtOrders();
+                    break;
+                case HomeScreen.CANCLED_ORDERS:
+                    tempOrders = getAllCanceldOrders();
+                    break;
+                default:
+                    break;
+            }
         } if(currentActivity instanceof NewList){
             ArrayList<Orderlist> tempOrderlist = getGroceryList();
             for(Integer id : tempOrderlist.get(0).getOrderIDs()){
@@ -111,17 +178,12 @@ public class Manager {
         return (temp.canRead()) ? xmlManager.loadXMLOrderLists(temp) : null;
     }
     
-    private ArrayList<Order> getAllOrder() throws SQLException{
-        if(database != null)
-            return database.getAllOrders();
-        return null;
-    }
     
     private String getActivityName(){
         if(this.currentActivity instanceof GroceryList){
             return ((GroceryList) currentActivity).getCurrentName();
         }if(this.currentActivity instanceof HomeScreen){
-            return "ALLE BESTELLUNGEN";
+            return ((HomeScreen) currentActivity).getButtonName();
         }
         return "";
     }

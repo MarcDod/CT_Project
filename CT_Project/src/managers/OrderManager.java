@@ -22,16 +22,16 @@ import java.util.ArrayList;
 public class OrderManager {
     private ArrayList<Order> orders;
     private ArrayList<Orderlist> orderList; 
-    private Connector connector;
+    private Connector database;
     private ArrayList<MovableLabel> orderLabels;
     private String name;
     private XMLManager xmlManager;
     private int index;
     
-    public OrderManager(ArrayList<Order> orders,int index ,ArrayList<Orderlist> orderList, Connector connector, String name, XMLManager xmlManager){
+    public OrderManager(ArrayList<Order> orders,int index ,ArrayList<Orderlist> orderList, Connector database, String name, XMLManager xmlManager){
         this.orders = orders;
         this.orderList = orderList;
-        this.connector = connector;
+        this.database = database;
         this.orderLabels = new ArrayList<>();
         this.name = name;
         this.xmlManager = xmlManager;

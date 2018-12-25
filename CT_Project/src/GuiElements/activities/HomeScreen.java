@@ -14,6 +14,7 @@ import java.awt.FontMetrics;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
@@ -24,24 +25,48 @@ import javax.swing.JButton;
  */
 public class HomeScreen extends Activity {
 
+    public final static String ORDER_DONE = "ERLEDIGTE BESTELLUNGEN";
+    public final static String ALL_ORDERS = "ALLE BESTELLUNGEN";
+    public final static String NEW_ORDERS = "NEUE BESTELLUNGEN";
+    public final static String CANCLED_ORDERS = "STRONIERTE BESTELLUNGEN";
+    
     private Button[] buttons;
     
     private HomeManager homeManager;
 
-    public HomeScreen(ActionListener groceryListListener, ActionListener allOrders,HomeManager homeManager) {
+    public HomeScreen(ActionListener groceryListListener, ActionListener showOrders,HomeManager homeManager) {
         super(ActivityID.HOME_SCREEN,"STARTFENSTER" ,new Color(240, 240, 240));
 
         this.homeManager = homeManager;
 
-        buttons = new Button[4];
+        buttons = new Button[5];
+        
+        ActionListener saveButtonInput = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                buttonsAction(ae);
+            }
+        };
 
+        buttons[4] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
+        buttons[4].setBackground(Color.WHITE);
+        buttons[4].setFont(Gui.BUTTON_FONT);
+        buttons[4].setHorizontalAlignment(JButton.LEFT);
+        buttons[4].setForeground(Color.BLACK);
+        buttons[4].setFocusPainted(false);
+        buttons[4].setText(CANCLED_ORDERS);
+        buttons[4].addActionListener(showOrders);
+        buttons[4].addActionListener(saveButtonInput);
+        
         buttons[3] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
         buttons[3].setBackground(Color.WHITE);
         buttons[3].setFont(Gui.BUTTON_FONT);
         buttons[3].setHorizontalAlignment(JButton.LEFT);
         buttons[3].setForeground(Color.BLACK);
         buttons[3].setFocusPainted(false);
-        buttons[3].setText("ERLEDIGTE BESTELLUNGEN");
+        buttons[3].setText(ORDER_DONE);
+        buttons[3].addActionListener(showOrders);
+        buttons[3].addActionListener(saveButtonInput);
         
         buttons[2] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
         buttons[2].setBackground(Color.WHITE);
@@ -49,13 +74,16 @@ public class HomeScreen extends Activity {
         buttons[2].setHorizontalAlignment(JButton.LEFT);
         buttons[2].setForeground(Color.BLACK);
         buttons[2].setFocusPainted(false);
-        buttons[2].setText("ALLE BESTELLUNGEN");
-        buttons[2].addActionListener(allOrders);
+        buttons[2].setText(ALL_ORDERS);
+        buttons[2].addActionListener(showOrders);
+        buttons[2].addActionListener(saveButtonInput);
         
         // Button neue Bestellung
-        BufferedImage image = drawGroceryList(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(124, 252, 0), new Color(0, 100, 0), "NEUE BESTELLUNGEN" , 0);
+        BufferedImage image = drawGroceryList(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(124, 252, 0), new Color(0, 100, 0), "NEUE BESTELLUNGEN" , homeManager.getNotWatchedOrdes());
         buttons[0] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, image);
         buttons[0].setText("NEUE BESTELLUNGEN");
+        buttons[0].addActionListener(showOrders);
+        buttons[0].addActionListener(saveButtonInput);
         
         // Button einkaufsliste
         image = drawGroceryList(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(100, 149, 237), new Color(025, 025, 112), "EINKAUFSLISTEN", homeManager.getGrocerySize());
@@ -100,4 +128,12 @@ public class HomeScreen extends Activity {
         super.paintComponent(g);
     }
 
+    private void buttonsAction(ActionEvent e){
+        Button temp = (Button) e.getSource();
+        this.homeManager.setButtonName(temp.getText());
+    }
+    
+    public String getButtonName(){
+        return this.homeManager.getButtonName();
+    }
 }

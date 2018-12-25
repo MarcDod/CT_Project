@@ -9,7 +9,6 @@ import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
-import ct_project.Gui;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class NewListManager {
     
     private String title;
     
-    public NewListManager(XMLManager xmlManager,Connector database ,ArrayList orderList, String title, int index) throws SQLException{
+    public NewListManager(XMLManager xmlManager, Connector database ,ArrayList orderList, String title, int index) throws SQLException{
         this.xmlManager = xmlManager;
         this.orderList = orderList;
         this.allOrders = new ArrayList<>();

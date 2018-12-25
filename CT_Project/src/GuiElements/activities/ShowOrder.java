@@ -16,8 +16,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -94,7 +94,7 @@ public class ShowOrder extends Activity{
         int x = (size % 2 == 0) ? 1 : 0;
         if(i % 2 == x){
             g2d.setColor(Color.BLACK);
-            g2d.drawRect(1, 0, width - 2, height - 1);
+            g2d.drawRect(0, 0, width - 1, height - 1);
         }
         String productName = tempOrder.getItemName();
         String number = String.valueOf(tempOrder.getNumber());
@@ -128,7 +128,7 @@ public class ShowOrder extends Activity{
         this.orderManager.resetOrderLabel();
         for(int i = 0; i < orderManager.getListSize(); i++){
             MovableLabel temp = new MovableLabel();
-            temp.setSize(this.getWidth() - 5, orderHeight);
+            temp.setSize(this.getWidth() - 6, orderHeight);
             Icon tempIcon = getOrderIcon(temp.getWidth(), temp.getHeight(), i, orderManager.getListSize());
             if(tempIcon == null){
                 this.orderManager.removeOrderWithID(i);
@@ -138,14 +138,16 @@ public class ShowOrder extends Activity{
             temp.setIcon(tempIcon);
             int bottomLast = (i != 0) ? this.orderManager.getOrderLabel(i - 1).getY()
                     + this.orderManager.getOrderLabel(i - 1).getHeight() : 0;
-            temp.setLocation(0, bottomLast);
+            temp.setLocation(1, bottomLast);
             temp.setVisible(true);
-            temp.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    orderReleased(e);  }
-            
+            temp.addActionListenerLeft((ActionEvent ae) -> {
+                swipedLeft(ae);
             });
+            temp.addActionListenerRight((ActionEvent ae) -> {
+                swipedRight(ae);
+            });
+            temp.setActionXLeft(-temp.getWidth() / 2);
+            temp.setActionXRight(temp.getWidth() / 2);
             this.jPanel.add(temp);
             this.orderManager.addOrderLabel(temp);
         }
@@ -161,18 +163,18 @@ public class ShowOrder extends Activity{
         this.jScrollPane.setVisible(true);
     }
     
-    private void orderReleased(MouseEvent e){
+    private void swipedLeft(ActionEvent e){
         MovableLabel temp = this.orderManager.getOrderLabel(e.getSource());
         if(temp == null) return;
-        if(temp.getX() > temp.getWidth() / 2){
-            removeOrder(temp);
-            orderManager.rightSwipe(temp);
-        }else if(temp.getX() < -temp.getWidth() / 2){
-            removeOrder(temp);
-            orderManager.leftSwipe(temp);
-        }else{
-            temp.setLocation(0, temp.getY());
-        }
+        removeOrder(temp);
+        orderManager.leftSwipe(temp);
+    }
+    
+    private void swipedRight(ActionEvent e){
+        MovableLabel temp = this.orderManager.getOrderLabel(e.getSource());
+        if(temp == null) return;
+        removeOrder(temp);
+        orderManager.rightSwipe(temp);
     }
     
     private void removeOrder(MovableLabel temp){
