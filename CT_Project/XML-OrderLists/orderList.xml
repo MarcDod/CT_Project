@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Orderlists>
-  <Orderlist name="ALLE OHNE LISTE" color="#0050be">
+  <Orderlist name="ALLE BESTELLUNGEN OHNE LISTE" color="#0050be">
     <IDs>
       <ID id="1" />
-      <ID id="2" />
       <ID id="3" />
       <ID id="4" />
+      <ID id="6" />
+      <ID id="7" />
+      <ID id="8" />
+    </IDs>
+  </Orderlist>
+  <Orderlist name="" color="#ff0000">
+    <IDs>
+      <ID id="2" />
       <ID id="5" />
     </IDs>
   </Orderlist>

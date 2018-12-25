@@ -86,7 +86,11 @@ public class OrderManager {
     }
  
 
-    public void orderAccept(MovableLabel label){
+    public void rightSwipe(MovableLabel label){
+        
+    }
+    
+    public void leftSwipe(MovableLabel label){
         
     }
 

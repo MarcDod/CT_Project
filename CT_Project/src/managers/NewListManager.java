@@ -70,7 +70,9 @@ public class NewListManager {
     }
     
     public void saveOrderList(Color color, String listName, ArrayList<Integer> orders) throws IOException{
-        Orderlist newList = new Orderlist(orders,listName.toUpperCase(), String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()));
+        String name = listName.toUpperCase();
+        if(name.equals(GroceryManager.ORDERS_WITHOUT_LIST)) name += "!";
+        Orderlist newList = new Orderlist(orders,name, String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()));
         if(index == 0)
             this.orderList.add(newList);
         else{

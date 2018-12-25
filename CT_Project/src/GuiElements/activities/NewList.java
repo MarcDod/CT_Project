@@ -20,7 +20,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import managers.NewListManager;
 
 /**
@@ -97,7 +96,9 @@ public class NewList extends Activity {
         this.add(createListButton);
 //</editor-fold> 
         
-        this.orderSelector = new OrderSelector(componentWidth, 400, this.newListManager.getAllOrders(), new JPanel(), this.newListManager.getOrderlist());
+
+        int maxHeight = this.createListButton.getY() - (this.palette.getY() +this.palette.getMaxHeight() + 20);
+        this.orderSelector = new OrderSelector(componentWidth, maxHeight, this.newListManager.getAllOrders(), new JPanel(), this.newListManager.getOrderlist());
         reLocate(componentX);
         this.add(this.orderSelector);
     }

@@ -166,9 +166,10 @@ public class ShowOrder extends Activity{
         if(temp == null) return;
         if(temp.getX() > temp.getWidth() / 2){
             removeOrder(temp);
-            orderManager.orderAccept(temp);
+            orderManager.rightSwipe(temp);
         }else if(temp.getX() < -temp.getWidth() / 2){
             removeOrder(temp);
+            orderManager.leftSwipe(temp);
         }else{
             temp.setLocation(0, temp.getY());
         }

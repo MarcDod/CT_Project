@@ -209,6 +209,10 @@ public class ColorPalette extends JLabel {
         this.panel.setVisible(unFolded);
     }
     
+    public int getMaxHeight(){
+        return height + panel.getHeight();
+    }
+    
     public Color getColor(){
         return this.activeColor;
     }

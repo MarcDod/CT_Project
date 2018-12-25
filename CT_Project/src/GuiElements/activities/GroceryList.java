@@ -52,7 +52,7 @@ public class GroceryList extends Activity {
     private GroceryManager groceryManager;
     private ActionListener listsListener;
 
-    public GroceryList(ActionListener listsListener, ActionListener newList, GroceryManager groceryManager) {
+    public GroceryList(ActionListener listsListener, ActionListener newListListener, GroceryManager groceryManager) {
         super(ActivityID.GROCERY_LIST, "EINKAUFSLISTE", new Color(240, 240, 240));
 
         this.groceryManager = groceryManager;
@@ -66,7 +66,7 @@ public class GroceryList extends Activity {
         this.newList.setText("NEUE LISTE");
         this.newList.setLocation(0, this.getHeight() - this.newList.getHeight());
         this.newList.setFocusPainted(false);
-        this.newList.addActionListener(newList);
+        this.newList.addActionListener(newListListener);
 //</editor-fold>
 
         //<editor-fold defaultstate="collapsed" desc="inti scrollPane and panel">
@@ -105,7 +105,15 @@ public class GroceryList extends Activity {
             this.lists[i] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, drawGroceryList(
                     Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, groceryList.get(i).getName(),
                     groceryList.get(i).getOrderIDs().size(), Color.decode(groceryList.get(i).getColor())));
-            int bottomLast = (i != 0) ? (this.lists[i - 1].getHeight() + 20) * (i) : 0;
+
+            int bottomLast;
+            if (i == 0) {
+                bottomLast = 0;
+                temp.disableSwipe();
+            } else {
+                bottomLast = (this.lists[i - 1].getHeight() + 20) * (i);
+            }
+
             temp.setLocation(0, bottomLast + 20);
             this.lists[i].setLocation((getWidth() - 6) / 2 - this.lists[i].getWidth() / 2,
                     0);
@@ -113,10 +121,18 @@ public class GroceryList extends Activity {
             this.lists[i].addActionListener((ActionEvent ae) -> {
                 updateActiveList(ae);
             });
-            temp.addMouseListener(new MouseAdapter() {
+            temp.setActionXLeft(-temp.getWidth() * 0.85);
+            temp.setActionXRight(temp.getWidth() / 2);
+            temp.addActionListenerLeft(new ActionListener() {
                 @Override
-                public void mouseReleased(MouseEvent e) {
-                    updateList(e);
+                public void actionPerformed(ActionEvent e) {
+                    swipedLeft(e);
+                }
+            });
+            temp.addActionListenerRight(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    swipedRight(e);
                 }
             });
             temp.add(this.lists[i]);
@@ -137,23 +153,53 @@ public class GroceryList extends Activity {
         return Integer.MAX_VALUE;
     }
 
+    private void swipedRight(ActionEvent e) {
+        MovableLabel temp = (MovableLabel) e.getSource();
+        this.groceryManager.setActivIndex(getIndexFromButtonInLabel(temp));
+        newList.getActionListeners()[0].actionPerformed(new ActionEvent(this, 0, ""));
+    }
+
+    private void swipedLeft(ActionEvent e) {
+        MovableLabel temp = (MovableLabel) e.getSource();
+        Object[] options = {"LÖSCHEN", "ZURÜCK"};
+        int optionResult = JOptionPane.showOptionDialog(this, "Die Liste wirklich löschen?.", "Liste löschen",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+
+        switch (optionResult) {
+            case 0:
+        {
+            try {
+                this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
+            } catch (IOException ex) {
+                Logger.getLogger(GroceryList.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+                createButtons();
+                break;
+            case 1:
+            default:
+                temp.setLocation(0, temp.getY());
+                break;
+        }
+
+    }
+
     private void updateList(MouseEvent e) {
         try {
             MovableLabel temp = (MovableLabel) e.getSource();
             if (temp == null) {
                 return;
             }
-            if(getIndexFromButtonInLabel(temp) == 0){
+            if (getIndexFromButtonInLabel(temp) == 0) {
                 temp.setLocation(0, temp.getY());
-            }else if (temp.getX() > temp.getWidth() / 2) {
+            } else if (temp.getX() > temp.getWidth() / 2) {
                 this.groceryManager.setActivIndex(getIndexFromButtonInLabel(temp));
                 newList.getActionListeners()[0].actionPerformed(new ActionEvent(this, 0, ""));
-            } else if (temp.getX() < -temp.getWidth() * 0.8) {
+            } else if (temp.getX() < -temp.getWidth() * 0.85) {
                 Object[] options = {"LÖSCHEN", "ZURÜCK"};
                 int optionResult = JOptionPane.showOptionDialog(this, "Die Liste wirklich löschen?.", "Liste löschen",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 
-                
                 switch (optionResult) {
                     case 0:
                         this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
@@ -170,13 +216,6 @@ public class GroceryList extends Activity {
         } catch (IOException ex) {
 
         }
-    }
-
-    private BufferedImage drawOptionButton(String text, int width, int height) {
-        BufferedImage image = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_RGB);
-
-        return image;
     }
 
     private BufferedImage drawGroceryList(int width, int height, String text,
