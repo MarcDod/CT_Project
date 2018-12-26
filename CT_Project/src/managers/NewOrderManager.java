@@ -9,16 +9,8 @@ package managers;
  *
  * @author Marc
  */
-public class HomeManager extends ActivityManager{
+public class NewOrderManager extends ActivityManager{
 
-    public HomeManager(){
-        
-    }
-    
-    public int getSizeOfMyOrder(){
-        return 0;
-    }
-    
     @Override
     public String getTitle() {
         return "";

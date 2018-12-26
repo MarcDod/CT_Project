@@ -41,7 +41,7 @@ public class LoginScreen extends Activity{
     private LogInManager logInManager;
     
     public LoginScreen(ActionListener loginButton, LogInManager logInManager) {
-        super(ActivityID.LOGIN_SCREEN,"" ,Gui.SCREEN_HEIGHT - 29, Color.WHITE);
+        super(ActivityID.LOGIN_SCREEN,"" ,Gui.SCREEN_HEIGHT - 29, Color.WHITE, logInManager);
         this.logInManager = logInManager;
         
         //<editor-fold defaultstate="collapsed" desc="init loginButton">

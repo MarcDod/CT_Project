@@ -9,7 +9,6 @@ import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
-import ct_project.Gui;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
  *
  * @author Marc
  */
-public class NewListManager {
+public class NewListManager extends ActivityManager{
     private XMLManager xmlManager;
     private ArrayList<Orderlist> orderList;
     private ArrayList<Order> allOrders;
@@ -29,7 +28,7 @@ public class NewListManager {
     
     private String title;
     
-    public NewListManager(XMLManager xmlManager,Connector database ,ArrayList orderList, String title, int index) throws SQLException{
+    public NewListManager(XMLManager xmlManager, Connector database ,ArrayList orderList, String title, int index) throws SQLException{
         this.xmlManager = xmlManager;
         this.orderList = orderList;
         this.allOrders = new ArrayList<>();
@@ -69,8 +68,10 @@ public class NewListManager {
         return this.allOrders;
     }
     
-    public void saveOrderList(Color color, String listName, ArrayList<Integer> orders) throws IOException{
-        Orderlist newList = new Orderlist(orders,listName.toUpperCase(), String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()));
+    public void saveOrderList(Color color, String listName, ArrayList orders) throws IOException{
+        String name = listName.toUpperCase();
+        if(name.equals(GroceryManager.ORDERS_WITHOUT_LIST)) name += "!";
+        Orderlist newList = new Orderlist(orders,name, String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()));
         if(index == 0)
             this.orderList.add(newList);
         else{

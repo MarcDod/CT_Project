@@ -15,6 +15,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JPanel;
+import managers.ActivityManager;
 
 /**
  *
@@ -27,9 +28,13 @@ public abstract class Activity extends JPanel{
     public static final int STANDART_BUTTON_WIDTH = Gui.SCREEN_WIDTH - 6 - 20;
     public static final int STANDART_BUTTON_HEIGHT = Gui.SCREEN_HEIGHT / 7;
     
-    public Activity(ActivityID activityID,String title, Color background){
+    private ActivityManager manager;
+    
+    public Activity(ActivityID activityID,String title, Color background, ActivityManager manager){
         this.activityID = activityID;
         this.title = title;
+        this.manager = manager;
+        this.manager.setActivityID(activityID);
         
         Dimension d = new Dimension(Gui.SCREEN_WIDTH,Gui.SCREEN_HEIGHT - 29 - MenuBar.MENUBAR_HEIGHT); // 29 = TopBar
         this.setPreferredSize(d);
@@ -43,9 +48,10 @@ public abstract class Activity extends JPanel{
         this.setBackground(background);
     }
     
-    public Activity(ActivityID activityID,String title ,int height, Color background){
+    public Activity(ActivityID activityID,String title ,int height, Color background, ActivityManager manager){
         this.activityID = activityID;
         this.title = title;
+        this.manager = manager;
         
         Dimension d = new Dimension(Gui.SCREEN_WIDTH,height);
         this.setPreferredSize(d);
@@ -101,5 +107,9 @@ public abstract class Activity extends JPanel{
         g2d.setStroke(new BasicStroke(2.0f));
         g2d.drawPolyline(new int[]{ovalX + ovalWidth - ovalHeight + 5,ovalX + ovalWidth - ovalHeight + 10,ovalX + ovalWidth - ovalHeight + 5}, new int[]{textY - fm.getHeight() / 2,textY,textY + fm.getHeight() / 2}, 3);
     }
-    
+        
+    public ActivityManager getActivityManager(){
+        return this.manager;
+    }
+        
 }

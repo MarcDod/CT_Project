@@ -6,9 +6,11 @@ import GuiElements.activities.Activity;
 import GuiElements.activities.ActivityID;
 import GuiElements.activities.GroceryList;
 import GuiElements.activities.HomeScreen;
+import GuiElements.activities.HomeScreenResourceManager;
 import managers.LogInManager;
 import GuiElements.activities.LoginScreen;
 import GuiElements.activities.NewList;
+import GuiElements.activities.NewOrder;
 import GuiElements.activities.ShowOrder;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -153,8 +155,11 @@ public class Gui {
         Activity tempActivity = null;
         try {
             switch (activity) {
+                case HOME_SCREEN_RESOURCE_MANAGER:
+                    tempActivity = new HomeScreenResourceManager(getActionListener(ActivityID.GROCERY_LIST, activity), getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity),manager.getHomeManagerResourceManager());
+                    break;
                 case HOME_SCREEN:
-                    tempActivity = new HomeScreen(getActionListener(ActivityID.GROCERY_LIST, activity), getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity),manager.getHomeManager());
+                    tempActivity = new HomeScreen(getActionListener(ActivityID.NEW_ORDER, activity),manager.getUserName(),manager.getHomeManager());
                     break;
                 case GROCERY_LIST:
                     tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity),getActionListener(ActivityID.NEW_LIST, activity), manager.getGroceryManager());
@@ -165,13 +170,21 @@ public class Gui {
                 case NEW_LIST:
                     tempActivity = new NewList(getActionListener(ActivityID.GROCERY_LIST, null), manager.getNewListManager());
                     break;
+                case NEW_ORDER:
+                    tempActivity = new NewOrder(manager.getNewOrderManager());
+                    break;
                 case LOGIN_SCREEN:
                     LogInManager logInManager = manager.getLogInManager();
                     tempActivity = new LoginScreen(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent ae) {
                             if (manager.loginIsValid()) {
-                                changeActivity(ActivityID.HOME_SCREEN);
+                                if(manager.getUserIsReosourceManager()){
+                                    changeActivity(ActivityID.HOME_SCREEN_RESOURCE_MANAGER);
+                                }
+                                else{
+                                    changeActivity(ActivityID.HOME_SCREEN);
+                                }
                             }
                         }
                     }, logInManager);
@@ -187,7 +200,7 @@ public class Gui {
 
         if (tempActivity != null) {
             this.panel.add(tempActivity);
-            this.manager.setCurrentActivity(tempActivity);
+            this.manager.setCurrentActivity(tempActivity.getActivityManager());
         }
 
         if (this.manager.isEmpty()) {
