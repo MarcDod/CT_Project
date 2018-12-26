@@ -5,8 +5,15 @@
   </Orderlist>
   <Orderlist name="ALDI" color="#ffc800">
     <IDs>
-      <ID id="3" />
       <ID id="4" />
+      <ID id="5" />
+    </IDs>
+  </Orderlist>
+  <Orderlist name="MEDIA MARKT" color="#ff0000">
+    <IDs>
+      <ID id="1" />
+      <ID id="6" />
+      <ID id="3" />
     </IDs>
   </Orderlist>
 </Orderlists>

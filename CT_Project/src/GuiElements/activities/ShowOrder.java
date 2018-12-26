@@ -142,23 +142,21 @@ public class ShowOrder extends Activity {
                     + this.orderManager.getOrderLabel(i - 1).getHeight() : 0;
             temp.setLocation(1, bottomLast);
             temp.setVisible(true);
-            if (orderManager.getLeftSwipeListener() != null && orderManager.swipeLeftAllowed()) {
-                temp.addActionListenerLeft(orderManager.getLeftSwipeListener());
-            } else if(!orderManager.swipeLeftAllowed()){
+            if(!orderManager.swipeLeftAllowed()){
                 temp.disableSwipeLeft();
             }
-            if (orderManager.getRightSwipeListener() != null && orderManager.swipeRightAllowed()) {
-                temp.addActionListenerRight(orderManager.getRightSwipeListener());
-            } else if(!orderManager.swipeRightAllowed()){
+            if(!orderManager.swipeRightAllowed()){
                 temp.disableSwipeRight();
             }
             temp.addActionListenerLeft((ActionEvent ae) -> {
+                swipeLeft(ae);
+                removeOrder(temp);
+            });
+            temp.addActionListenerRight((ActionEvent ae) -> {
+                swipeRight(ae);
                 removeOrder(temp);
             });
             temp.setActionXLeft(-temp.getWidth() / 2);
-            temp.addActionListenerRight((ActionEvent ae) -> {
-                removeOrder(temp);
-            });
             temp.setActionXRight(temp.getWidth() / 2);
 
             this.jPanel.add(temp);
@@ -166,6 +164,22 @@ public class ShowOrder extends Activity {
         }
     }
 
+    private void swipeLeft(ActionEvent e){
+        try {
+            this.orderManager.swipeLeft(e);
+        } catch (SQLException ex) {
+            Logger.getLogger(ShowOrder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void swipeRight(ActionEvent e){
+        try {
+            this.orderManager.swipeRight(e);
+        } catch (SQLException ex) {
+            Logger.getLogger(ShowOrder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void reSizeJScroolPane(int orderHeight) {
         this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.orderManager.getOrderLabelSize() * orderHeight));
         this.jPanel.
