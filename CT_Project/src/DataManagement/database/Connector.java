@@ -106,15 +106,16 @@ public class Connector{
     }
 
     public void addOrder(int orderID, Date date, String deadline, int number,
-            boolean canceled, String itemName, boolean watched, String user,boolean bought) throws SQLException{
+            boolean canceled, String itemName, boolean watched, String user,
+            boolean bought) throws SQLException{
         String[] attributes = {"odererID", "date", "deadline", "number",
-            "canceled", "itemName", "watched", "User","bought"};
+            "canceled", "itemName", "watched", "User", "bought"};
         int canceledint = (canceled) ? 1 : 0;
         int watchedint = (watched) ? 1 : 0;
-        int boughtint = (bought) ? 1:0;
+        int boughtint = (bought) ? 1 : 0;
         String[] values = {String.valueOf(orderID), "" + date, deadline, String.
-            valueOf(number), String.valueOf(canceledint),itemName,String.
-            valueOf(watchedint),user ,String.valueOf(boughtint)};
+            valueOf(number), String.valueOf(canceledint), itemName, String.
+            valueOf(watchedint), user, String.valueOf(boughtint)};
         this.insert("order", attributes, values);
     }
 
@@ -140,5 +141,31 @@ public class Connector{
         }
         this.con.executeUpdate(statementString);
     }//INSERT INTO `mydb`.`item` (`itemName`, `defaultPrice`) VALUES ('Nutella', '1.50');
+
+    public void setOrderCanceled(int orderID, boolean canceled) throws
+            SQLException{
+        this.update("order", "canceled", String.valueOf((canceled) ? 1 : 0),
+                "orderID", String.valueOf(orderID));
+    }
+
+    public void setOrderWatched(int orderID, boolean watched) throws
+            SQLException{
+        this.update("order", "watched", String.valueOf((watched) ? 1 : 0),
+                "orderID", String.valueOf(orderID));
+    }
+
+    public void setOrderBought(int orderID, boolean bought) throws SQLException{
+        this.update("order", "bought", String.valueOf((bought) ? 1 : 0),
+                "orderID", String.valueOf(orderID));
+    }
+
+    private void update(String table, String cloumn, String value,
+            String identifyingColumn, String identifyingValue) throws
+            SQLException{//UPDATE `mydb`.`order` SET `canceled` = '1' WHERE (`orderID` = '1');
+        String statement = "UPDATE `mydb`.`" + table + "` SET `" + cloumn
+                + "` = '" + value + "' WHERE (`" + identifyingColumn + "` = '"
+                + identifyingValue + "');";
+        this.con.executeUpdate(statement);
+    }
 
 }
