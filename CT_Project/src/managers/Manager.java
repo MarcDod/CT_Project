@@ -90,7 +90,7 @@ public class Manager {
 
     public HomeManager getHomeManager() throws SQLException{
        
-        return new HomeManager(getMyOrders());
+        return new HomeManager(getAllValidOrders(getMyOrders()));
     }
     
     public NewOrderManager getNewOrderManager(){
@@ -158,7 +158,7 @@ public class Manager {
         if(this.user == null)
             temp = new ArrayList<>();
         else
-            temp = getAllValidOrders(this.database.getOrdersFromUser(user.getName()));
+            temp = this.database.getOrdersFromUser(user.getName());
         return temp;
     }
     
@@ -193,8 +193,16 @@ public class Manager {
                     tempOrders = getAllCanceldOrders(this.database.getAllOrders());
                     break;
                 case HomeScreen.MY_ORDERS:
-                    
                     tempOrders = getAllValidOrders(getMyOrders());
+                    break;
+                case HomeScreen.MY_CANCELED_ORDERS:
+                    tempOrders = getAllCanceldOrders(getMyOrders());
+                    break;
+                case HomeScreen.MY_GROUP_ORDERS:
+
+                    break;
+                case HomeScreen.My_FINISHED_ORDERS:
+                    tempOrders = getAllBoughtOrders(getMyOrders());
                     break;
                 default:
                     break;
