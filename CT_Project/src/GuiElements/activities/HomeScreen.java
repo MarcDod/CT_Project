@@ -26,7 +26,7 @@ public class HomeScreen extends Activity{
     
     private HomeManager homeManager;
     
-    public HomeScreen(ActionListener newOrderListener,String title, HomeManager homeManager) {
+    public HomeScreen(ActionListener newOrderListener, ActionListener showOrderListener, String title, HomeManager homeManager) {
         super(ActivityID.HOME_SCREEN, title, new Color(240, 240, 240), homeManager);
         
         this.homeManager = homeManager; 
@@ -39,6 +39,7 @@ public class HomeScreen extends Activity{
         // Button einkaufsliste
         image = drawMyOrders(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(100, 149, 237), new Color(025, 025, 112), "MEINE BESTELLUNGEN", homeManager.getSizeOfMyOrder());
         buttons[1] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, image);
+        buttons[1].addActionListener(showOrderListener);
         
         for (int i = 0; i < buttons.length; i++) {
             int bottomLast = (i != 0) ? buttons[i - 1].getY() + buttons[i - 1].getHeight() : 0;

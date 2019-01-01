@@ -19,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -61,8 +63,8 @@ public class Gui {
                     }
                 }
             } catch (SQLException ex) {
-                //Logger.getLogger(Manager.class.getName()).
-                //log(Level.SEVERE, null, ex);
+                Logger.getLogger(Manager.class.getName()).
+                log(Level.SEVERE, null, ex);
             } catch (NullPointerException ex) {
             }
         });
@@ -98,7 +100,7 @@ public class Gui {
         try {
             this.manager.newConnection();
         } catch (SQLException ex) {
-            //Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
         changeActivity(ActivityID.HOME_SCREEN);
         
@@ -159,7 +161,7 @@ public class Gui {
                     tempActivity = new HomeScreenResourceManager(getActionListener(ActivityID.GROCERY_LIST, activity), getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity),manager.getHomeManagerResourceManager());
                     break;
                 case HOME_SCREEN:
-                    tempActivity = new HomeScreen(getActionListener(ActivityID.NEW_ORDER, activity),manager.getUserName(),manager.getHomeManager());
+                    tempActivity = new HomeScreen(getActionListener(ActivityID.NEW_ORDER, activity), getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity),manager.getUserName(),manager.getHomeManager());
                     break;
                 case GROCERY_LIST:
                     tempActivity = new GroceryList(getActionListener(ActivityID.SHOW_ORDER_SCREEN, activity),getActionListener(ActivityID.NEW_LIST, activity), manager.getGroceryManager());

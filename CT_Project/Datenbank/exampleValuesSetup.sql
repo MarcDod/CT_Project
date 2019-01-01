@@ -1,6 +1,8 @@
+INSERT INTO `mydb`.`group` (`groupID`) VALUES ('0');
 INSERT INTO `mydb`.`group` (`groupID`) VALUES ('1');
 INSERT INTO `mydb`.`group` (`groupID`) VALUES ('2');
 INSERT INTO `mydb`.`account` (`User`, `password`, `groupID`) VALUES ('Paul', '123', '1');
+INSERT INTO `mydb`.`account` (`User`, `password`, `groupID`) VALUES ('Tom', '456', '0');
 INSERT INTO `mydb`.`account` (`itemName`, `defaultPrice`) VALUES ('Handschuh', '10');
 INSERT INTO `mydb`.`account` (`itemName`, `defaultPrice`) VALUES ('Kleid', '150.67');
 INSERT INTO `mydb`.`account` (`itemName`, `defaultPrice`) VALUES ('Nutella', '3.25');
