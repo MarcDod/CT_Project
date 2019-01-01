@@ -213,6 +213,15 @@ public class Manager {
     }
 
     
+    private ArrayList<Order> getMyGroupOrders(){
+        ArrayList<Order> temp;
+        if(this.user == null)
+            temp = new ArrayList<>();
+        //else
+            //temp = this.database.getOrdersFromGroup(this.user.getGroup());
+        return null;
+    }
+    
     private ArrayList<Orderlist> getGroceryList() throws JDOMException, IOException {
         File temp = new File(GroceryManager.XML_FILE_PATH);
         return (temp.canRead()) ? xmlManager.loadXMLOrderLists(temp) : null;

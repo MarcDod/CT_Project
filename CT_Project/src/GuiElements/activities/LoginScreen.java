@@ -7,24 +7,16 @@ package GuiElements.activities;
 
 import managers.LogInManager;
 import DataManagement.Datatemplates.Account;
-import DataManagement.Datatemplates.Order;
 import GuiElements.Button;
 import GuiElements.TextField;
 import ct_project.Gui;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 
 /**

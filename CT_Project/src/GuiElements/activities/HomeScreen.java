@@ -26,8 +26,8 @@ import managers.HomeManager;
 public class HomeScreen extends Activity{
     public static final String MY_ORDERS = "MEINE OFFENEN BESTELLUNGEN";
     public static final String MY_GROUP_ORDERS = "BESTELLUNGEN MEINER GRUPPE";
-    public static final String MY_CANCELED_ORDERS = "NICHTGEMACHTE BESTELLUNGEN";
-    public static final String My_FINISHED_ORDERS = "MEINE FERTIGEN BESTELLUNGEN";
+    public static final String MY_CANCELED_ORDERS = "ABGELEHNTE BESTELLUNGEN";
+    public static final String My_FINISHED_ORDERS = "FERTIGE BESTELLUNGEN";
     private Button[] buttons;
     
     private HomeManager homeManager;
