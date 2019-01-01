@@ -199,7 +199,7 @@ public class Manager {
                     tempOrders = getAllCanceldOrders(getMyOrders());
                     break;
                 case HomeScreen.MY_GROUP_ORDERS:
-
+                    tempOrders = getAllValidOrders(getMyGroupOrders());
                     break;
                 case HomeScreen.My_FINISHED_ORDERS:
                     tempOrders = getAllBoughtOrders(getMyOrders());
@@ -213,13 +213,13 @@ public class Manager {
     }
 
     
-    private ArrayList<Order> getMyGroupOrders(){
+    private ArrayList<Order> getMyGroupOrders() throws SQLException{
         ArrayList<Order> temp;
         if(this.user == null)
             temp = new ArrayList<>();
-        //else
-            //temp = this.database.getOrdersFromGroup(this.user.getGroup());
-        return null;
+        else
+            temp = this.database.getOrdersFromGroup(this.user.getGroup());
+        return temp;
     }
     
     private ArrayList<Orderlist> getGroceryList() throws JDOMException, IOException {
