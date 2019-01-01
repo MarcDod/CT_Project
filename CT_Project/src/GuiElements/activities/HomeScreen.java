@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import managers.HomeManager;
@@ -21,7 +22,7 @@ import managers.HomeManager;
  * @author Marc
  */
 public class HomeScreen extends Activity{
-    
+    public static final String MY_ORDERS = "MEINE BESTELLUNGEN";
     private Button[] buttons;
     
     private HomeManager homeManager;
@@ -31,6 +32,14 @@ public class HomeScreen extends Activity{
         
         this.homeManager = homeManager; 
         this.buttons = new Button[2];
+        
+        ActionListener saveButtonInput = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                buttonsAction(ae);
+            }
+        };
+        
                 // Button neue Bestellung
         BufferedImage image = drawNewOrder(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(124, 252, 0), new Color(0, 100, 0), "NEUE BESTELLUNG");
         buttons[0] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, image);
@@ -40,6 +49,7 @@ public class HomeScreen extends Activity{
         image = drawMyOrders(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(100, 149, 237), new Color(025, 025, 112), "MEINE BESTELLUNGEN", homeManager.getSizeOfMyOrder());
         buttons[1] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, image);
         buttons[1].addActionListener(showOrderListener);
+        buttons[1].setText(MY_ORDERS);
         
         for (int i = 0; i < buttons.length; i++) {
             int bottomLast = (i != 0) ? buttons[i - 1].getY() + buttons[i - 1].getHeight() : 0;
@@ -87,5 +97,10 @@ public class HomeScreen extends Activity{
         g2d.dispose();
 
         return image;
+    }
+    
+    private void buttonsAction(ActionEvent ae){
+        Button temp =(Button) ae.getSource();
+        this.homeManager.setButtonName(MY_ORDERS);
     }
 }

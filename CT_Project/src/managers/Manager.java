@@ -11,6 +11,7 @@ import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
 import GuiElements.activities.ActivityID;
+import GuiElements.activities.HomeScreen;
 import GuiElements.activities.HomeScreenResourceManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -80,15 +81,15 @@ public class Manager {
     }
 
     public GroceryManager getGroceryManager() throws JDOMException, IOException, SQLException {
-        return new GroceryManager(getGroceryList(), getAllValidOrders(), xmlManager);
+        return new GroceryManager(getGroceryList(), getAllValidOrders(this.database.getAllOrders()), xmlManager);
     }
 
     public HomeManagerResourceManager getHomeManagerResourceManager() throws JDOMException, IOException, SQLException {
-        return new HomeManagerResourceManager(getGroceryList(), getAllValidOrders());
+        return new HomeManagerResourceManager(getGroceryList(), getAllValidOrders(this.database.getAllOrders()));
     }
 
-    public HomeManager getHomeManager(){
-        return new HomeManager();
+    public HomeManager getHomeManager() throws SQLException{
+        return new HomeManager(getMyOrders());
     }
     
     public NewOrderManager getNewOrderManager(){
@@ -99,12 +100,8 @@ public class Manager {
         return new NewListManager(xmlManager, database, getGroceryList(), getActivityName(), getOrderIndex());
     }
 
-    private ArrayList<Order> getAllValidOrders() throws SQLException {
-        if (database == null) {
-            return null;
-        }
-
-        ArrayList<Order> temp = this.database.getAllOrders();
+    private ArrayList<Order> getAllValidOrders(ArrayList<Order> orders) throws SQLException {
+        ArrayList<Order> temp = orders;
 
         for (int i = temp.size() - 1; i >= 0; i--) {
             Order o = temp.get(i);
@@ -116,12 +113,8 @@ public class Manager {
         return temp;
     }
 
-    private ArrayList<Order> getAllBoughtOrders() throws SQLException {
-        if (database == null) {
-            return null;
-        }
-
-        ArrayList<Order> temp = this.database.getAllOrders();
+    private ArrayList<Order> getAllBoughtOrders(ArrayList<Order> orders) throws SQLException {
+        ArrayList<Order> temp = orders;
 
         for (int i = temp.size() - 1; i >= 0; i--) {
             Order o = temp.get(i);
@@ -134,7 +127,7 @@ public class Manager {
     }
 
     private ArrayList<Order> getAllNewOrders() throws SQLException {
-        ArrayList<Order> temp = getAllValidOrders();
+        ArrayList<Order> temp = getAllValidOrders(this.database.getAllOrders());
 
         for (int i = temp.size() - 1; i >= 0; i--) {
             Order o = temp.get(i);
@@ -146,8 +139,8 @@ public class Manager {
         return temp;
     }
 
-    private ArrayList<Order> getAllCanceldOrders() throws SQLException {
-        ArrayList<Order> temp = this.database.getAllOrders();
+    private ArrayList<Order> getAllCanceldOrders(ArrayList<Order> orders) throws SQLException {
+        ArrayList<Order> temp = orders;
 
         for (int i = temp.size() - 1; i >= 0; i--) {
             Order o = temp.get(i);
@@ -160,6 +153,7 @@ public class Manager {
     }
 
     private ArrayList<Order> getOrder() throws JDOMException, IOException, SQLException {
+        if(this.database == null) return null;
         ArrayList<Order> tempOrders = new ArrayList<>();
 
         if (currentActivityManager instanceof GroceryManager) {
@@ -168,36 +162,41 @@ public class Manager {
             for (Integer id : tempOrderlist.get(index).getOrderIDs()) {
                 tempOrders.add(this.database.getOrder(id));
             }
-        }
-        if (currentActivityManager instanceof HomeManagerResourceManager) {
+        }else if (currentActivityManager instanceof NewListManager) {
+            ArrayList<Orderlist> tempOrderlist = getGroceryList();
+            for (Integer id : tempOrderlist.get(0).getOrderIDs()) {
+                tempOrders.add(this.database.getOrder(id));
+            }
+        }else if (currentActivityManager instanceof HomeManagerResourceManager || currentActivityManager instanceof HomeManager) {
             String activeName = getActivityName();
             switch (activeName) {
                 case HomeScreenResourceManager.ALL_ORDERS:
-                    tempOrders = getAllValidOrders();
+                    tempOrders = getAllValidOrders(this.database.getAllOrders());
                     break;
                 case HomeScreenResourceManager.NEW_ORDERS:
                     tempOrders = getAllNewOrders();
                     break;
                 case HomeScreenResourceManager.ORDER_DONE:
-                    tempOrders = getAllBoughtOrders();
+                    tempOrders = getAllBoughtOrders(this.database.getAllOrders());
                     break;
                 case HomeScreenResourceManager.CANCLED_ORDERS:
-                    tempOrders = getAllCanceldOrders();
+                    tempOrders = getAllCanceldOrders(this.database.getAllOrders());
                     break;
+                case HomeScreen.MY_ORDERS:
+                    tempOrders = getMyOrders();
                 default:
                     break;
-            }
-        }
-        if (currentActivityManager instanceof NewListManager) {
-            ArrayList<Orderlist> tempOrderlist = getGroceryList();
-            for (Integer id : tempOrderlist.get(0).getOrderIDs()) {
-                tempOrders.add(this.database.getOrder(id));
             }
         }
 
         return tempOrders;
     }
 
+    private ArrayList<Order> getMyOrders() throws SQLException{
+        ArrayList<Order> myOrders = new ArrayList<>();
+        return getAllValidOrders(myOrders);
+    }
+    
     private ArrayList<Orderlist> getGroceryList() throws JDOMException, IOException {
         File temp = new File(GroceryManager.XML_FILE_PATH);
         return (temp.canRead()) ? xmlManager.loadXMLOrderLists(temp) : null;
@@ -289,8 +288,8 @@ public class Manager {
                 temp[1] = true;
                 break;
             default:
-                temp[0] = true;
-                temp[1] = true;
+                temp[0] = false;
+                temp[1] = false;
                 break;
         }
 

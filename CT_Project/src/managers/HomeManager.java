@@ -5,23 +5,35 @@
  */
 package managers;
 
+import DataManagement.Datatemplates.Order;
+import java.util.ArrayList;
+
 /**
  *
  * @author Marc
  */
 public class HomeManager extends ActivityManager{
 
-    public HomeManager(){
-        
+    private String buttonName;
+    private ArrayList<Order> myOrders;
+    
+    public HomeManager(ArrayList myOrders){
+        this.buttonName = "";
+        this.myOrders = myOrders;
     }
     
     public int getSizeOfMyOrder(){
-        return 0;
+        if(myOrders == null) return 0;
+        return myOrders.size();
+    }
+    
+    public void setButtonName(String buttonName){
+        this.buttonName = buttonName;
     }
     
     @Override
     public String getTitle() {
-        return "";
+        return buttonName;
     }
     
 }
