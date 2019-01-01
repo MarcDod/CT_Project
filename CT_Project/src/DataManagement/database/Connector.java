@@ -98,11 +98,33 @@ public class Connector{
         }
         return resultingOrder;
     }
-    
+
     public ArrayList<Order> getOrdersFromUser(String user) throws SQLException{
         ArrayList<Order> resultList = new ArrayList<>();
         ResultSet result = this.sendSQLStatement(
-                "SELECT * FROM mydb.order WHERE user = \""+user+"\";");
+                "SELECT * FROM mydb.order WHERE user = \"" + user + "\";");
+        while(result.next()){
+            resultList.add(new Order(result.getInt("orderID"), result.
+                    getDate(
+                            "date"), result.getString("deadline"), result.
+                    getInt(
+                            "number"), result.getBoolean("canceled"), result.
+                    getString(
+                            "itemName"), result.getString("user"), result.
+                    getBoolean(
+                            "watched"), result.getBoolean(
+                            "bought")));
+        }
+        return resultList;
+    }
+
+    public ArrayList<Order> getOrdersFromGroup(int groupID) throws SQLException{//SELECT mydb.order.* FROM mydb.order INNER JOIN mydb.account ON mydb.order.User = mydb.account.User WHERE mydb.account.groupID = 1;
+        ArrayList<Order> resultList = new ArrayList<>();
+        ResultSet result = this.sendSQLStatement(
+                "SELECT mydb.order.* FROM mydb.order INNER JOIN mydb.account"
+                        + " ON mydb.order.User = mydb.account.User"
+                        + "  WHERE mydb.account.groupID = \""
+                + String.valueOf(groupID) + "\";");
         while(result.next()){
             resultList.add(new Order(result.getInt("orderID"), result.
                     getDate(
