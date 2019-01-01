@@ -6,7 +6,7 @@ INSERT INTO `mydb`.`account` (`User`, `password`, `groupID`) VALUES ('Tom', '456
 INSERT INTO `mydb`.`account` (`itemName`, `defaultPrice`) VALUES ('Handschuh', '10');
 INSERT INTO `mydb`.`account` (`itemName`, `defaultPrice`) VALUES ('Kleid', '150.67');
 INSERT INTO `mydb`.`account` (`itemName`, `defaultPrice`) VALUES ('Nutella', '3.25');
-INSERT INTO `mydb`.`order` (`orderID`, `date`, `deadline`, `number`, `canceled`, `itemName`, `watched`, `User`, `bought`) VALUES ('1', '2018-01-12 00:00:00', '20.23.2018', '4', '0', 'Nutella', '1', 'Tom', '0');
-INSERT INTO `mydb`.`order` (`orderID`, `date`, `deadline`, `number`, `canceled`, `itemName`, `watched`, `User`, `bought`) VALUES ('2', '2012-02-04 00:00:00', '29.3.2103', '5', '0', 'Nutella', '1', 'Tom', '0');
-INSERT INTO `mydb`.`order` (`orderID`, `date`, `deadline`, `number`, `canceled`, `itemName`, `watched`, `User`, `bought`) VALUES ('3', '2012-02-04 00:00:00', '29.3.2103', '19', '0', 'Kleid', '0', 'Tom', '0');
-INSERT INTO `mydb`.`order` (`orderID`, `date`, `deadline`, `number`, `canceled`, `itemName`, `watched`, `User`, `bought`) VALUES ('4', '2012-02-04 00:00:00', '29.3.2103', '20', '0', 'Handschuh', '1', 'Tom', '0');
+INSERT INTO `mydb`.`order` (`orderID`, `date`, `deadline`, `number`, `canceled`, `itemName`, `watched`, `User`, `bought`) VALUES ('1', '2018-01-12 00:00:00', '20.23.2018', '4', '0', 'Nutella', '1', 'Paul', '0');
+INSERT INTO `mydb`.`order` (`orderID`, `date`, `deadline`, `number`, `canceled`, `itemName`, `watched`, `User`, `bought`) VALUES ('2', '2012-02-04 00:00:00', '29.3.2103', '5', '0', 'Nutella', '1', 'Paul', '0');
+INSERT INTO `mydb`.`order` (`orderID`, `date`, `deadline`, `number`, `canceled`, `itemName`, `watched`, `User`, `bought`) VALUES ('3', '2012-02-04 00:00:00', '29.3.2103', '19', '0', 'Kleid', '0', 'Paul', '0');
+INSERT INTO `mydb`.`order` (`orderID`, `date`, `deadline`, `number`, `canceled`, `itemName`, `watched`, `User`, `bought`) VALUES ('4', '2012-02-04 00:00:00', '29.3.2103', '20', '0', 'Handschuh', '1', 'Paul', '0');
