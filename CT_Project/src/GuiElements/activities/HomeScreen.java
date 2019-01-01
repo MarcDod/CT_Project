@@ -49,6 +49,7 @@ public class HomeScreen extends Activity{
         image = drawMyOrders(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(100, 149, 237), new Color(025, 025, 112), "MEINE BESTELLUNGEN", homeManager.getSizeOfMyOrder());
         buttons[1] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, image);
         buttons[1].addActionListener(showOrderListener);
+        buttons[1].addActionListener(saveButtonInput);
         buttons[1].setText(MY_ORDERS);
         
         for (int i = 0; i < buttons.length; i++) {
@@ -101,6 +102,6 @@ public class HomeScreen extends Activity{
     
     private void buttonsAction(ActionEvent ae){
         Button temp =(Button) ae.getSource();
-        this.homeManager.setButtonName(MY_ORDERS);
+        this.homeManager.setButtonName(temp.getText());
     }
 }

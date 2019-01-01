@@ -89,6 +89,7 @@ public class Manager {
     }
 
     public HomeManager getHomeManager() throws SQLException{
+       
         return new HomeManager(getMyOrders());
     }
     
@@ -152,6 +153,15 @@ public class Manager {
         return temp;
     }
 
+    private ArrayList<Order> getMyOrders() throws SQLException{
+        ArrayList<Order> temp;
+        if(this.user == null)
+            temp = new ArrayList<>();
+        else
+            temp = getAllValidOrders(this.database.getOrdersFromUser(user.getName()));
+        return temp;
+    }
+    
     private ArrayList<Order> getOrder() throws JDOMException, IOException, SQLException {
         if(this.database == null) return null;
         ArrayList<Order> tempOrders = new ArrayList<>();
@@ -183,7 +193,9 @@ public class Manager {
                     tempOrders = getAllCanceldOrders(this.database.getAllOrders());
                     break;
                 case HomeScreen.MY_ORDERS:
-                    tempOrders = getMyOrders();
+                    
+                    tempOrders = getAllValidOrders(getMyOrders());
+                    break;
                 default:
                     break;
             }
@@ -192,10 +204,6 @@ public class Manager {
         return tempOrders;
     }
 
-    private ArrayList<Order> getMyOrders() throws SQLException{
-        ArrayList<Order> myOrders = new ArrayList<>();
-        return getAllValidOrders(myOrders);
-    }
     
     private ArrayList<Orderlist> getGroceryList() throws JDOMException, IOException {
         File temp = new File(GroceryManager.XML_FILE_PATH);
