@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Orderlists>
   <Orderlist name="ALLE BESTELLUNGEN OHNE LISTE" color="#0050be">
-    <IDs />
-  </Orderlist>
-  <Orderlist name="ALDI" color="#ffc800">
-    <IDs>
-      <ID id="4" />
-      <ID id="5" />
-    </IDs>
-  </Orderlist>
-  <Orderlist name="MEDIA MARKT" color="#ff0000">
     <IDs>
       <ID id="1" />
       <ID id="6" />
+      <ID id="7" />
+    </IDs>
+  </Orderlist>
+  <Orderlist name="MEDIA MARKT" color="#ffafaf">
+    <IDs>
+      <ID id="2" />
+      <ID id="4" />
+      <ID id="5" />
       <ID id="3" />
     </IDs>
   </Orderlist>

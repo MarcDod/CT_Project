@@ -154,11 +154,11 @@ public class OrderManager extends ActivityManager{
             case SET_CANCEL_TRUE:
                 setOrdercanceled(true, orderID);
                 setOrderWatched(true, orderID);
+                setOrderBought(false, orderID);
                 break;
             case SET_CANCEL_FALSE:
                 setOrdercanceled(false, orderID);
                 setOrderWatched(true, orderID);
-                setOrderBought(false, orderID);
                 break;
             case SET_WATCHED_TRUE:
                 setOrderWatched(true, orderID);
