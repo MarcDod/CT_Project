@@ -101,7 +101,7 @@ public class Gui{
         this.ping.start();
 
         initializeConnection();
-        changeActivity(ActivityID.LOGIN_SCREEN);
+        changeActivity(ActivityID.NEW_ORDER);
 
     }
 

@@ -100,7 +100,7 @@ public class GroceryList extends Activity {
 
         this.lists = new Button[groceryList.size()];
         for (int i = 0; i < this.lists.length; i++) {
-            MovableLabel temp = new MovableLabel(this.getBackground(), this.getBackground());
+            MovableLabel temp = new MovableLabel(this.getBackground(), this.getBackground(), MovableLabel.LEFT_RIGHT_MODE);
             temp.setSize(this.getWidth(), Activity.STANDART_BUTTON_HEIGHT);
             this.lists[i] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, drawGroceryList(
                     Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, groceryList.get(i).getName(),
@@ -109,8 +109,8 @@ public class GroceryList extends Activity {
             int bottomLast;
             if (i == 0) {
                 bottomLast = 0;
-                temp.disableSwipeLeft();
-                temp.disableSwipeRight();
+                temp.disableSwipeLeftTop();
+                temp.disableSwipeRightDown();
             } else {
                 bottomLast = (this.lists[i - 1].getHeight() + 20) * (i);
             }
@@ -122,15 +122,15 @@ public class GroceryList extends Activity {
             this.lists[i].addActionListener((ActionEvent ae) -> {
                 updateActiveList(ae);
             });
-            temp.setActionXLeft(-temp.getWidth() * 0.85);
-            temp.setActionXRight(temp.getWidth() / 2);
-            temp.addActionListenerLeft(new ActionListener() {
+            temp.setBoundaryLeftTop(-temp.getWidth() * 0.85);
+            temp.setBoundaryRightDown(temp.getWidth() / 2);
+            temp.addActionListenerLeftTop(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     swipedLeft(e);
                 }
             });
-            temp.addActionListenerRight(new ActionListener() {
+            temp.addActionListenerRightDown(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     swipedRight(e);

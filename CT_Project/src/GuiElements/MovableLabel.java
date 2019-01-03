@@ -21,38 +21,44 @@ import javax.swing.JLabel;
  */
 public class MovableLabel extends JLabel {
 
-    private int oldMouseX;
+    public static final int TOP_DOWN_MODE = 0;
+    public static final int LEFT_RIGHT_MODE = 1;
+
+    private int mode;
+
+    private int oldMousePos;
     private boolean leftButtonPressed;
-    private Color colorLeft;
-    private Color colorRight;
+    private Color colorLeftTop;
+    private Color colorRightDown;
 
-    private boolean swipeRight;
-    private boolean swipeLeft;
+    private boolean swipeRightDown;
+    private boolean swipeLeftTop;
 
-    private ArrayList<ActionListener> actionLeft;
-    private ArrayList<ActionListener> actionRight;
+    private ArrayList<ActionListener> actionLeftTop;
+    private ArrayList<ActionListener> actionRightDown;
 
-    private double actionXLeft;
-    private double actionXRight;
-    
-    private int startX;
+    private double boundaryLeftTop;
+    private double boundaryRightDown;
 
-    public MovableLabel() {
-        initMovableLabel(Color.RED, Color.GREEN);
+    private int startPos;
+
+    public MovableLabel(int mode) {
+        initMovableLabel(Color.RED, Color.GREEN, mode);
     }
 
-    public MovableLabel(Color left, Color right) {
-        initMovableLabel(left, right);
+    public MovableLabel(Color left, Color right, int mode) {
+        initMovableLabel(left, right, mode);
     }
 
-    private void initMovableLabel(Color left, Color right) {
+    private void initMovableLabel(Color left, Color right, int mode) {
         this.leftButtonPressed = false;
-        this.colorLeft = left;
-        this.colorRight = right;
-        this.swipeRight = true;
-        this.swipeLeft = true;
-        this.actionLeft = new ArrayList<>();
-        this.actionRight = new ArrayList<>();
+        this.colorLeftTop = left;
+        this.colorRightDown = right;
+        this.swipeRightDown = true;
+        this.swipeLeftTop = true;
+        this.actionLeftTop = new ArrayList<>();
+        this.actionRightDown = new ArrayList<>();
+        this.mode = mode;
         this.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -74,98 +80,154 @@ public class MovableLabel extends JLabel {
     }
 
     private void labelDragged(MouseEvent e) {
-        if (!this.leftButtonPressed || (!this.swipeLeft && !this.swipeRight)) {
+        if (!this.leftButtonPressed || (!this.swipeLeftTop && !this.swipeRightDown)) {
             return;
         }
-        int move = (e.getX() - oldMouseX);
-        if(!this.swipeLeft && move < startX && this.getX() <= startX|| !this.swipeRight && move > startX && this.getX() >= startX){
-            this.setLocation(startX, this.getY());
+        int move = 0;
+        int pos = 0;
+        switch (mode) {
+            case (0):
+                move = (e.getY() - oldMousePos);
+                pos = this.getY();
+                break;
+            case (1):
+                move = (e.getX() - oldMousePos);
+                pos = this.getX();
+                break;
+            default:
+                return;
+        }
+        
+        
+        if (!this.swipeLeftTop && move < startPos && pos <= startPos || !this.swipeRightDown && move > startPos && pos >= startPos) {
+            this.setLocation(startPos, pos);
             return;
         }
-        this.setLocation(this.getX() + move, this.getY());
-        if (this.getX() > startX) {
-            this.getParent().setBackground(colorRight);
+        
+        switch(mode){
+            case(0):
+                this.setLocation(this.getX(), pos + move);
+                break;
+            case(1):
+                this.setLocation(pos + move, this.getY());
+                break;
+        }
+        if (pos > startPos) {
+            this.getParent().setBackground(colorRightDown);
         } else {
-            this.getParent().setBackground(colorLeft);
+            this.getParent().setBackground(colorLeftTop);
         }
     }
 
     private void labelPressed(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
             this.leftButtonPressed = true;
-            this.oldMouseX = e.getX();
-            this.startX = this.getX();
+            switch (mode) {
+                case (0):
+                    this.oldMousePos = e.getY();
+                    this.startPos = this.getY();
+                    break;
+                case (1):
+                    this.oldMousePos = e.getX();
+                    this.startPos = this.getX();
+                    break;
+            }
         }
     }
 
     private void labelReleased(MouseEvent e) {
         this.leftButtonPressed = false;
-        if (this.getX() > 0) {
-            this.getParent().setBackground(colorRight);
-            if (this.getX() > actionXRight) {
-                actionRight.forEach((a) -> {
+        int pos;
+        switch (mode) {
+            case (0):
+                pos = e.getY();
+                break;
+            case (1):
+                pos = e.getX();
+                break;
+            default:
+                return;
+        }
+        if (pos > 0) {
+            this.getParent().setBackground(colorRightDown);
+            if (pos > boundaryRightDown) {
+                actionRightDown.forEach((a) -> {
                     a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
                 });
-            }else{
-                this.setLocation(startX, this.getY());
+            } else {
+                switch (mode) {
+                    case (0):
+                        this.setLocation(this.getX(), startPos);
+                        break;
+                    case (1):
+                        this.setLocation(startPos, this.getY());
+                        break;
+                }
             }
-        } else if (this.getX() < 0) {
-            this.getParent().setBackground(colorLeft);
-            if (this.getX() < actionXLeft) {
-                actionLeft.forEach((a) -> {
+        } else if (pos < 0) {
+            this.getParent().setBackground(colorLeftTop);
+            if (pos < boundaryLeftTop) {
+                actionLeftTop.forEach((a) -> {
                     a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
                 });
-            }else{
-                this.setLocation(startX, this.getY());
+            } else {
+                switch (mode) {
+                    case (0):
+                        this.setLocation(this.getX(), startPos);
+                        break;
+                    case (1):
+                        this.setLocation(startPos, this.getY());
+                        break;
+                }
             }
         }
     }
 
-    public void enableSwipeLeft() {
-        this.swipeLeft = true;
+    public void enableSwipeLeftTop() {
+        this.swipeLeftTop = true;
     }
 
-    public void disableSwipeLeft() {
-        this.swipeLeft = false;
-    }
-    
-    public void enableSwipeRight() {
-        this.swipeRight = true;
+    public void disableSwipeLeftTop() {
+        this.swipeLeftTop = false;
     }
 
-    public void disableSwipeRight() {
-        this.swipeRight = false;
+    public void enableSwipeRightDown() {
+        this.swipeRightDown = true;
     }
 
-    public void setActionXLeft(double x) {
-        this.actionXLeft = x;
+    public void disableSwipeRightDown() {
+        this.swipeRightDown = false;
     }
 
-    public void setActionXRight(double x) {
-        this.actionXRight = x;
+    public void setBoundaryLeftTop(double x) {
+        this.boundaryLeftTop = x;
     }
 
-    public void addActionListenerLeft(ActionListener newListenerLeft) {
-        this.actionLeft.add(newListenerLeft);
+    public void setBoundaryRightDown(double x) {
+        this.boundaryRightDown = x;
     }
 
-    public void removeActionListenerLeft(ActionListener newListenerLeft) {
-        this.actionLeft.remove(newListenerLeft);
+    public void addActionListenerLeftTop(ActionListener newListenerLeft) {
+        this.actionLeftTop.add(newListenerLeft);
     }
 
-    public void removeActionListenerLeft(int i) {
-        this.actionLeft.remove(i);
+    public void removeActionListenerLeftTop(ActionListener newListenerLeft) {
+        this.actionLeftTop.remove(newListenerLeft);
     }
 
-    public void addActionListenerRight(ActionListener newListenerRight) {
-        this.actionRight.add(newListenerRight);
+    public void removeActionListenerLeftTop(int i) {
+        this.actionLeftTop.remove(i);
     }
 
-    public void removeActionListenerRight(ActionListener newListenerRight) {
-        this.actionRight.remove(newListenerRight);
+    public void addActionListenerRightDown(ActionListener newListenerRight) {
+        this.actionRightDown.add(newListenerRight);
     }
 
-    public void removeActionListenerRight(int i) {
-        this.actionRight.remove(i);
+    public void removeActionListenerRightDown(ActionListener newListenerRight) {
+        this.actionRightDown.remove(newListenerRight);
+    }
+
+    public void removeActionListenerRightDown(int i) {
+        this.actionRightDown.remove(i);
     }
 }

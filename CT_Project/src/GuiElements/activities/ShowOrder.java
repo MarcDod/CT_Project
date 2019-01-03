@@ -129,7 +129,7 @@ public class ShowOrder extends Activity {
         jPanel.removeAll();
         this.orderManager.resetOrderLabel();
         for (int i = 0; i < orderManager.getListSize(); i++) {
-            MovableLabel temp = new MovableLabel();
+            MovableLabel temp = new MovableLabel(MovableLabel.LEFT_RIGHT_MODE);
             temp.setSize(this.getWidth() - 6, orderHeight);
             Icon tempIcon = getOrderIcon(temp.getWidth(), temp.getHeight(), i, orderManager.getListSize());
             if (tempIcon == null) {
@@ -143,21 +143,21 @@ public class ShowOrder extends Activity {
             temp.setLocation(1, bottomLast);
             temp.setVisible(true);
             if(!orderManager.swipeLeftAllowed()){
-                temp.disableSwipeLeft();
+                temp.disableSwipeLeftTop();
             }
             if(!orderManager.swipeRightAllowed()){
-                temp.disableSwipeRight();
+                temp.disableSwipeRightDown();
             }
-            temp.addActionListenerLeft((ActionEvent ae) -> {
+            temp.addActionListenerLeftTop((ActionEvent ae) -> {
                 swipeLeft(ae);
                 removeOrder(temp);
             });
-            temp.addActionListenerRight((ActionEvent ae) -> {
+            temp.addActionListenerRightDown((ActionEvent ae) -> {
                 swipeRight(ae);
                 removeOrder(temp);
             });
-            temp.setActionXLeft(-temp.getWidth() / 2);
-            temp.setActionXRight(temp.getWidth() / 2);
+            temp.setBoundaryLeftTop(-temp.getWidth() / 2);
+            temp.setBoundaryRightDown(temp.getWidth() / 2);
 
             this.jPanel.add(temp);
             this.orderManager.addOrderLabel(temp);
