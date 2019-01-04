@@ -97,18 +97,24 @@ public class MovableLabel extends JLabel {
             default:
                 return;
         }
-        
-        
+
         if (!this.swipeLeftTop && move < startPos && pos <= startPos || !this.swipeRightDown && move > startPos && pos >= startPos) {
-            this.setLocation(startPos, pos);
+            switch (mode) {
+                case (0):
+                    this.setLocation(this.getX(), startPos);
+                    break;
+                case (1):
+                    this.setLocation(startPos, this.getY());
+                    break;
+            }
             return;
         }
-        
-        switch(mode){
-            case(0):
+
+        switch (mode) {
+            case (0):
                 this.setLocation(this.getX(), pos + move);
                 break;
-            case(1):
+            case (1):
                 this.setLocation(pos + move, this.getY());
                 break;
         }
@@ -140,10 +146,10 @@ public class MovableLabel extends JLabel {
         int pos;
         switch (mode) {
             case (0):
-                pos = e.getY();
+                pos = this.getY();
                 break;
             case (1):
-                pos = e.getX();
+                pos = this.getX();
                 break;
             default:
                 return;
