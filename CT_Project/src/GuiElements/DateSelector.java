@@ -126,7 +126,7 @@ public class DateSelector extends JPanel {
         int pos = (temp.getY() - getFontMetrics().getHeight() / 2) / getFontMetrics().getHeight();
         int maxInt = (index == 0)? -31 : -12; 
         if (pos <= maxInt) {
-            pos = -30;
+            pos = maxInt + 1;
         }
         if (pos >= 0) {
             pos = 0;
