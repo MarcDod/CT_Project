@@ -6,7 +6,7 @@
 package GuiElements.activities;
 
 import GuiElements.Button;
-import static GuiElements.activities.HomeScreenResourceManager.ALL_ORDERS;
+import static GuiElements.activities.HomeScreenResourceManagerActivity.ALL_ORDERS;
 import ct_project.Gui;
 import java.awt.Color;
 import java.awt.Font;
@@ -23,7 +23,7 @@ import managers.HomeManager;
  *
  * @author Marc
  */
-public class HomeScreen extends Activity{
+public class HomeScreenActivity extends Activity{
     public static final String MY_ORDERS = "MEINE OFFENEN BESTELLUNGEN";
     public static final String MY_GROUP_ORDERS = "BESTELLUNGEN MEINER GRUPPE";
     public static final String MY_CANCELED_ORDERS = "ABGELEHNTE BESTELLUNGEN";
@@ -32,7 +32,7 @@ public class HomeScreen extends Activity{
     
     private HomeManager homeManager;
     
-    public HomeScreen(ActionListener newOrderListener, ActionListener showOrderListener, String title, HomeManager homeManager) {
+    public HomeScreenActivity(ActionListener newOrderListener, ActionListener showOrderListener, String title, HomeManager homeManager) {
         super(ActivityID.HOME_SCREEN, title, new Color(240, 240, 240), homeManager);
         
         this.homeManager = homeManager; 

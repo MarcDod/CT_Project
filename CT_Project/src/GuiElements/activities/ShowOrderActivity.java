@@ -31,14 +31,14 @@ import javax.swing.JScrollPane;
  *
  * @author Marc
  */
-public class ShowOrder extends Activity {
+public class ShowOrderActivity extends Activity {
 
     private final JPanel jPanel;
     private final JScrollPane jScrollPane;
 
     private OrderManager orderManager;
 
-    public ShowOrder(OrderManager orderManager) throws SQLException {
+    public ShowOrderActivity(OrderManager orderManager) throws SQLException {
         super(ActivityID.SHOW_ORDER_SCREEN, orderManager.getTitle(), Color.WHITE, orderManager);
         this.orderManager = orderManager;
         int orderHeight = 70;
@@ -168,7 +168,7 @@ public class ShowOrder extends Activity {
         try {
             this.orderManager.swipeLeft(e);
         } catch (SQLException ex) {
-            Logger.getLogger(ShowOrder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowOrderActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -176,7 +176,7 @@ public class ShowOrder extends Activity {
         try {
             this.orderManager.swipeRight(e);
         } catch (SQLException ex) {
-            Logger.getLogger(ShowOrder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowOrderActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -198,7 +198,7 @@ public class ShowOrder extends Activity {
             this.orderManager.removeOrder(temp);
             buildOrders(temp.getHeight());
         } catch (SQLException ex) {
-            Logger.getLogger(ShowOrder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowOrderActivity.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NullPointerException ex) {
             System.err.println("Keine Verbidnung");
         } catch (IOException ex) {

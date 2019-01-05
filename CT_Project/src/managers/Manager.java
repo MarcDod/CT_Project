@@ -11,8 +11,8 @@ import DataManagement.Datatemplates.Orderlist;
 import DataManagement.XML.XMLManager;
 import DataManagement.database.Connector;
 import GuiElements.activities.ActivityID;
-import GuiElements.activities.HomeScreen;
-import GuiElements.activities.HomeScreenResourceManager;
+import GuiElements.activities.HomeScreenActivity;
+import GuiElements.activities.HomeScreenResourceManagerActivity;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -64,7 +64,7 @@ public class Manager {
         this.activities.push(id);
     }
 
-    public boolean isEmpty() {
+    public boolean isStackEmpty() {
         return this.activities.isEmpty();
     }
 
@@ -180,28 +180,28 @@ public class Manager {
         }else if (currentActivityManager instanceof HomeManagerResourceManager || currentActivityManager instanceof HomeManager) {
             String activeName = getActivityName();
             switch (activeName) {
-                case HomeScreenResourceManager.ALL_ORDERS:
+                case HomeScreenResourceManagerActivity.ALL_ORDERS:
                     tempOrders = getAllValidOrders(this.database.getAllOrders());
                     break;
-                case HomeScreenResourceManager.NEW_ORDERS:
+                case HomeScreenResourceManagerActivity.NEW_ORDERS:
                     tempOrders = getAllNewOrders();
                     break;
-                case HomeScreenResourceManager.ORDER_DONE:
+                case HomeScreenResourceManagerActivity.ORDER_DONE:
                     tempOrders = getAllBoughtOrders(this.database.getAllOrders());
                     break;
-                case HomeScreenResourceManager.CANCLED_ORDERS:
+                case HomeScreenResourceManagerActivity.CANCLED_ORDERS:
                     tempOrders = getAllCanceldOrders(this.database.getAllOrders());
                     break;
-                case HomeScreen.MY_ORDERS:
+                case HomeScreenActivity.MY_ORDERS:
                     tempOrders = getAllValidOrders(getMyOrders());
                     break;
-                case HomeScreen.MY_CANCELED_ORDERS:
+                case HomeScreenActivity.MY_CANCELED_ORDERS:
                     tempOrders = getAllCanceldOrders(getMyOrders());
                     break;
-                case HomeScreen.MY_GROUP_ORDERS:
+                case HomeScreenActivity.MY_GROUP_ORDERS:
                     tempOrders = getAllValidOrders(getMyGroupOrders());
                     break;
-                case HomeScreen.My_FINISHED_ORDERS:
+                case HomeScreenActivity.My_FINISHED_ORDERS:
                     tempOrders = getAllBoughtOrders(getMyOrders());
                     break;
                 default:

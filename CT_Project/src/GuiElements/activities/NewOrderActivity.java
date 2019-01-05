@@ -22,7 +22,7 @@ import managers.NewOrderManager;
  *
  * @author Marc
  */
-public class NewOrder extends Activity {
+public class NewOrderActivity extends Activity {
 
     private DateSelector date;
     private ItemSelector itemSelector;
@@ -30,7 +30,7 @@ public class NewOrder extends Activity {
 
     private NewOrderManager newOrderManager;
 
-    public NewOrder(NewOrderManager newOrderManager, ActionListener newOrderListener) {
+    public NewOrderActivity(NewOrderManager newOrderManager, ActionListener newOrderListener) {
         super(ActivityID.NEW_ORDER, "NEUE BESTELLUNG", new Color(240, 240, 240), newOrderManager);
         
         final int componentWidth = (int) (this.getWidth() * 0.9);

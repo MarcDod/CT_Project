@@ -4,14 +4,14 @@ import managers.Manager;
 import GuiElements.MenuBar;
 import GuiElements.activities.Activity;
 import GuiElements.activities.ActivityID;
-import GuiElements.activities.GroceryList;
-import GuiElements.activities.HomeScreen;
-import GuiElements.activities.HomeScreenResourceManager;
+import GuiElements.activities.GroceryListActivity;
+import GuiElements.activities.HomeScreenActivity;
+import GuiElements.activities.HomeScreenResourceManagerActivity;
 import managers.LogInManager;
-import GuiElements.activities.LoginScreen;
-import GuiElements.activities.NewList;
-import GuiElements.activities.NewOrder;
-import GuiElements.activities.ShowOrder;
+import GuiElements.activities.LoginScreenActivity;
+import GuiElements.activities.NewListActivity;
+import GuiElements.activities.NewOrderActivity;
+import GuiElements.activities.ShowOrderActivity;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -80,18 +80,20 @@ public class Gui{
         this.frame.setMinimumSize(d);
         this.frame.setResizable(false);
         this.frame.setVisible(true);
+
         this.panel = new JPanel();
         this.panel.setPreferredSize(d);
         this.panel.setSize(d);
-        this.menu = new MenuBar(getActionListener(), getActionListener(
-                ActivityID.LOGIN_SCREEN));
-        this.frame.setLocationRelativeTo(null);
 
+        this.menu = new MenuBar(getActionListener(), logout());
+
+        this.frame.setLocationRelativeTo(null);
         this.frame.setLayout(null);
+
+        this.panel.setLayout(null);
 
         this.panel.add(menu);
         this.frame.add(panel);
-        this.panel.setLayout(null);
         this.frame.pack();
 //</editor-fold>
 
@@ -130,6 +132,9 @@ public class Gui{
         }
     }
 
+    /**
+     * For switching to new Activity and adding to activity stack
+     */
     private ActionListener getActionListener(ActivityID activity,
             ActivityID oldActivity){
 
@@ -146,16 +151,22 @@ public class Gui{
         return listener;
     }
 
-    private ActionListener getActionListener(ActivityID activity){
+    /**
+     * For returning to the Login Screen, with resetting the stack
+     */
+    private ActionListener logout(){
 
         ActionListener listener = (ActionEvent e) -> {
             manager.resetStack();
-            changeActivity(activity);
+            changeActivity(ActivityID.LOGIN_SCREEN);
         };
 
         return listener;
     }
 
+    /**
+     * For returning to the Last activity
+     */
     private ActionListener getActionListener(){
 
         ActionListener listener = (ActionEvent e) -> {
@@ -166,56 +177,61 @@ public class Gui{
     }
 
     private void changeActivity(ActivityID activity){
-        for(int i = 0; i < this.panel.getComponentCount(); i++){
+        for(int i = this.panel.getComponentCount() - 1; i <= 0; i--){
             if(!(this.panel.getComponent(i) instanceof MenuBar)){
                 this.panel.getComponent(i).setVisible(false);
                 this.panel.remove(i);
-                i--;
             }
         }
 
+        //<editor-fold defaultstate="collapsed" desc="MenuBar visibility">
         if(activity == ActivityID.LOGIN_SCREEN){
             this.menu.setVisible(false);
         }else{
             this.menu.setVisible(true);
         }
+        //</editor-fold>
 
         Activity tempActivity = null;
         try {
             switch(activity){
                 case HOME_SCREEN_RESOURCE_MANAGER:
-                    tempActivity = new HomeScreenResourceManager(
+                    tempActivity = new HomeScreenResourceManagerActivity(
                             getActionListener(ActivityID.GROCERY_LIST, activity),
                             getActionListener(ActivityID.SHOW_ORDER_SCREEN,
-                                    activity), manager.
-                                    getHomeManagerResourceManager());
+                                    activity),
+                            manager.getHomeManagerResourceManager());
                     break;
                 case HOME_SCREEN:
-                    tempActivity = new HomeScreen(getActionListener(
-                            ActivityID.NEW_ORDER, activity), getActionListener(
-                                    ActivityID.SHOW_ORDER_SCREEN, activity),
+                    tempActivity = new HomeScreenActivity(
+                            getActionListener(ActivityID.NEW_ORDER, activity),
+                            getActionListener(ActivityID.SHOW_ORDER_SCREEN,
+                                    activity),
                             manager.getUserName(), manager.getHomeManager());
                     break;
                 case GROCERY_LIST:
-                    tempActivity = new GroceryList(getActionListener(
-                            ActivityID.SHOW_ORDER_SCREEN, activity),
+                    tempActivity = new GroceryListActivity(
+                            getActionListener(ActivityID.SHOW_ORDER_SCREEN,
+                                    activity),
                             getActionListener(ActivityID.NEW_LIST, activity),
                             manager.getGroceryManager());
                     break;
                 case SHOW_ORDER_SCREEN:
-                    tempActivity = new ShowOrder(manager.getOrderManager());
+                    tempActivity = new ShowOrderActivity(manager.getOrderManager());
                     break;
                 case NEW_LIST:
-                    tempActivity = new NewList(getActionListener(
-                            ActivityID.GROCERY_LIST, null), manager.
-                                    getNewListManager());
+                    tempActivity = new NewListActivity(
+                            getActionListener(ActivityID.GROCERY_LIST, null),
+                            manager.getNewListManager());
                     break;
                 case NEW_ORDER:
-                    tempActivity = new NewOrder(manager.getNewOrderManager(),getActionListener(ActivityID.HOME_SCREEN, null));
+                    tempActivity = new NewOrderActivity(
+                            manager.getNewOrderManager(),
+                            getActionListener(ActivityID.HOME_SCREEN, null));
                     break;
                 case LOGIN_SCREEN:
                     LogInManager logInManager = manager.getLogInManager();
-                    tempActivity = new LoginScreen(new ActionListener(){
+                    tempActivity = new LoginScreenActivity(new ActionListener(){
                         @Override
                         public void actionPerformed(ActionEvent ae){
                             if(manager.loginIsValid()){
@@ -243,7 +259,7 @@ public class Gui{
             this.manager.setCurrentActivity(tempActivity.getActivityManager());
         }
 
-        if(this.manager.isEmpty()){
+        if(this.manager.isStackEmpty()){
             this.menu.disableReturnButton(this.manager.getUserName());
         }else{
             if(tempActivity != null){
