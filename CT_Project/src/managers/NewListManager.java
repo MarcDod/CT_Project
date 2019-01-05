@@ -46,6 +46,7 @@ public class NewListManager extends ActivityManager{
         
     }
     
+    @Override
     public String getTitle(){
         return this.title;
     }

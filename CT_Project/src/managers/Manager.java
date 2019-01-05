@@ -93,8 +93,8 @@ public class Manager {
         return new HomeManager(getAllValidOrders(getMyOrders()));
     }
     
-    public NewOrderManager getNewOrderManager(){
-        return new NewOrderManager();
+    public NewOrderManager getNewOrderManager() throws SQLException{
+        return new NewOrderManager(getAllItems());
     }
     
     public NewListManager getNewListManager() throws JDOMException, IOException, SQLException {
@@ -227,6 +227,10 @@ public class Manager {
         return (temp.canRead()) ? xmlManager.loadXMLOrderLists(temp) : null;
     }
 
+    private ArrayList<String> getAllItems() throws SQLException{
+        return database.getAllItems();
+    }
+    
     private String getActivityName() {
         return currentActivityManager.getTitle();
     }
@@ -263,61 +267,18 @@ public class Manager {
     }
 
     private Action[] getOrderSwipeAction() {
-        Action[] temp = new Action[2];
-        String name = currentActivityManager.getTitle();
-        switch (name) {
-            case HomeScreenResourceManager.NEW_ORDERS:
-                temp[0] = Action.SET_CANCEL_TRUE;
-                temp[1] = Action.SET_WATCHED_TRUE;
-                break;
-            case HomeScreenResourceManager.ALL_ORDERS:
-            case GroceryManager.ORDERS_WITHOUT_LIST:    
-                temp[0] = Action.SET_CANCEL_TRUE;
-                temp[1] = Action.SET_BOUGHT_TRUE;
-                break;
-            case HomeScreenResourceManager.ORDER_DONE:
-                temp[0] = Action.SET_BOUGHT_FALSE;
-                temp[1] = Action.NOTHING;
-                break;
-            case HomeScreenResourceManager.CANCLED_ORDERS:
-                temp[0] = Action.NOTHING;
-                temp[1] = Action.SET_CANCEL_FALSE;
-                break;
-            default:
-                temp[0] = Action.NOTHING;
-                temp[1] = Action.SET_BOUGHT_TRUE;
-                break;
+        Action[] temp = null;
+        if(this.currentActivityManager instanceof ShowsOrders){
+            temp = ((ShowsOrders)this.currentActivityManager).getSwipeActions();
         }
         return temp;
     }
 
     private boolean[] getSwipeAllowed() {
-        boolean[] temp = new boolean[2];
-        String name = currentActivityManager.getTitle();
-        switch (name) {
-            case HomeScreenResourceManager.NEW_ORDERS:
-                temp[0] = true;
-                temp[1] = true;
-                break;
-            case HomeScreenResourceManager.ALL_ORDERS:
-            case GroceryManager.ORDERS_WITHOUT_LIST:    
-                temp[0] = true;
-                temp[1] = true;
-                break;
-            case HomeScreenResourceManager.ORDER_DONE:
-                temp[0] = true;
-                temp[1] = false;
-                break;
-            case HomeScreenResourceManager.CANCLED_ORDERS:
-                temp[0] = false;
-                temp[1] = true;
-                break;
-            default:
-                temp[0] = false;
-                temp[1] = false;
-                break;
+        boolean[] temp = null;
+        if(this.currentActivityManager instanceof ShowsOrders){
+            temp = ((ShowsOrders)this.currentActivityManager).getSwipeAllowed();
         }
-
         return temp;
     }
 }

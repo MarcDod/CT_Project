@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Marc
  */
-public class HomeManager extends ActivityManager{
+public class HomeManager extends ActivityManager implements ShowsOrders{
 
     private String buttonName;
     private ArrayList<Order> myOrders;
@@ -34,6 +34,16 @@ public class HomeManager extends ActivityManager{
     @Override
     public String getTitle() {
         return buttonName;
+    }
+
+    @Override
+    public boolean[] getSwipeAllowed() {
+        return new boolean[]{false, false};
+    }
+
+    @Override
+    public OrderManager.Action[] getSwipeActions() {
+        return new OrderManager.Action[]{OrderManager.Action.NOTHING, OrderManager.Action.NOTHING};
     }
     
 }

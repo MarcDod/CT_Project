@@ -19,7 +19,7 @@ import org.jdom2.JDOMException;
  *
  * @author Marc
  */
-public class GroceryManager extends ActivityManager{
+public class GroceryManager extends ActivityManager implements ShowsOrders{
 
     public final static String XML_FILE_PATH = "XML-OrderLists/orderList.xml";
     public final static String ORDERS_WITHOUT_LIST = "ALLE BESTELLUNGEN OHNE LISTE";
@@ -97,5 +97,26 @@ public class GroceryManager extends ActivityManager{
     @Override
     public String getTitle() {
         return this.groceryList.get(activeIndex).getName();
+    }
+
+    @Override
+    public boolean[] getSwipeAllowed() {
+        return new boolean[]{true, true};
+    }
+
+    @Override
+    public OrderManager.Action[] getSwipeActions() {
+        OrderManager.Action[] temp = new OrderManager.Action[2];
+        switch(getTitle()){
+            case(ORDERS_WITHOUT_LIST):
+                temp[0] = OrderManager.Action.SET_CANCEL_TRUE;
+                temp[1] = OrderManager.Action.SET_BOUGHT_TRUE;
+                break;
+            default:
+                temp[0] = OrderManager.Action.NOTHING;
+                temp[1] = OrderManager.Action.SET_BOUGHT_TRUE;
+                break;
+        }
+        return temp;
     }
 }

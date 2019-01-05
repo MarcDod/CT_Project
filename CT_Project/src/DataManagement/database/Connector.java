@@ -98,7 +98,7 @@ public class Connector{
         }
         return resultingOrder;
     }
-
+    
     public ArrayList<Order> getOrdersFromUser(String user) throws SQLException{
         ArrayList<Order> resultList = new ArrayList<>();
         ResultSet result = this.sendSQLStatement(
@@ -146,6 +146,16 @@ public class Connector{
         this.insert("item", attributes, values);
     }
 
+    public ArrayList<String> getAllItems() throws SQLException{
+        ArrayList<String> items = new ArrayList<>();
+        ResultSet result = this.sendSQLStatement(
+                "SELECT * FROM mydb.item;");
+        while(result.next()){
+            items.add(result.getString("itemName"));
+        }
+        return items;
+    }
+    
     public void addOrder(int orderID, Date date, String deadline, int number,
             boolean canceled, String itemName, boolean watched, String user,
             boolean bought) throws SQLException{

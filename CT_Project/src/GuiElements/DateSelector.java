@@ -45,7 +45,7 @@ public class DateSelector extends JPanel {
         this.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150)));
         this.setBackground(Color.WHITE);
         this.setLayout(null);
-
+        
         for (int i = 0; i < labels.length; i++) {
             this.labels[i] = new JLabel();
             this.labels[i].setSize((int) ((this.getWidth() / 3) * 0.9), (int) (this.getHeight() * 0.8));
@@ -68,7 +68,7 @@ public class DateSelector extends JPanel {
             } else if (i == 2) {
                 maxNum = 12;
                 year = true;
-            }
+            }    
             this.moveLabels[i] = new MovableLabel(MovableLabel.TOP_DOWN_MODE);
             this.moveLabels[i].setSize(this.labels[i].getWidth(), maxNum * getFontMetrics().getHeight());
             this.moveLabels[i].setIcon(getMoveLabelIcons(maxNum, this.moveLabels[i].getWidth(), this.moveLabels[i].getHeight(), year));
@@ -122,8 +122,10 @@ public class DateSelector extends JPanel {
                 index = i;
             }
         }
+        
         int pos = (temp.getY() - getFontMetrics().getHeight() / 2) / getFontMetrics().getHeight();
-        if (pos <= -31) {
+        int maxInt = (index == 0)? -31 : -12; 
+        if (pos <= maxInt) {
             pos = -30;
         }
         if (pos >= 0) {

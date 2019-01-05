@@ -100,7 +100,10 @@ public abstract class Selector extends JScrollPane{
         }
         if(selectedElements.contains(allElements.get(index))){
             selectedElements.remove((Object)allElements.get(index));
-        }else if(selectedElements.size() <= maxElements){
+        }else if(selectedElements.size() < maxElements){
+            selectedElements.add(allElements.get(index));
+        }else{
+            selectedElements.remove(selectedElements.size() - 1);
             selectedElements.add(allElements.get(index));
         }
         this.labels.get(index).setIcon(getIcon(this.labels.get(0).getWidth(), this.labels.get(0).getHeight(), index));

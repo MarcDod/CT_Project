@@ -211,7 +211,7 @@ public class Gui{
                                     getNewListManager());
                     break;
                 case NEW_ORDER:
-                    tempActivity = new NewOrder(manager.getNewOrderManager());
+                    tempActivity = new NewOrder(manager.getNewOrderManager(),getActionListener(ActivityID.HOME_SCREEN, null));
                     break;
                 case LOGIN_SCREEN:
                     LogInManager logInManager = manager.getLogInManager();
