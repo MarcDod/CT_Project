@@ -30,7 +30,7 @@ public abstract class Selector extends JScrollPane{
     protected int maxElements;
     
     protected Color selctedColor;
-    
+    private int maxHeight;
     
     public Selector(int width, int height, ArrayList allElements, JPanel panel, ArrayList selectedElements, int maxElements){
         super(panel);
@@ -46,7 +46,7 @@ public abstract class Selector extends JScrollPane{
     }
     
     private void init(int width, int height, JPanel panel){
-        int orderHeight = 70;
+        this.maxHeight = height;
         this.jPanel = panel;
         this.jPanel.setBackground(Color.WHITE);
         this.setSize(width, height);
@@ -63,6 +63,13 @@ public abstract class Selector extends JScrollPane{
           
         this.getVerticalScrollBar().setUnitIncrement(10);
 
+        initLabels();
+    }
+    
+    protected void initLabels(){
+        this.labels.removeAll(this.labels);
+        this.jPanel.removeAll();
+        int orderHeight = 70;
         for(int i = 0; i < allElements.size(); i++){
             JLabel temp = new JLabel();
             temp.setSize(this.getWidth(), orderHeight);
@@ -85,8 +92,8 @@ public abstract class Selector extends JScrollPane{
         this.jPanel.
                 setSize(this.getWidth(), labels.size() * orderHeight);
         this.jPanel.setVisible(true);
-        height = (height > jPanel.getHeight())? jPanel.getHeight() : height;
-        this.setSize(width, height);
+        int height = (maxHeight > jPanel.getHeight())? jPanel.getHeight() : maxHeight;
+        this.setSize(this.getWidth(), height);
         this.setVisible(true);
     }
     
@@ -111,6 +118,12 @@ public abstract class Selector extends JScrollPane{
     }
     
     abstract Icon getIcon(int width,int height, int i);
+    
+    public void addObject(Object object) throws IllegalArgumentException{
+        if(this.allElements.contains(object)) throw new IllegalArgumentException();
+        this.allElements.add(object);
+        initLabels();
+    }
     
     public ArrayList<Object> getSelectedElements(){
         return this.selectedElements;

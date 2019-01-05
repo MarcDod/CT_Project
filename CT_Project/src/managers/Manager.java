@@ -94,7 +94,7 @@ public class Manager {
     }
     
     public NewOrderManager getNewOrderManager() throws SQLException{
-        return new NewOrderManager(getAllItems());
+        return new NewOrderManager(getAllItems(), database, getUserName());
     }
     
     public NewListManager getNewListManager() throws JDOMException, IOException, SQLException {

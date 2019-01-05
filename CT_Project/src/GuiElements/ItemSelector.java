@@ -28,13 +28,16 @@ public class ItemSelector extends Selector{
     public ItemSelector(int width, int height, ArrayList<String> allElements, ArrayList<String> selectedElements) {
         super(width, height, allElements, new JPanel(), selectedElements, 1);
         
+        initTextLabels();
+    }
+
+    private void initTextLabels(){
         for(int i = 0; i < allElements.size(); i++){
-            this.labels.get(i).setText(allElements.get(i));
+            this.labels.get(i).setText(String.valueOf(allElements.get(i)));
             this.labels.get(i).setHorizontalAlignment(JLabel.CENTER);
             this.labels.get(i).setFont(new Font(Gui.BUTTON_FONT.getName(), Font.BOLD, 30));
         }
     }
-
     @Override
     protected void orderUpdate(MouseEvent e) {
         super.orderUpdate(e);
@@ -53,6 +56,13 @@ public class ItemSelector extends Selector{
         }
     }
 
+    @Override
+    public void addObject(Object object) {
+        super.addObject(object);
+        initTextLabels();
+    }
+
+    
     
     
     @Override

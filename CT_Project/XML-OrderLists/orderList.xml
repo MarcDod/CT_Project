@@ -2,11 +2,12 @@
 <Orderlists>
   <Orderlist name="ALLE BESTELLUNGEN OHNE LISTE" color="#0050be">
     <IDs>
-      <ID id="5" />
+      <ID id="2" />
+      <ID id="3" />
       <ID id="6" />
     </IDs>
   </Orderlist>
-  <Orderlist name="SCHNADDERADINE" color="#404040">
+  <Orderlist name="TEST" color="#00ffff">
     <IDs />
   </Orderlist>
 </Orderlists>

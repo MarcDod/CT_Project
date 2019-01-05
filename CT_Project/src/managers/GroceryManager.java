@@ -29,14 +29,14 @@ public class GroceryManager extends ActivityManager implements ShowsOrders{
     private ArrayList<Orderlist> groceryList;
     private int activeIndex;
     
-    public GroceryManager(ArrayList<Orderlist> grList, ArrayList<Order> allValidOrders, XMLManager xmlManager) throws JDOMException, IOException, SQLException {
+    public GroceryManager(ArrayList<Orderlist> grList, ArrayList<Order> allOpenOrders, XMLManager xmlManager) throws JDOMException, IOException, SQLException {
         if (grList == null) {
             grList = new ArrayList<>();
         }
         for (Orderlist list : grList) {
             for (int i = list.getOrderIDs().size() - 1; i >= 0; i--) {
                 boolean valid = false;
-                for(Order o : allValidOrders){
+                for(Order o : allOpenOrders){
                     if(o.getOrderID() == list.getOrderIDs().get(i))
                         valid = true;
                 }
@@ -52,7 +52,7 @@ public class GroceryManager extends ActivityManager implements ShowsOrders{
         }
 
         ArrayList<Integer> allOrderIdsWithoutList = new ArrayList<>();
-        for (Order order : allValidOrders) {
+        for (Order order : allOpenOrders) {
             boolean withoutList = true;
             for (Orderlist list : grList) {
                 if (list.getOrderIDs().contains(order.getOrderID())) {

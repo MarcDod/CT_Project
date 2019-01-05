@@ -177,7 +177,7 @@ public class Gui{
     }
 
     private void changeActivity(ActivityID activity){
-        for(int i = this.panel.getComponentCount() - 1; i <= 0; i--){
+        for(int i = this.panel.getComponentCount() - 1; i >= 0; i--){
             if(!(this.panel.getComponent(i) instanceof MenuBar)){
                 this.panel.getComponent(i).setVisible(false);
                 this.panel.remove(i);
@@ -235,7 +235,7 @@ public class Gui{
                         @Override
                         public void actionPerformed(ActionEvent ae){
                             if(manager.loginIsValid()){
-                                if(manager.getUserIsReosourceManager()){
+                                if(manager.getUserIsReosourceManager()){                                          
                                     changeActivity(
                                             ActivityID.HOME_SCREEN_RESOURCE_MANAGER);
                                 }else{

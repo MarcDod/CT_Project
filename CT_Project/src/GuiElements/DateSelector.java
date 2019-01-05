@@ -40,7 +40,7 @@ public class DateSelector extends JPanel {
     public DateSelector(int width, int height) {
         this.moveLabels = new MovableLabel[3];
         this.labels = new JLabel[3];
-        this.date = new int[]{1, 1, 1};
+        this.date = new int[]{Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.WEEK_OF_MONTH), 1};
         this.setSize(width, height);
         this.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150)));
         this.setBackground(Color.WHITE);
@@ -48,12 +48,14 @@ public class DateSelector extends JPanel {
         
         for (int i = 0; i < labels.length; i++) {
             this.labels[i] = new JLabel();
-            this.labels[i].setSize((int) ((this.getWidth() / 3) * 0.9), (int) (this.getHeight() * 0.8));
+            this.labels[i].setSize((int) ((this.getWidth() / 3) * 0.9), this.getHeight());
             int gap = (i == 2) ? 0 : -20;
+            //this.labels[i].setOpaque(true);
+            //this.labels[i].setBackground(Color.yellow);
             this.labels[i].setLocation((this.getWidth() - ((this.labels[i].getWidth() + 7) * 3)) / 2 + i * (this.labels[i].getWidth() + gap), 0);
             this.labels[i].setIcon(getLabelIcon(this.labels[i].getWidth(), this.labels[i].getHeight()));
         }
-        initLabel(1, Calendar.getInstance().get(Calendar.YEAR));
+        initLabel(this.date[1], Calendar.getInstance().get(Calendar.YEAR));
 
         this.image = getImage();
     }
