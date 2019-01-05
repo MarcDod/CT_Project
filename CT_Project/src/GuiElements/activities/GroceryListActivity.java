@@ -41,7 +41,7 @@ import javax.swing.event.EventListenerList;
  *
  * @author marc.doderer
  */
-public class GroceryList extends Activity {
+public class GroceryListActivity extends Activity {
 
     private Button lists[];
     private JScrollPane jScrollPane;
@@ -52,7 +52,7 @@ public class GroceryList extends Activity {
     private GroceryManager groceryManager;
     private ActionListener listsListener;
 
-    public GroceryList(ActionListener listsListener, ActionListener newListListener, GroceryManager groceryManager) {
+    public GroceryListActivity(ActionListener listsListener, ActionListener newListListener, GroceryManager groceryManager) {
         super(ActivityID.GROCERY_LIST, "EINKAUFSLISTE", new Color(240, 240, 240), groceryManager);
 
         this.groceryManager = groceryManager;
@@ -172,7 +172,7 @@ public class GroceryList extends Activity {
             try {
                 this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
             } catch (IOException ex) {
-                Logger.getLogger(GroceryList.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GroceryListActivity.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
                 createButtons();

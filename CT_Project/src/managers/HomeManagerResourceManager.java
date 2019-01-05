@@ -7,7 +7,7 @@ package managers;
 
 import DataManagement.Datatemplates.Order;
 import DataManagement.Datatemplates.Orderlist;
-import GuiElements.activities.HomeScreenResourceManager;
+import GuiElements.activities.HomeScreenResourceManagerActivity;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -52,19 +52,19 @@ public class HomeManagerResourceManager extends ActivityManager implements Shows
     public boolean[] getSwipeAllowed() {
         boolean[] temp = new boolean[2];
         switch (this.buttonName) {
-            case HomeScreenResourceManager.NEW_ORDERS:
+            case HomeScreenResourceManagerActivity.NEW_ORDERS:
                 temp[0] = true;
                 temp[1] = true;
                 break;
-            case HomeScreenResourceManager.ALL_ORDERS:
+            case HomeScreenResourceManagerActivity.ALL_ORDERS:
                 temp[0] = true;
                 temp[1] = true;
                 break;
-            case HomeScreenResourceManager.ORDER_DONE:
+            case HomeScreenResourceManagerActivity.ORDER_DONE:
                 temp[0] = true;
                 temp[1] = false;
                 break;
-            case HomeScreenResourceManager.CANCLED_ORDERS:
+            case HomeScreenResourceManagerActivity.CANCLED_ORDERS:
                 temp[0] = false;
                 temp[1] = true;
                 break;
@@ -80,20 +80,20 @@ public class HomeManagerResourceManager extends ActivityManager implements Shows
     public OrderManager.Action[] getSwipeActions() {
         OrderManager.Action[] temp = new OrderManager.Action[2];
         switch (this.buttonName) {
-            case HomeScreenResourceManager.NEW_ORDERS:
+            case HomeScreenResourceManagerActivity.NEW_ORDERS:
                 temp[0] = OrderManager.Action.SET_CANCEL_TRUE;
                 temp[1] = OrderManager.Action.SET_WATCHED_TRUE;
                 break;
-            case HomeScreenResourceManager.ALL_ORDERS:
+            case HomeScreenResourceManagerActivity.ALL_ORDERS:
             case GroceryManager.ORDERS_WITHOUT_LIST:
                 temp[0] = OrderManager.Action.SET_CANCEL_TRUE;
                 temp[1] = OrderManager.Action.SET_BOUGHT_TRUE;
                 break;
-            case HomeScreenResourceManager.ORDER_DONE:
+            case HomeScreenResourceManagerActivity.ORDER_DONE:
                 temp[0] = OrderManager.Action.SET_BOUGHT_FALSE;
                 temp[1] = OrderManager.Action.NOTHING;
                 break;
-            case HomeScreenResourceManager.CANCLED_ORDERS:
+            case HomeScreenResourceManagerActivity.CANCLED_ORDERS:
                 temp[0] = OrderManager.Action.NOTHING;
                 temp[1] = OrderManager.Action.SET_CANCEL_FALSE;
                 break;

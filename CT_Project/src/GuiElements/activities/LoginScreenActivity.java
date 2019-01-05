@@ -23,7 +23,7 @@ import javax.swing.JTextField;
  *
  * @author Marc
  */
-public class LoginScreen extends Activity{
+public class LoginScreenActivity extends Activity{
     
     private Button loginButton;
     
@@ -32,7 +32,7 @@ public class LoginScreen extends Activity{
     
     private LogInManager logInManager;
     
-    public LoginScreen(ActionListener loginButton, LogInManager logInManager) {
+    public LoginScreenActivity(ActionListener loginButton, LogInManager logInManager) {
         super(ActivityID.LOGIN_SCREEN,"" ,Gui.SCREEN_HEIGHT - 29, Color.WHITE, logInManager);
         this.logInManager = logInManager;
         
@@ -76,7 +76,7 @@ public class LoginScreen extends Activity{
         try {
             logInManager.checkUserData(this.password.getString(), this.userName.getString());
         } catch (SQLException ex) {
-            Logger.getLogger(LoginScreen.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginScreenActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

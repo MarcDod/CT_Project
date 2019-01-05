@@ -23,7 +23,7 @@ import javax.swing.JButton;
  *
  * @author marc.doderer
  */
-public class HomeScreenResourceManager extends Activity {
+public class HomeScreenResourceManagerActivity extends Activity {
 
     public final static String ORDER_DONE = "ERLEDIGTE BESTELLUNGEN";
     public final static String ALL_ORDERS = "ALLE BESTELLUNGEN";
@@ -34,7 +34,7 @@ public class HomeScreenResourceManager extends Activity {
     
     private HomeManagerResourceManager homeManager;
 
-    public HomeScreenResourceManager(ActionListener groceryListListener, ActionListener showOrders,HomeManagerResourceManager homeManager) {
+    public HomeScreenResourceManagerActivity(ActionListener groceryListListener, ActionListener showOrders,HomeManagerResourceManager homeManager) {
         super(ActivityID.HOME_SCREEN_RESOURCE_MANAGER,"STARTFENSTER" ,new Color(240, 240, 240), homeManager);
 
         this.homeManager = homeManager;

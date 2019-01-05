@@ -26,7 +26,7 @@ import managers.NewListManager;
  *
  * @author Marc
  */
-public class NewList extends Activity {
+public class NewListActivity extends Activity {
 
     private Button createListButton;
     private ColorPalette palette;
@@ -36,7 +36,7 @@ public class NewList extends Activity {
     
     private NewListManager newListManager;
     
-    public NewList(ActionListener newListListener, NewListManager newListManager) {
+    public NewListActivity(ActionListener newListListener, NewListManager newListManager) {
         super(ActivityID.NEW_LIST, newListManager.getTitle(), new Color(240, 240, 240), newListManager);
 
         this.newListManager = newListManager;
@@ -111,7 +111,7 @@ public class NewList extends Activity {
         try {
             newListManager.saveOrderList(palette.getColor(), ((TextField)listName.getComponent(0)).getString(), this.orderSelector.getSelectedElements());
         } catch (IOException ex) {
-            Logger.getLogger(NewList.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewListActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
