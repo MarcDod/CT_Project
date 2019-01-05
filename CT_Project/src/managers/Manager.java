@@ -50,11 +50,8 @@ public class Manager {
         return (user.getGroup() == 0);
     }
     
-    public ActivityID getLastActivityID() {
-        if (!this.activities.isEmpty()) {
-            if (this.activities.peek() == currentActivityManager.getActivityID()) {
-                this.activities.pop();
-            }
+    public ActivityID getLastActivityID() {        
+        if (!this.activities.isEmpty()) {      
             return this.activities.pop();
         }
         return null;
@@ -201,7 +198,7 @@ public class Manager {
                 case HomeScreenActivity.MY_GROUP_ORDERS:
                     tempOrders = getAllValidOrders(getMyGroupOrders());
                     break;
-                case HomeScreenActivity.My_FINISHED_ORDERS:
+                case HomeScreenActivity.MY_FINISHED_ORDERS:
                     tempOrders = getAllBoughtOrders(getMyOrders());
                     break;
                 default:

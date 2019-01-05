@@ -48,35 +48,11 @@ public class HomeScreenResourceManagerActivity extends Activity {
             }
         };
 
-        buttons[4] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
-        buttons[4].setBackground(Color.WHITE);
-        buttons[4].setFont(Gui.BUTTON_FONT);
-        buttons[4].setHorizontalAlignment(JButton.LEFT);
-        buttons[4].setForeground(Color.BLACK);
-        buttons[4].setFocusPainted(false);
-        buttons[4].setText(CANCLED_ORDERS);
-        buttons[4].addActionListener(showOrders);
-        buttons[4].addActionListener(saveButtonInput);
+        buttons[4] = initButton(CANCLED_ORDERS, showOrders, saveButtonInput);
         
-        buttons[3] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
-        buttons[3].setBackground(Color.WHITE);
-        buttons[3].setFont(Gui.BUTTON_FONT);
-        buttons[3].setHorizontalAlignment(JButton.LEFT);
-        buttons[3].setForeground(Color.BLACK);
-        buttons[3].setFocusPainted(false);
-        buttons[3].setText(ORDER_DONE);
-        buttons[3].addActionListener(showOrders);
-        buttons[3].addActionListener(saveButtonInput);
+        buttons[3] = initButton(ORDER_DONE, showOrders, saveButtonInput);
         
-        buttons[2] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
-        buttons[2].setBackground(Color.WHITE);
-        buttons[2].setFont(Gui.BUTTON_FONT);
-        buttons[2].setHorizontalAlignment(JButton.LEFT);
-        buttons[2].setForeground(Color.BLACK);
-        buttons[2].setFocusPainted(false);
-        buttons[2].setText(ALL_ORDERS);
-        buttons[2].addActionListener(showOrders);
-        buttons[2].addActionListener(saveButtonInput);
+        buttons[2] = initButton(ALL_ORDERS, showOrders, saveButtonInput);
         
         // Button neue Bestellung
         BufferedImage image = drawGroceryList(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, new Color(124, 252, 0), new Color(0, 100, 0), "NEUE BESTELLUNGEN" , homeManager.getNotWatchedOrdes());
@@ -97,6 +73,19 @@ public class HomeScreenResourceManagerActivity extends Activity {
             buttons[i].setLocation((getWidth() - 6) / 2 - buttons[i].getWidth() / 2, bottomLast + 20);
             this.add(buttons[i]);
         }
+    }
+    
+    private Button initButton(String text, ActionListener showOrderListener, ActionListener saveButtonInput){
+        Button temp = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
+        temp.setBackground(Color.WHITE);
+        temp.setFont(Gui.BUTTON_FONT);
+        temp.setHorizontalAlignment(JButton.LEFT);
+        temp.setForeground(Color.BLACK);
+        temp.setFocusPainted(false);
+        temp.setText(text);
+        temp.addActionListener(showOrderListener);
+        temp.addActionListener(saveButtonInput);
+        return temp;
     }
 
     private BufferedImage drawGroceryList(int width, int height, Color beginColor, Color endColor, String text, int number) {

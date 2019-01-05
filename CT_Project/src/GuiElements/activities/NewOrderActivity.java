@@ -126,15 +126,17 @@ public class NewOrderActivity extends Activity {
             int number = Integer.parseInt(((TextField) this.number.getComponent(0)).getString());      
             int[] dateInt = this.date.getDate();
             String deadLine = dateInt[0] + "." + dateInt[1] + "." + dateInt[2];
-            String itemName = ((TextField) newItem.getComponent(0)).getString();
+            String itemName = (String)this.itemSelector.getSelectedElements().get(0);
             this.newOrderManager.makeNewOrder(itemName, deadLine, number);
             this.newOrderListener.actionPerformed(ae);
         }catch(NumberFormatException ne){
-            JOptionPane.showMessageDialog(this, "Eine vernünftige Zahl bitte");
+            JOptionPane.showMessageDialog(this, "Geben sie eine vernünftige Zahl an");
         }catch(SQLException se){
-            
+            System.out.println("h");
         }catch(IllegalArgumentException ia){
             JOptionPane.showMessageDialog(this, ia.getMessage());
+        }catch(IndexOutOfBoundsException aobe){
+            JOptionPane.showMessageDialog(this, "Wählen sie ein Item aus");
         }
     }
 

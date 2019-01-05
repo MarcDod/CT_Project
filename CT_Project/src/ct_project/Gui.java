@@ -143,8 +143,10 @@ public class Gui{
             public void actionPerformed(ActionEvent e){
                 if(oldActivity != null){
                     manager.addActivityID(oldActivity);
+                    changeActivity(activity);
+                }else{
+                    changeActivity(manager.getLastActivityID());
                 }
-                changeActivity(activity);
             }
         };
 

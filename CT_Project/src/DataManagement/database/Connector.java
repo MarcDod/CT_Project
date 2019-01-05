@@ -156,15 +156,15 @@ public class Connector{
         return items;
     }
     
-    public void addOrder(int orderID, Date date, String deadline, int number,
+    public void addOrder(Date date, String deadline, int number,
             boolean canceled, String itemName, boolean watched, String user,
             boolean bought) throws SQLException{
-        String[] attributes = {"odererID", "date", "deadline", "number",
+        String[] attributes = {"date", "deadline", "number",
             "canceled", "itemName", "watched", "User", "bought"};
         int canceledint = (canceled) ? 1 : 0;
         int watchedint = (watched) ? 1 : 0;
         int boughtint = (bought) ? 1 : 0;
-        String[] values = {String.valueOf(orderID), "" + date, deadline, String.
+        String[] values = {"" + date, deadline, String.
             valueOf(number), String.valueOf(canceledint), itemName, String.
             valueOf(watchedint), user, String.valueOf(boughtint)};
         this.insert("order", attributes, values);

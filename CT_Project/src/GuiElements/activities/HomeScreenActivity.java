@@ -27,7 +27,7 @@ public class HomeScreenActivity extends Activity{
     public static final String MY_ORDERS = "MEINE OFFENEN BESTELLUNGEN";
     public static final String MY_GROUP_ORDERS = "BESTELLUNGEN MEINER GRUPPE";
     public static final String MY_CANCELED_ORDERS = "ABGELEHNTE BESTELLUNGEN";
-    public static final String My_FINISHED_ORDERS = "FERTIGE BESTELLUNGEN";
+    public static final String MY_FINISHED_ORDERS = "FERTIGE BESTELLUNGEN";
     private Button[] buttons;
     
     private HomeManager homeManager;
@@ -57,41 +57,28 @@ public class HomeScreenActivity extends Activity{
         buttons[1].addActionListener(saveButtonInput);
         buttons[1].setText(MY_ORDERS);
         
-        buttons[2] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
-        buttons[2].setBackground(Color.WHITE);
-        buttons[2].setFont(Gui.BUTTON_FONT);
-        buttons[2].setHorizontalAlignment(JButton.LEFT);
-        buttons[2].setForeground(Color.BLACK);
-        buttons[2].setFocusPainted(false);
-        buttons[2].setText(MY_GROUP_ORDERS);
-        buttons[2].addActionListener(showOrderListener);
-        buttons[2].addActionListener(saveButtonInput);
-        
-        buttons[3] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
-        buttons[3].setBackground(Color.WHITE);
-        buttons[3].setFont(Gui.BUTTON_FONT);
-        buttons[3].setHorizontalAlignment(JButton.LEFT);
-        buttons[3].setForeground(Color.BLACK);
-        buttons[3].setFocusPainted(false);
-        buttons[3].setText(My_FINISHED_ORDERS);
-        buttons[3].addActionListener(showOrderListener);
-        buttons[3].addActionListener(saveButtonInput);
-        
-        buttons[4] = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
-        buttons[4].setBackground(Color.WHITE);
-        buttons[4].setFont(Gui.BUTTON_FONT);
-        buttons[4].setHorizontalAlignment(JButton.LEFT);
-        buttons[4].setForeground(Color.BLACK);
-        buttons[4].setFocusPainted(false);
-        buttons[4].setText(MY_CANCELED_ORDERS);
-        buttons[4].addActionListener(showOrderListener);
-        buttons[4].addActionListener(saveButtonInput);
+        buttons[2] = initButton(MY_GROUP_ORDERS, showOrderListener, saveButtonInput); 
+        buttons[3] = initButton(MY_FINISHED_ORDERS, showOrderListener, saveButtonInput);     
+        buttons[4] = initButton(MY_CANCELED_ORDERS, showOrderListener, saveButtonInput);
         
         for (int i = 0; i < buttons.length; i++) {
             int bottomLast = (i != 0) ? buttons[i - 1].getY() + buttons[i - 1].getHeight() : 0;
             buttons[i].setLocation((getWidth() - 6) / 2 - buttons[i].getWidth() / 2, bottomLast + 20);
             this.add(buttons[i]);
         }
+    }
+    
+    private Button initButton(String text, ActionListener showOrderListener, ActionListener saveButtonInput){
+        Button temp = new Button(Activity.STANDART_BUTTON_WIDTH, 50);
+        temp.setBackground(Color.WHITE);
+        temp.setFont(Gui.BUTTON_FONT);
+        temp.setHorizontalAlignment(JButton.LEFT);
+        temp.setForeground(Color.BLACK);
+        temp.setFocusPainted(false);
+        temp.setText(text);
+        temp.addActionListener(showOrderListener);
+        temp.addActionListener(saveButtonInput);
+        return temp;
     }
     
     private BufferedImage drawMyOrders(int width, int height, Color beginColor, Color endColor, String text, int number) {

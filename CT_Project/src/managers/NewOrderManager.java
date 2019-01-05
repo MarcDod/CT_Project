@@ -35,7 +35,7 @@ public class NewOrderManager extends ActivityManager{
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
         GregorianCalendar now = new GregorianCalendar(); 
         if(userName.equals("Keine Information")) throw new IllegalArgumentException("Bitte Melden sie sich an");
-        this.database.addOrder(0, new java.sql.Date(now.getTime().getTime()), deadLine, number, false, itemName, false, userName, false);
+        this.database.addOrder(new java.sql.Date(now.getTime().getTime()), deadLine, number, false, itemName, false, userName, false);
     }
     
     public void addItemName(String itemName) throws SQLException, NullPointerException{
