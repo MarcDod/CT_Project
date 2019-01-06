@@ -18,12 +18,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,22 +40,16 @@ public class GroceryListActivity extends Activity {
     private GroceryManager groceryManager;
     private ActionListener listsListener;
 
-    public GroceryListActivity(ActionListener listsListener, ActionListener newListListener, GroceryManager groceryManager) {
-        super(ActivityID.GROCERY_LIST, "EINKAUFSLISTE", new Color(240, 240, 240), groceryManager);
+    public GroceryListActivity(ActionListener listsListener,
+            ActionListener newListListener, GroceryManager groceryManager) {
+        super(ActivityID.GROCERY_LIST, "EINKAUFSLISTE", new Color(240, 240, 240),
+                groceryManager);
 
         this.groceryManager = groceryManager;
         this.listsListener = listsListener;
 
-        //<editor-fold defaultstate="collapsed" desc="init NewList">
-        this.newList = new Button(Gui.SCREEN_WIDTH, 60);
-        this.newList.setBackground(Gui.COLOR);
-        this.newList.setForeground(Color.WHITE);
-        this.newList.setFont(Gui.BUTTON_FONT);
-        this.newList.setText("NEUE LISTE");
-        this.newList.setLocation(0, this.getHeight() - this.newList.getHeight());
-        this.newList.setFocusPainted(false);
+        this.newList = initBottomButton("NEUE LISTE");
         this.newList.addActionListener(newListListener);
-//</editor-fold>
 
         //<editor-fold defaultstate="collapsed" desc="inti scrollPane and panel">
         this.jPanel = new JPanel();
@@ -91,13 +82,27 @@ public class GroceryListActivity extends Activity {
 
         this.lists = new Button[groceryList.size()];
         for (int i = 0; i < this.lists.length; i++) {
-            MovableLabel temp = new MovableLabel(this.getBackground(), this.getBackground(), MovableLabel.LEFT_RIGHT_MODE);
+
+            MovableLabel temp = new MovableLabel(
+                    this.getBackground(),
+                    this.getBackground(),
+                    MovableLabel.LEFT_RIGHT_MODE);
             temp.setSize(this.getWidth(), Activity.STANDART_BUTTON_HEIGHT);
-            this.lists[i] = new Button(Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, drawGroceryList(
-                    Activity.STANDART_BUTTON_WIDTH, Activity.STANDART_BUTTON_HEIGHT, groceryList.get(i).getName(),
-                    groceryList.get(i).getOrderIDs().size(), Color.decode(groceryList.get(i).getColor())));
+
+            this.lists[i] = new Button(
+                    Activity.STANDART_BUTTON_WIDTH,
+                    Activity.STANDART_BUTTON_HEIGHT);
+
+            this.lists[i].setImage(drawGroceryList(
+                    Activity.STANDART_BUTTON_WIDTH,
+                    Activity.STANDART_BUTTON_HEIGHT,
+                    groceryList.get(i).getName(),
+                    groceryList.get(i).getOrderIDs().size(),
+                    Color.decode(groceryList.get(i).getColor())));
 
             int bottomLast;
+            // Alle Orders ohne liste sollen nicht gelöscht / editiert werden.
+            // Erste liste kann sich nicht unter eine andere liste hängen.
             if (i == 0) {
                 bottomLast = 0;
                 temp.disableSwipeLeftTop();
@@ -107,12 +112,15 @@ public class GroceryListActivity extends Activity {
             }
 
             temp.setLocation(0, bottomLast + 20);
-            this.lists[i].setLocation((getWidth() - 6) / 2 - this.lists[i].getWidth() / 2,
-                    0);
+            this.lists[i].setLocation(
+                    (getWidth() - 6) / 2 - this.lists[i].getWidth() / 2, 0);
+            //Button klick events
             this.lists[i].addActionListener(this.listsListener);
             this.lists[i].addActionListener((ActionEvent ae) -> {
                 updateActiveList(ae);
             });
+
+            // Rechts und Links swipe Actions der labels
             temp.setBoundaryLeftTop(-temp.getWidth() * 0.85);
             temp.setBoundaryRightDown(temp.getWidth() / 2);
             temp.addActionListenerLeftTop(new ActionListener() {
@@ -127,13 +135,15 @@ public class GroceryListActivity extends Activity {
                     swipedRight(e);
                 }
             });
+
             temp.add(this.lists[i]);
             this.jPanel.add(temp);
         }
 
-        this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.lists.length * (Activity.STANDART_BUTTON_HEIGHT + 20) + 20));
-        this.jPanel.
-                setSize(Activity.STANDART_BUTTON_HEIGHT, this.lists.length * (Activity.STANDART_BUTTON_HEIGHT + 20) + 20);
+        this.jPanel.setPreferredSize(new Dimension(this.getWidth(),
+                this.lists.length * (Activity.STANDART_BUTTON_HEIGHT + 20) + 20));
+        this.jPanel.setSize(Activity.STANDART_BUTTON_HEIGHT,
+                this.lists.length * (Activity.STANDART_BUTTON_HEIGHT + 20) + 20);
     }
 
     private int getIndexFromButtonInLabel(MovableLabel label) {
@@ -155,59 +165,22 @@ public class GroceryListActivity extends Activity {
         MovableLabel temp = (MovableLabel) e.getSource();
         Object[] options = {"LÖSCHEN", "ZURÜCK"};
         int optionResult = JOptionPane.showOptionDialog(this, "Die Liste wirklich löschen?.", "Liste löschen",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 
         switch (optionResult) {
             case 0:
-        {
-            try {
-                this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
-            } catch (IOException ex) {
-                Logger.getLogger(GroceryListActivity.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+                try {
+                    this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
+                } catch (IOException ex) {
+                    this.notifyException("Fehler beim Dateizugriff.");
+                }
                 createButtons();
                 break;
-            case 1:
             default:
                 temp.setLocation(0, temp.getY());
                 break;
         }
 
-    }
-
-    private void updateList(MouseEvent e) {
-        try {
-            MovableLabel temp = (MovableLabel) e.getSource();
-            if (temp == null) {
-                return;
-            }
-            if (getIndexFromButtonInLabel(temp) == 0) {
-                temp.setLocation(0, temp.getY());
-            } else if (temp.getX() > temp.getWidth() / 2) {
-                this.groceryManager.setActivIndex(getIndexFromButtonInLabel(temp));
-                newList.getActionListeners()[0].actionPerformed(new ActionEvent(this, 0, ""));
-            } else if (temp.getX() < -temp.getWidth() * 0.85) {
-                Object[] options = {"LÖSCHEN", "ZURÜCK"};
-                int optionResult = JOptionPane.showOptionDialog(this, "Die Liste wirklich löschen?.", "Liste löschen",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-
-                switch (optionResult) {
-                    case 0:
-                        this.groceryManager.removeList(getIndexFromButtonInLabel(temp));
-                        createButtons();
-                        break;
-                    case 1:
-                    default:
-                        temp.setLocation(0, temp.getY());
-                        break;
-                }
-            } else {
-                temp.setLocation(0, temp.getY());
-            }
-        } catch (IOException ex) {
-
-        }
     }
 
     private BufferedImage drawGroceryList(int width, int height, String text,

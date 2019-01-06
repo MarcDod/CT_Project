@@ -23,11 +23,11 @@ public class LogInManager extends ActivityManager{
         this.user = null;
     }
     
-    public void checkUserData(String password, String user) throws SQLException{
+    public void checkUserData(String password, String user) throws SQLException, IllegalAccessException{
         database = new Connector();
         if(database.getPassword(user).equals(password)){
             this.user = database.getAccount(user);
-        }
+        }else throw new IllegalAccessException();
     }
     
     public Account getUser(){

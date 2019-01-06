@@ -52,7 +52,6 @@ public class NewListManager extends ActivityManager{
     }
     
     public ArrayList<Integer> getOrderlist(){
-        if(index == 0) return null;
         return orderList.get(index).getOrderIDs();
     }
     

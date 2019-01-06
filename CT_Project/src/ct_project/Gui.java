@@ -64,14 +64,14 @@ public class Gui{
                             manager.reconnect();
                             break;
                         case 1:
-                            System.exit(1);
+                            System.exit(0);
                             break;
                     }
                 }
             }catch (SQLException ex){
-                Logger.getLogger(Manager.class.getName()).
-                        log(Level.SEVERE, null, ex);
-            }catch (NullPointerException ex){
+                this.notifyException("Bei der Datenbankverbindung trat ein Fehler auf.");
+            }catch (IllegalArgumentException ex){
+                this.notifyException(ex.getLocalizedMessage());
             }
         });   
         //<editor-fold defaultstate="collapsed" desc="Init frame and panel">       
@@ -92,7 +92,7 @@ public class Gui{
         try {
             logOut = ImageIO.read(new File("rsc/exitIcon.png"));
         } catch (IOException ex) {
-            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            this.notifyException("Bild konnte nicht geladen werden.");
         }
         
         this.menu = new MenuBar(getActionListener(), logout(), logOut);
@@ -214,7 +214,7 @@ public class Gui{
                                     activity),
                             manager.getHomeManagerResourceManager());
                     break;
-                case HOME_SCREEN:
+                case HOME_SCREEN_USER:
                     tempActivity = new HomeScreenUserActivity(
                             getActionListener(ActivityID.NEW_ORDER, activity),
                             getActionListener(ActivityID.SHOW_ORDER_SCREEN,
@@ -239,7 +239,7 @@ public class Gui{
                 case NEW_ORDER:
                     tempActivity = new NewOrderActivity(
                             manager.getNewOrderManager(),
-                            getActionListener(ActivityID.HOME_SCREEN, null));
+                            getActionListener(ActivityID.HOME_SCREEN_USER, null));
                     break;
                 case LOGIN_SCREEN:
                     LogInManager logInManager = manager.getLogInManager();
@@ -251,7 +251,7 @@ public class Gui{
                                     changeActivity(
                                             ActivityID.HOME_SCREEN_RESOURCE_MANAGER);
                                 }else{
-                                    changeActivity(ActivityID.HOME_SCREEN);
+                                    changeActivity(ActivityID.HOME_SCREEN_USER);
                                 }
                             }
                         }
@@ -259,11 +259,11 @@ public class Gui{
                     break;
             }
         }catch (JDOMException ex){
-
+            this.notifyException("XML Datei konnte nicht geladen werden.");
         }catch (IOException ex){
-
-        }catch (SQLException ex){
-
+            this.notifyException("Auf Datei konnte nicht zugegriffen werden.");
+        } catch (SQLException ex) {
+            this.notifyException("Bei der Datenbankverbindung trat ein Fehler auf.");
         }
 
         if(tempActivity != null){
@@ -280,6 +280,10 @@ public class Gui{
         }
 
         this.frame.repaint();
+    }
+    
+    protected void notifyException(String message){
+        JOptionPane.showMessageDialog(this.frame, message, "Ein Fehler ist aufgetreten", JOptionPane.ERROR_MESSAGE);
     }
 
 }

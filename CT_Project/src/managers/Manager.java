@@ -157,7 +157,6 @@ public class Manager {
     }
     
     private ArrayList<Order> getOrder() throws JDOMException, IOException, SQLException {
-        if(this.database == null) return null;
         ArrayList<Order> tempOrders = new ArrayList<>();
 
         if (currentActivityManager instanceof GroceryManager) {
@@ -248,7 +247,7 @@ public class Manager {
         this.currentActivityManager = tempActivityManager;
     }
 
-    public boolean ping(int timeout) throws SQLException {
+    public boolean ping(int timeout) throws IllegalArgumentException{
         return database.ping(timeout);
     }
 

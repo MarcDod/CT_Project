@@ -16,8 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import managers.NewListManager;
@@ -31,31 +29,38 @@ public class NewListActivity extends Activity {
     private Button createListButton;
     private ColorPalette palette;
     private JPanel listName;
-
+    private TextField listNameTextField;
+    
     private OrderSelector orderSelector;
-    
+
     private NewListManager newListManager;
-    
-    public NewListActivity(ActionListener newListListener, NewListManager newListManager) {
-        super(ActivityID.NEW_LIST, newListManager.getTitle(), new Color(240, 240, 240), newListManager);
+
+    public NewListActivity(ActionListener newListListener,
+            NewListManager newListManager) {
+        super(ActivityID.NEW_LIST, newListManager.getTitle(),
+                new Color(240, 240, 240), newListManager);
 
         this.newListManager = newListManager;
-        
+
         //<editor-fold defaultstate="collapsed" desc="init listName">
         final int componentWidth = (int) (this.getWidth() * 0.9);
         final int componentHeight = 50;
-        final int componentX = (this.getWidth() - 6 - (int) (this.getWidth() * 0.9)) / 2;
+        final int componentX = (this.getWidth() - 6 - (int) (this.getWidth()
+                * 0.9)) / 2;
         this.listName = new JPanel(null);
         this.listName.setSize(componentWidth, componentHeight);
         this.listName.setLocation(componentX, 30);
         this.listName.setBackground(Color.WHITE);
-        TextField tempTextField = new TextField(Color.WHITE, "Listenname", false);
-        int textFieldWidth = (int)(componentWidth * 0.8);
-        tempTextField.setSize(textFieldWidth, 20);
-        tempTextField.setLocation(13, (componentHeight / 2) - tempTextField.getHeight() / 2);
-        tempTextField.setText(newListManager.getListName());
-        this.listName.add(tempTextField);
-        this.listName.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150)));
+        this.listNameTextField
+                = new TextField(Color.WHITE, "Listenname", false);
+        int textFieldWidth = (int) (componentWidth * 0.8);
+        this.listNameTextField.setSize(textFieldWidth, 20);
+        this.listNameTextField.setLocation(13,
+                (componentHeight / 2) - this.listNameTextField.getHeight() / 2);
+        this.listNameTextField.setText(newListManager.getListName());
+        this.listName.add(this.listNameTextField);
+        this.listName.setBorder(BorderFactory.createLineBorder(new Color(150,
+                150, 150)));
         this.add(listName);
 //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="init ColorPalette">
@@ -71,7 +76,11 @@ public class NewListActivity extends Activity {
         colors.add(Color.PINK);
         colors.add(Color.DARK_GRAY);
 
-        this.palette = new ColorPalette(newListManager.getColor(), colors, componentX, listName.getY() + listName.getHeight() + 20, componentWidth, componentHeight, new ActionListener() {
+        this.palette = new ColorPalette(newListManager.getColor(),
+                colors,
+                componentX, listName.getY() + listName.getHeight() + 20,
+                componentWidth, componentHeight,
+                new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 reLocate(componentX);
@@ -80,12 +89,7 @@ public class NewListActivity extends Activity {
         this.add(palette);
 //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="init createButton">
-        this.createListButton = new Button(Gui.SCREEN_WIDTH, 60);
-        this.createListButton.setBackground(Gui.COLOR);
-        this.createListButton.setForeground(Color.WHITE);
-        this.createListButton.setFont(Gui.BUTTON_FONT);
-        this.createListButton.setText("ERSTELLEN");
-        this.createListButton.setLocation(0, this.getHeight() - this.createListButton.getHeight());
+        this.createListButton = initBottomButton("ERSTELLEN");
         this.createListButton.addActionListener(newListListener);
         this.createListButton.addActionListener(new ActionListener() {
             @Override
@@ -95,23 +99,28 @@ public class NewListActivity extends Activity {
         });
         this.add(createListButton);
 //</editor-fold> 
-        
 
-        int maxHeight = this.createListButton.getY() - (this.palette.getY() +this.palette.getMaxHeight() + 20);
-        this.orderSelector = new OrderSelector(componentWidth, maxHeight, this.newListManager.getAllOrders(), this.newListManager.getOrderlist());
+        int maxHeight = this.createListButton.getY() - (this.palette.getY()
+                + this.palette.getMaxHeight() + 20);
+        this.orderSelector = new OrderSelector(componentWidth, maxHeight,
+                this.newListManager.getAllOrders(), this.newListManager
+                .getOrderlist());
         reLocate(componentX);
         this.add(this.orderSelector);
     }
 
-    private void reLocate(int componentX){
-        this.orderSelector.setLocation(componentX, this.palette.getY() + this.palette.getHeight() + 20);
+    private void reLocate(int componentX) {
+        this.orderSelector.setLocation(componentX, this.palette.getY()
+                + this.palette.getHeight() + 20);
     }
-    
-    private void saveNewList(){
+
+    private void saveNewList() {
         try {
-            newListManager.saveOrderList(palette.getColor(), ((TextField)listName.getComponent(0)).getString(), this.orderSelector.getSelectedElements());
+            newListManager.saveOrderList(palette.getColor(),
+                    listNameTextField.getString(),
+                    this.orderSelector.getSelectedElements());
         } catch (IOException ex) {
-            Logger.getLogger(NewListActivity.class.getName()).log(Level.SEVERE, null, ex);
+            this.notifyException("Dateizugriff ist Fehlerhaft");
         }
     }
 }

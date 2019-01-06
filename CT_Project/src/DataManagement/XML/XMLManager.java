@@ -22,10 +22,7 @@ import org.jdom2.output.XMLOutputter;
  * @author Julian
  */
 public class XMLManager{
-
-    public XMLManager(){
-    }
-
+    
     public ArrayList<Orderlist> loadXMLOrderLists(File file) throws JDOMException,
             IOException{
         Document xmlDoc = new SAXBuilder().build(file);

@@ -22,7 +22,6 @@ public class HomeManagerUser extends HomeManager implements ShowsOrders{
     }
     
     public int getSizeOfMyOrder(){
-        if(myOrders == null) return 0;
         return myOrders.size();
     }
     

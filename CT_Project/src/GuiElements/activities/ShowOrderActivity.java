@@ -20,8 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -38,11 +36,12 @@ public class ShowOrderActivity extends Activity {
 
     private OrderManager orderManager;
 
-    public ShowOrderActivity(OrderManager orderManager) throws SQLException {
+    public ShowOrderActivity(OrderManager orderManager){
         super(ActivityID.SHOW_ORDER_SCREEN, orderManager.getTitle(), Color.WHITE, orderManager);
         this.orderManager = orderManager;
         int orderHeight = 70;
 
+        //<editor-fold defaultstate="collapsed" desc="init JPanel / JScrollPane">
         this.jPanel = new JPanel();
         this.jPanel.setBackground(this.getBackground());
         this.jScrollPane = new JScrollPane(jPanel);
@@ -51,25 +50,24 @@ public class ShowOrderActivity extends Activity {
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.jScrollPane.setLocation(-1, 0);
-
+        
         this.jPanel.setMaximumSize(new Dimension(this.getWidth(), Integer.MAX_VALUE));
         this.jPanel.setLayout(null);
-
+        
         this.jScrollPane.getVerticalScrollBar().setUnitIncrement(10);
-
+        
         this.jScrollPane.setBorder(null);
         this.jPanel.setBorder(null);
-
         this.add(this.jScrollPane);
+//</editor-fold>
+
 
         try {
             buildOrders(orderHeight);
-        } catch (NullPointerException ex) {
-            System.err.println("Keine Verbindung!");
         } catch (SQLException ex) {
-            System.err.println("Fehler!");
+            this.notifyException("Ein Fehler mit der Datenbank ist aufgetreten");
         }
-        reSizeJScroolPane(orderHeight);
+        resizeJScrollPane(orderHeight);
     }
 
     private Icon getOrderIcon(int width, int height, int i, int size) throws SQLException, NullPointerException {
@@ -125,7 +123,7 @@ public class ShowOrderActivity extends Activity {
         super.paintComponent(g);
     }
 
-    private void buildOrders(int orderHeight) throws SQLException, NullPointerException {
+    private void buildOrders(int orderHeight) throws SQLException{
         jPanel.removeAll();
         this.orderManager.resetOrderLabel();
         for (int i = 0; i < orderManager.getListSize(); i++) {
@@ -168,7 +166,7 @@ public class ShowOrderActivity extends Activity {
         try {
             this.orderManager.swipeLeft(e);
         } catch (SQLException ex) {
-            Logger.getLogger(ShowOrderActivity.class.getName()).log(Level.SEVERE, null, ex);
+            this.notifyException("Ein Fehler mit der Datenbank ist aufgetreten");
         }
     }
     
@@ -176,11 +174,11 @@ public class ShowOrderActivity extends Activity {
         try {
             this.orderManager.swipeRight(e);
         } catch (SQLException ex) {
-            Logger.getLogger(ShowOrderActivity.class.getName()).log(Level.SEVERE, null, ex);
+            this.notifyException("Ein Fehler mit der Datenbank ist aufgetreten");
         }
     }
     
-    private void reSizeJScroolPane(int orderHeight) {
+    private void resizeJScrollPane(int orderHeight) {
         this.jPanel.setPreferredSize(new Dimension(this.getWidth(), this.orderManager.getOrderLabelSize() * orderHeight));
         this.jPanel.
                 setSize(this.getWidth(), this.orderManager.getOrderLabelSize() * orderHeight);
@@ -191,20 +189,15 @@ public class ShowOrderActivity extends Activity {
     }
 
     private void removeOrder(MovableLabel temp) {
-        if (temp == null) {
-            return;
-        }
         try {
             this.orderManager.removeOrder(temp);
             buildOrders(temp.getHeight());
         } catch (SQLException ex) {
-            Logger.getLogger(ShowOrderActivity.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NullPointerException ex) {
-            System.err.println("Keine Verbidnung");
+            this.notifyException("Ein Fehler mit der Datenbank ist aufgetreten");
         } catch (IOException ex) {
-
+            this.notifyException("Ein Fehler beim Dateizugriff ist aufgetreten");
         }
-        reSizeJScroolPane(temp.getHeight());
+        resizeJScrollPane(temp.getHeight());
         repaint();
     }
 }

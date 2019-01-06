@@ -30,10 +30,9 @@ public class GroceryManager extends ActivityManager implements ShowsOrders{
     private int activeIndex;
     
     public GroceryManager(ArrayList<Orderlist> grList, ArrayList<Order> allOpenOrders, XMLManager xmlManager) throws JDOMException, IOException, SQLException {
-        if (grList == null) {
-            grList = new ArrayList<>();
-        }
-        for (Orderlist list : grList) {
+        
+        // Filter liste nach Oders welche nicht mehr in die liste gehören
+        grList.forEach((list) -> {
             for (int i = list.getOrderIDs().size() - 1; i >= 0; i--) {
                 boolean valid = false;
                 for(Order o : allOpenOrders){
@@ -43,7 +42,7 @@ public class GroceryManager extends ActivityManager implements ShowsOrders{
                 if(!valid)
                     list.getOrderIDs().remove(i);
             }
-        }
+        });
         
         if (!grList.isEmpty()) {
             if (ORDERS_WITHOUT_LIST.equals(grList.get(0).getName())) {
@@ -51,8 +50,9 @@ public class GroceryManager extends ActivityManager implements ShowsOrders{
             }
         }
 
+        // bekomme alle bestellungen ohne liste
         ArrayList<Integer> allOrderIdsWithoutList = new ArrayList<>();
-        for (Order order : allOpenOrders) {
+        allOpenOrders.forEach((order) -> {
             boolean withoutList = true;
             for (Orderlist list : grList) {
                 if (list.getOrderIDs().contains(order.getOrderID())) {
@@ -62,7 +62,7 @@ public class GroceryManager extends ActivityManager implements ShowsOrders{
             if (withoutList) {
                 allOrderIdsWithoutList.add(order.getOrderID());
             }
-        }
+        });
 
         grList.add(0, new Orderlist(allOrderIdsWithoutList,ORDERS_WITHOUT_LIST, String.format("#%02x%02x%02x", Gui.COLOR.getRed(), Gui.COLOR.getGreen(), Gui.COLOR.getBlue())));
         this.groceryList = grList;

@@ -21,8 +21,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**
@@ -40,19 +38,16 @@ public class LoginScreenActivity extends Activity{
     
     private BufferedImage iconImage;
     
-    public LoginScreenActivity(ActionListener loginButton, LogInManager logInManager) {
-        super(ActivityID.LOGIN_SCREEN,"" ,Gui.SCREEN_HEIGHT - 29, Color.WHITE, logInManager);
+    public LoginScreenActivity(ActionListener loginButton,
+            LogInManager logInManager) {
+        super(ActivityID.LOGIN_SCREEN,"" ,Gui.SCREEN_HEIGHT - 29,
+                Color.WHITE, logInManager);
         this.logInManager = logInManager;
        
         this.iconImage = loadImage();
        
         //<editor-fold defaultstate="collapsed" desc="init loginButton">
-        this.loginButton = new Button(Gui.SCREEN_WIDTH, 60);
-        this.loginButton.setBackground(Gui.COLOR);
-        this.loginButton.setForeground(Color.WHITE);
-        this.loginButton.setFont(Gui.BUTTON_FONT);
-        this.loginButton.setText("LOGIN");
-        this.loginButton.setLocation(0, this.getHeight() - this.loginButton.getHeight());
+        this.loginButton = initBottomButton("LOGIN");
         this.loginButton.addActionListener(loginButton);
         this.loginButton.addActionListener(new ActionListener() {
             @Override
@@ -64,7 +59,8 @@ public class LoginScreenActivity extends Activity{
         
         
         this.userName = initTextField(350, "Username",false);
-        this.password = initTextField(this.userName.getY() + this.userName.getHeight() + 30, "Password",true);
+        this.password = initTextField(this.userName.getY() + 
+                this.userName.getHeight() + 30, "Password",true);
             
         this.add(this.loginButton);
         this.add(this.userName);
@@ -76,15 +72,17 @@ public class LoginScreenActivity extends Activity{
         try {
             icon = ImageIO.read(new File("rsc/Icon.png"));
         } catch (IOException ex) {
-            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            this.notifyException("Bild konnte nicht geladen werden");
         }
         return icon;
     }
     
     private TextField initTextField(int y, String hintText,boolean password){
-        TextField retTextField = new TextField(this.getBackground(), hintText,password);
+        TextField retTextField = new TextField(this.getBackground(),
+                hintText,password);
         retTextField.setSize((int) (Gui.SCREEN_WIDTH * 0.8), 20);
-        retTextField.setLocation((Gui.SCREEN_WIDTH - 6) / 2 - retTextField.getWidth() / 2, y);
+        retTextField.setLocation(
+                (Gui.SCREEN_WIDTH - 6) / 2 - retTextField.getWidth() / 2, y);
         retTextField.setHorizontalAlignment(JTextField.CENTER);
         return retTextField;
     }
@@ -92,15 +90,18 @@ public class LoginScreenActivity extends Activity{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         int d = (int)(this.getWidth() * 0.7);
-        g.drawImage(iconImage, (this.getWidth() - d) / 2, 0, d, d,this);
+        
+        if(iconImage != null)
+            g.drawImage(iconImage, (this.getWidth() - d) / 2, 0, d, d,this);
     }  
  
     private void loginAction(){
         try {
-            logInManager.checkUserData(this.password.getString(), this.userName.getString());
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginScreenActivity.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            logInManager.checkUserData(this.password.getString(),
+                    this.userName.getString());
+        } catch (SQLException | IllegalAccessException ex) {
+            this.notifyException("Die Daten stimmen nicht überein.");
+        } 
     }
     
     public Account getUser(){

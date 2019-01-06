@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -46,8 +48,12 @@ public class DB_Connection {
         return stmt.executeQuery(sqlQuery);
     }
     
-    protected boolean ping(int timeout) throws SQLException{
-        return this.con.isValid(timeout);
+    protected boolean ping(int timeout) throws IllegalArgumentException{
+        try {
+            return this.con.isValid(timeout);
+        } catch (SQLException ex) {
+            throw new IllegalArgumentException("Timeout muss größer als 0 sein");
+        }
     }
 
     protected void reconnect() throws SQLException{

@@ -3,7 +3,6 @@ package GuiElements;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 
@@ -32,11 +31,11 @@ public class Button extends JButton{
         g.clearRect(0, 0, this.getWidth(), this.getHeight());
         if(this.image ==  null){
             super.paintComponent(g);
-            return;
+        }else{
+            Graphics2D g2d = image.createGraphics();
+
+            g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
         }
-        Graphics2D g2d = image.createGraphics();
-        
-        g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
         
     }
  

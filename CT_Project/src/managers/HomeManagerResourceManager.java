@@ -25,9 +25,10 @@ public class HomeManagerResourceManager extends HomeManager implements ShowsOrde
     public HomeManagerResourceManager(ArrayList<Orderlist> groceryList, ArrayList<Order> allOrder) throws SQLException {
         this.groceryList = groceryList;
         this.notWatchedOrder = 0;
-        allOrder.stream().filter((order) -> (!order.isWatched())).forEachOrdered((_item) -> {
-            notWatchedOrder++;
-        });
+        for(Order order : allOrder){
+            if(!order.isWatched())
+                notWatchedOrder++;
+        }
     }
 
     public int getGrocerySize() {

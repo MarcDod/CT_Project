@@ -56,7 +56,7 @@ public class Connector{
         return resultingAccount;
     }
 
-    public boolean ping(int timeout) throws SQLException{
+    public boolean ping(int timeout) throws IllegalArgumentException{
         return this.con.ping(timeout);
     }
 
