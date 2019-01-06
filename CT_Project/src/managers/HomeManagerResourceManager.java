@@ -15,11 +15,10 @@ import java.util.ArrayList;
  *
  * @author Marc
  */
-public class HomeManagerResourceManager extends ActivityManager implements ShowsOrders {
+public class HomeManagerResourceManager extends HomeManager implements ShowsOrders {
 
     private ArrayList<Orderlist> groceryList;
 
-    private String buttonName;
 
     private int notWatchedOrder;
 
@@ -35,17 +34,9 @@ public class HomeManagerResourceManager extends ActivityManager implements Shows
         return (groceryList != null) ? this.groceryList.size() : 0;
     }
 
-    public void setButtonName(String buttonName) {
-        this.buttonName = buttonName;
-    }
 
     public int getNotWatchedOrdes() {
         return this.notWatchedOrder;
-    }
-
-    @Override
-    public String getTitle() {
-        return this.buttonName;
     }
 
     @Override

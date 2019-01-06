@@ -24,10 +24,10 @@ public class MenuBar extends JPanel{
     
     private Button optionButton;
     private Button returnButton;
-    
+       
     private JLabel label;
     
-    public MenuBar(ActionListener returnListener, ActionListener optionListener){         
+    public MenuBar(ActionListener returnListener, ActionListener optionListener, BufferedImage logOut){         
         //<editor-fold defaultstate="collapsed" desc="settings">
         Dimension d = new Dimension(Gui.SCREEN_WIDTH, MENUBAR_HEIGHT);
         this.setPreferredSize(d);
@@ -40,9 +40,13 @@ public class MenuBar extends JPanel{
 //</editor-fold>
         
         //<editor-fold defaultstate="collapsed" desc="Init Button">
-        int width = 20;
+        int width = d.height - 15;
         int height = d.height - 15;
-        this.optionButton = new Button(width, height, getImage(width, height));
+        if(logOut != null)
+            this.optionButton = new Button(width, height, logOut);
+        else{
+            this.optionButton = new Button(width, height);
+        }
         this.optionButton.setLocation(Gui.SCREEN_WIDTH - 20 -
                 this.optionButton.getWidth(),
                 (d.height - this.optionButton.getHeight())/2);
@@ -52,7 +56,7 @@ public class MenuBar extends JPanel{
         
 
         height -= 10;
-        width -= 10;
+        width = 10;
         this.returnButton = new Button(width, height, getRetrunImage(width, height));
         this.returnButton.setLocation(20,
                 (d.height - this.returnButton.getHeight())/2);
@@ -86,28 +90,6 @@ public class MenuBar extends JPanel{
         g2d.setStroke(new BasicStroke(2.0f));
         g2d.drawPolyline(new int[]{width, 0, width}, new int[]{0, height/2, height}, 3);
        
-        g2d.dispose();
-        
-        return image;
-    }
-    
-    private BufferedImage getImage(int width, int height){
-        BufferedImage image = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
-        
-        Graphics2D g2d = image.createGraphics();
-        
-        g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, width, height);
-        
-        
-        g2d.setColor(Color.BLACK);
-        
-        int pHeight = height / 5;
-        
-        for(int i = 0; i < 3; i++){
-            g2d.fillRect(width / 2 - pHeight / 2, (int) (i * pHeight * 1.5) + (int)(pHeight * 0.5), pHeight, pHeight);
-        }
-        
         g2d.dispose();
         
         return image;

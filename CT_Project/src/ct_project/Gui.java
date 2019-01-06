@@ -5,7 +5,7 @@ import GuiElements.MenuBar;
 import GuiElements.activities.Activity;
 import GuiElements.activities.ActivityID;
 import GuiElements.activities.GroceryListActivity;
-import GuiElements.activities.HomeScreenActivity;
+import GuiElements.activities.HomeScreenUserActivity;
 import GuiElements.activities.HomeScreenResourceManagerActivity;
 import managers.LogInManager;
 import GuiElements.activities.LoginScreenActivity;
@@ -17,10 +17,13 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -70,8 +73,8 @@ public class Gui{
                         log(Level.SEVERE, null, ex);
             }catch (NullPointerException ex){
             }
-        });
-        //<editor-fold defaultstate="collapsed" desc="Init frame and panel">
+        });   
+        //<editor-fold defaultstate="collapsed" desc="Init frame and panel">       
         this.frame = new JFrame("CT_Project");
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         final Dimension d = new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -85,7 +88,14 @@ public class Gui{
         this.panel.setPreferredSize(d);
         this.panel.setSize(d);
 
-        this.menu = new MenuBar(getActionListener(), logout());
+        BufferedImage logOut = null;
+        try {
+            logOut = ImageIO.read(new File("rsc/exitIcon.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.menu = new MenuBar(getActionListener(), logout(), logOut);
 
         this.frame.setLocationRelativeTo(null);
         this.frame.setLayout(null);
@@ -103,7 +113,7 @@ public class Gui{
         this.ping.start();
 
         initializeConnection();
-        changeActivity(ActivityID.NEW_ORDER);
+        changeActivity(ActivityID.LOGIN_SCREEN);
 
     }
 
@@ -205,7 +215,7 @@ public class Gui{
                             manager.getHomeManagerResourceManager());
                     break;
                 case HOME_SCREEN:
-                    tempActivity = new HomeScreenActivity(
+                    tempActivity = new HomeScreenUserActivity(
                             getActionListener(ActivityID.NEW_ORDER, activity),
                             getActionListener(ActivityID.SHOW_ORDER_SCREEN,
                                     activity),

@@ -20,32 +20,34 @@ import javax.swing.JScrollPane;
  *
  * @author Marc
  */
-public abstract class Selector extends JScrollPane{
-    private JPanel jPanel; 
+public abstract class Selector extends JScrollPane {
+
+    private JPanel jPanel;
     protected ArrayList<Object> selectedElements;
-    
+
     protected ArrayList<Object> allElements;
-    
+
     protected ArrayList<JLabel> labels;
     protected int maxElements;
-    
+
     protected Color selctedColor;
     private int maxHeight;
-    
-    public Selector(int width, int height, ArrayList allElements, JPanel panel, ArrayList selectedElements, int maxElements){
+
+    public Selector(int width, int height, ArrayList allElements, JPanel panel, ArrayList selectedElements, int maxElements) {
         super(panel);
         this.selctedColor = Color.decode("0xC9FFE5");
-        if(selectedElements != null)
+        if (selectedElements != null) {
             this.selectedElements = selectedElements;
-        else
+        } else {
             this.selectedElements = new ArrayList<>();
+        }
         this.allElements = allElements;
         this.labels = new ArrayList<>();
         this.maxElements = maxElements;
         init(width, height, panel);
     }
-    
-    private void init(int width, int height, JPanel panel){
+
+    private void init(int width, int height, JPanel panel) {
         this.maxHeight = height;
         this.jPanel = panel;
         this.jPanel.setBackground(Color.WHITE);
@@ -53,24 +55,24 @@ public abstract class Selector extends JScrollPane{
         this.setWheelScrollingEnabled(true);
         this.setLocation(-1, 0);
         JScrollBar vertical = new JScrollBar();
-        vertical.setPreferredSize(new Dimension(0,0));
+        vertical.setPreferredSize(new Dimension(0, 0));
         this.setVerticalScrollBar(vertical);
         this.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.jPanel.setMaximumSize(new Dimension(this.getWidth(), Integer.MAX_VALUE));
         this.jPanel.setLayout(null);
-          
+
         this.getVerticalScrollBar().setUnitIncrement(10);
 
         initLabels();
     }
-    
-    protected void initLabels(){
+
+    protected void initLabels() {
         this.labels.removeAll(this.labels);
         this.jPanel.removeAll();
         int orderHeight = 70;
-        for(int i = 0; i < allElements.size(); i++){
+        for (int i = 0; i < allElements.size(); i++) {
             JLabel temp = new JLabel();
             temp.setSize(this.getWidth(), orderHeight);
             Icon tempIcon = getIcon(temp.getWidth(), temp.getHeight(), i);
@@ -82,8 +84,9 @@ public abstract class Selector extends JScrollPane{
             temp.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    orderUpdate(e);  }
-            
+                    orderUpdate(e);
+                }
+
             });
             this.labels.add(temp);
             this.jPanel.add(temp);
@@ -92,40 +95,63 @@ public abstract class Selector extends JScrollPane{
         this.jPanel.
                 setSize(this.getWidth(), labels.size() * orderHeight);
         this.jPanel.setVisible(true);
-        int height = (maxHeight > jPanel.getHeight())? jPanel.getHeight() : maxHeight;
+        int height = (maxHeight > jPanel.getHeight()) ? jPanel.getHeight() : maxHeight;
         this.setSize(this.getWidth(), height);
         this.setVisible(true);
     }
-    
-    protected void orderUpdate(MouseEvent e){
+
+    protected void orderUpdate(MouseEvent e) {
         int index = 0;
-        for(int i = 0; i < labels.size(); i++){
-            if(labels.get(i).equals(e.getSource())){
+        for (int i = 0; i < labels.size(); i++) {
+            if (labels.get(i).equals(e.getSource())) {
                 index = i;
                 break;
             }
         }
-        if(selectedElements.contains(allElements.get(index))){
-            selectedElements.remove((Object)allElements.get(index));
-        }else if(selectedElements.size() < maxElements){
+        addSelectedItem(index);
+    }
+
+    protected void refreshUpdate(int i){
+        
+    }
+    
+    public void addSelectedItem(int index) {
+        if (selectedElements.contains(allElements.get(index))) {
+            selectedElements.remove((Object) allElements.get(index));
+        } else if (selectedElements.size() < maxElements) {
             selectedElements.add(allElements.get(index));
-        }else{
+        } else {
             selectedElements.remove(selectedElements.size() - 1);
             selectedElements.add(allElements.get(index));
         }
         this.labels.get(index).setIcon(getIcon(this.labels.get(0).getWidth(), this.labels.get(0).getHeight(), index));
         this.jPanel.repaint();
     }
-    
-    abstract Icon getIcon(int width,int height, int i);
-    
-    public void addObject(Object object) throws IllegalArgumentException{
-        if(this.allElements.contains(object)) throw new IllegalArgumentException();
-        this.allElements.add(object);
+
+    abstract Icon getIcon(int width, int height, int i);
+
+    public void addObject(Object object, boolean top) throws IllegalArgumentException {
+        if (this.allElements.contains(object)) {
+            throw new IllegalArgumentException();
+        }
+        int index;
+        if (top) {
+            this.allElements.add(0, object);
+            index = 0;
+        } else {
+            this.allElements.add(object);
+            index = this.allElements.size() - 1;
+        }
+        addSelectedItem(index);
         initLabels();
+        refreshUpdate(index);
     }
-    
-    public ArrayList<Object> getSelectedElements(){
+
+    public ArrayList<Object> getSelectedElements() {
         return this.selectedElements;
+    }
+
+    public ArrayList<Object> getAllElements() {
+        return this.allElements;
     }
 }

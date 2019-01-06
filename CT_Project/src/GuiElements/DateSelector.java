@@ -6,14 +6,13 @@
 package GuiElements;
 
 import ct_project.Gui;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -36,10 +35,13 @@ public class DateSelector extends JPanel {
     private BufferedImage image;
 
     private int[] date;
+    
+    private Font font;
 
     public DateSelector(int width, int height) {
         this.moveLabels = new MovableLabel[3];
         this.labels = new JLabel[3];
+        this.font = new Font(Gui.BUTTON_FONT.getName(), Font.PLAIN, 30);
         this.date = new int[]{Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.WEEK_OF_MONTH), 1};
         this.setSize(width, height);
         this.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150)));
@@ -50,8 +52,6 @@ public class DateSelector extends JPanel {
             this.labels[i] = new JLabel();
             this.labels[i].setSize((int) ((this.getWidth() / 3) * 0.9), this.getHeight());
             int gap = (i == 2) ? 0 : -20;
-            //this.labels[i].setOpaque(true);
-            //this.labels[i].setBackground(Color.yellow);
             this.labels[i].setLocation((this.getWidth() - ((this.labels[i].getWidth() + 7) * 3)) / 2 + i * (this.labels[i].getWidth() + gap), 0);
             this.labels[i].setIcon(getLabelIcon(this.labels[i].getWidth(), this.labels[i].getHeight()));
         }
@@ -102,13 +102,17 @@ public class DateSelector extends JPanel {
 
         g2d.setColor(Color.BLACK);
 
-        int r = 6;
-        g2d.fillOval((labels[2].getX() - r) / 2 - r, (this.getHeight() - r) / 2 - r, r, r);
-        g2d.fillOval((labels[2].getX() - r) / 2 - r, (this.getHeight() - r) / 2 + r, r, r);
+        int r = 4;
+        int height = this.getFontMetrics().getHeight() + this.getFontMetrics().getHeight() / 4;
+        g2d.fillOval((labels[2].getX() - r) / 2 - r, (height / 2) - r, r, r);
+        g2d.fillOval((labels[2].getX() - r) / 2 - r, (height / 2) + r, r, r);
 
-        g2d.fillOval((labels[1].getX() + labels[1].getWidth() - r), (this.getHeight() - r) / 2 - r, r, r);
-        g2d.fillOval((labels[1].getX() + labels[1].getWidth() - r), (this.getHeight() - r) / 2 + r, r, r);
+        g2d.fillOval((labels[1].getX() + labels[1].getWidth() - r), (height / 2) - r, r, r);
+        g2d.fillOval((labels[1].getX() + labels[1].getWidth() - r), (height / 2) + r, r, r);
 
+        g2d.setStroke(new BasicStroke(2));
+        g2d.drawRect(1, 1, this.getWidth() - 3, height);
+        
         g2d.dispose();
         return temp;
     }
@@ -160,7 +164,7 @@ public class DateSelector extends JPanel {
     private FontMetrics getFontMetrics() {
         BufferedImage temp = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = temp.createGraphics();
-        g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.BOLD, 50));
+        g2d.setFont(font);
         return g2d.getFontMetrics();
     }
 
@@ -172,7 +176,7 @@ public class DateSelector extends JPanel {
         g2d.fillRect(0, 0, width, height);
 
         g2d.setColor(Color.BLACK);
-        g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.BOLD, 50));
+        g2d.setFont(font);
         FontMetrics fm = g2d.getFontMetrics();
 
         return new ImageIcon(temp);
@@ -191,7 +195,7 @@ public class DateSelector extends JPanel {
         g2d.fillRect(0, 0, width, height);
 
         g2d.setColor(Color.BLACK);
-        g2d.setFont(new Font(Gui.BUTTON_FONT.getName(), Font.BOLD, 50));
+        g2d.setFont(font);
         FontMetrics fm = g2d.getFontMetrics();
         for (int i = 1; i <= lastNumb; i++) {
             int tempValue = (year) ? Calendar.getInstance().get(Calendar.YEAR) + i - 1 : i;

@@ -14,9 +14,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**
@@ -32,10 +38,14 @@ public class LoginScreenActivity extends Activity{
     
     private LogInManager logInManager;
     
+    private BufferedImage iconImage;
+    
     public LoginScreenActivity(ActionListener loginButton, LogInManager logInManager) {
         super(ActivityID.LOGIN_SCREEN,"" ,Gui.SCREEN_HEIGHT - 29, Color.WHITE, logInManager);
         this.logInManager = logInManager;
-        
+       
+        this.iconImage = loadImage();
+       
         //<editor-fold defaultstate="collapsed" desc="init loginButton">
         this.loginButton = new Button(Gui.SCREEN_WIDTH, 60);
         this.loginButton.setBackground(Gui.COLOR);
@@ -52,12 +62,23 @@ public class LoginScreenActivity extends Activity{
         });
 //</editor-fold>
         
-        this.userName = initTextField(300, "Username",false);
-        this.password = initTextField(350, "Password",true);
         
+        this.userName = initTextField(350, "Username",false);
+        this.password = initTextField(this.userName.getY() + this.userName.getHeight() + 30, "Password",true);
+            
         this.add(this.loginButton);
         this.add(this.userName);
         this.add(this.password);
+    }
+    
+    private BufferedImage loadImage(){
+        BufferedImage icon = null;
+        try {
+            icon = ImageIO.read(new File("rsc/Icon.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return icon;
     }
     
     private TextField initTextField(int y, String hintText,boolean password){
@@ -70,6 +91,8 @@ public class LoginScreenActivity extends Activity{
      @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        int d = (int)(this.getWidth() * 0.7);
+        g.drawImage(iconImage, (this.getWidth() - d) / 2, 0, d, d,this);
     }  
  
     private void loginAction(){

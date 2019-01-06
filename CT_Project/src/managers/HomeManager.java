@@ -5,26 +5,15 @@
  */
 package managers;
 
-import DataManagement.Datatemplates.Order;
-import java.util.ArrayList;
-
 /**
  *
  * @author Marc
  */
-public class HomeManager extends ActivityManager implements ShowsOrders{
-
-    private String buttonName;
-    private ArrayList<Order> myOrders;
+public abstract class HomeManager extends ActivityManager{
+    protected String buttonName;
     
-    public HomeManager(ArrayList myOrders){
+    public HomeManager(){
         this.buttonName = "";
-        this.myOrders = myOrders;
-    }
-    
-    public int getSizeOfMyOrder(){
-        if(myOrders == null) return 0;
-        return myOrders.size();
     }
     
     public void setButtonName(String buttonName){
@@ -35,15 +24,4 @@ public class HomeManager extends ActivityManager implements ShowsOrders{
     public String getTitle() {
         return buttonName;
     }
-
-    @Override
-    public boolean[] getSwipeAllowed() {
-        return new boolean[]{false, false};
-    }
-
-    @Override
-    public OrderManager.Action[] getSwipeActions() {
-        return new OrderManager.Action[]{OrderManager.Action.NOTHING, OrderManager.Action.NOTHING};
-    }
-    
 }
