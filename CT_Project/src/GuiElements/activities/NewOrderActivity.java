@@ -90,23 +90,19 @@ public class NewOrderActivity extends Activity {
         });
 
         this.number = new Number(50, 100, this.getBackground(), 999, 0);
-        this.number.setLocation(this.itemSelector.getX(), this.itemSelector
-                .getY() + this.itemSelector.getHeight() + 30);
-
+        this.deadLine = new JLabel();
         this.date = new DateSelector(this.itemSelector.getWidth() - this.number
                 .getWidth() - 30, 90);
-        this.date.setLocation(this.number.getX() + this.number.getWidth() + 30,
-                this.number.getY() + (this.number.getHeight() - this.date
-                .getHeight()) / 2);
-
-        this.deadLine = new JLabel();
-        this.deadLine.setSize(date.getWidth(), 25);
-        this.deadLine.setLocation(date.getX(), date.getY() - deadLine
-                .getHeight());
+        this.deadLine.setSize(this.date.getWidth(), 25);
         this.deadLine.setFont(
                 new Font(Gui.BUTTON_FONT.getName(), Font.PLAIN, 20));
         this.deadLine.setText("DEADLINE");
 
+        reLocated();
+        
+
+
+        
         this.add(deadLine);
         this.add(number);
         this.add(createItemButton);
@@ -116,6 +112,16 @@ public class NewOrderActivity extends Activity {
 
     }
 
+    private void reLocated(){
+        this.number.setLocation(this.itemSelector.getX(), this.itemSelector
+                .getY() + this.itemSelector.getHeight() + 30);
+        this.date.setLocation(this.number.getX() + this.number.getWidth() + 30,
+                this.number.getY() + (this.number.getHeight() - this.date
+                .getHeight()) / 2);
+        this.deadLine.setLocation(date.getX(), date.getY() - deadLine
+                .getHeight());
+    }
+    
     private JPanel initTextField(int width, int height, int x, int y,
             String hiddenText) {
         JPanel temp = new JPanel(null);
@@ -182,6 +188,8 @@ public class NewOrderActivity extends Activity {
         } catch (SQLException se) {
             this.notifyException("Fehler bei dem Zugriff auf die Datenbank");
         }
+        
+        reLocated();
     }
 
 }

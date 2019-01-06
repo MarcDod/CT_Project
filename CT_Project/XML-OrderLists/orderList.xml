@@ -2,18 +2,10 @@
 <Orderlists>
   <Orderlist name="ALLE BESTELLUNGEN OHNE LISTE" color="#0050be">
     <IDs>
-      <ID id="2" />
       <ID id="3" />
-      <ID id="4" />
-      <ID id="5" />
-      <ID id="6" />
-      <ID id="7" />
       <ID id="8" />
       <ID id="22" />
       <ID id="25" />
-      <ID id="26" />
-      <ID id="27" />
-      <ID id="28" />
       <ID id="29" />
       <ID id="30" />
       <ID id="31" />
@@ -24,12 +16,22 @@
       <ID id="36" />
       <ID id="37" />
       <ID id="38" />
+      <ID id="40" />
     </IDs>
   </Orderlist>
-  <Orderlist name="" color="#0050be">
+  <Orderlist name="ALDI" color="#ffc800">
     <IDs>
-      <ID id="23" />
+      <ID id="5" />
+      <ID id="6" />
+      <ID id="7" />
+    </IDs>
+  </Orderlist>
+  <Orderlist name="MEDIA MARKT" color="#ff0000">
+    <IDs>
       <ID id="24" />
+      <ID id="26" />
+      <ID id="28" />
+      <ID id="27" />
     </IDs>
   </Orderlist>
 </Orderlists>

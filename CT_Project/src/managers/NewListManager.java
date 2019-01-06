@@ -52,7 +52,10 @@ public class NewListManager extends ActivityManager{
     }
     
     public ArrayList<Integer> getOrderlist(){
-        return orderList.get(index).getOrderIDs();
+        ArrayList<Integer> ret = new ArrayList<>();
+        if(index != 0)
+            ret = orderList.get(index).getOrderIDs();
+        return ret;
     }
     
     public Color getColor(){
