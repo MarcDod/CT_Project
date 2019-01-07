@@ -124,7 +124,8 @@ public abstract class Selector extends JScrollPane {
             selectedElements.remove(selectedElements.size() - 1);
             selectedElements.add(allElements.get(index));
         }
-        this.labels.get(index).setIcon(getIcon(this.labels.get(0).getWidth(), this.labels.get(0).getHeight(), index));
+        if(!this.labels.isEmpty())
+            this.labels.get(index).setIcon(getIcon(this.labels.get(0).getWidth(), this.labels.get(0).getHeight(), index));
         this.jPanel.repaint();
     }
 
